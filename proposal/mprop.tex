@@ -1,0 +1,152 @@
+\documentclass{mprop}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{url}
+% alternative font if you prefer
+%\usepackage{times}
+
+% for alternative page numbering use the following package
+% and see documentation for commands
+%\usepackage{fancyheadings}
+
+
+% other potentially useful packages
+\usepackage{epigraph}
+%\uspackage{amssymb,amsmath}
+%\usepackage{url}
+%\usepackage{fancyvrb}
+%\usepackage[final]{pdfpages}
+
+% Inspirational Quote type setting
+\makeatletter
+\newenvironment{chapquote}[2][2em]
+  {\setlength{\@tempdima}{#1}%
+   \def\chapquote@author{#2}%
+   \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
+   \itshape}
+  {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
+\makeatother
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Securing and Integrating the IoT with a Smart Home Router}
+\author{Fergus W. Leahy}
+\date{16/12/2013}
+\maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}\label{intro}
+\begin{chapquote}{Mark Weiser, \textit{The Computer for the Twenty-First Century, 1991}}
+    ``The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.''
+\end{chapquote}
+
+The modern home is becoming increasingly filled with a variety of \textit{connected} devices (laptops, tablets, phones, set-top boxes etc.), providing a myriad of different services to users within the home. On top of this, with the advent use of smart phones and introduction of wearable devices, we too are starting to carry around our own personal network of devices everywhere we go, brushing past many others in our daily lives at home, work and on the street. Although all connected to the Internet, these devices are often encapsulated within their own environment and ecosystem, unable to interconnect, creating a fractured and often complex user experience. 
+
+Making matters more interesting, the Internet of Things paradigm is once again becoming a field of great interest due to the advent of cheap, low power wireless embedded devices \cite{2013IoT}. However, not much consideration has been made for how these Things should be integrated into the existing home network, with many approaches opting to simply bridge the device to the cloud (\cite{SmartThings}, \cite{Twine}, \cite{IETF_CORE}), with obvious concerns for security, privacy and up-time.
+
+As these devices enter our homes and pockets, bringing with them their own ecosystems, the user is faced with the increasingly difficult burden of managing all of them and the ecosystems \cite{brundell2011w}, \cite{brown2013multinet}. Due to the sheer number and diversity of these devices, many of which will provide overlapping services and functionality, problems arise in how to ensure these devices not only play nicely together but also ensuring the user's network and information stays secure against new and unanticipated threats.
+
+The Homework home router platform was created to resolve some of these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
+
+In regards to the Internet of Things development, previous work demonstrated that it was in need a suitable protocol in order to meet the specific needs of a network of Things \cite{KNoT}. Thus, a new protocol was designed and implemented, which could not only run on even the most constrained battery-powered devices (8MHz), but it could also efficiently scale to support hundreds of Things within the same network.
+
+%TODO: WRITE MORE LINKY LINKY
+In order for our networks of devices to truly fade away into the fabric of our lives, a platform and relevant protocols need to be engineered to not only support this heterogeneous network securely, but also aid the user in managing both the network and the privacy of their information.
+%briefly explain the context of the project problem
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Statement of Problem}
+
+The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, several issues need to first be addressed. Intranet of things....
+\begin{itemize}
+    \item Security, integration, encryption
+    \item Usability, interoperability
+    \item Privacy, information security - user controls of data
+\end{itemize}
+
+This project seeks to address these issues
+% clearly state the problem to be addressed in your forthcoming project. Explain why it would be worthwhile to solve this problem.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background Survey}
+
+\subsection{State-of-the-art IoT Protocols} % (fold)
+\label{sub:state_of_the_art_iot_protocols}
+
+% subsection state_of_the_art_iot_protocols (end)
+\subsection{Homework - Smart Home Router} % (fold)
+\label{sub:homework_smart_home_router}
+
+% subsection homework_smart_home_router (end)
+\subsection{Symmetric Security - TinySec, MiniSec, ContikiSec} % (fold)
+\label{sub:tinysec_minisec_contikisec}
+
+% subsection tinysec_minisec_contikisec (end)
+
+\subsection{Asymmetric Security - TinyECC} % (fold)
+\label{sub:tinyecc}
+
+% subsection tinyecc (end)
+
+\subsection{Other Works} % (fold)
+\label{sub:other_works}
+\subsubsection{MQTT} % (fold)
+\label{ssub:mqtt}
+
+% subsubsection mqtt (end)
+\subsubsection{IETF Work} % (fold)
+\label{ssub:ietf_work}
+
+% subsubsection ietf_work (end)
+% subsection other_works (end)
+
+% present an overview of relevant previous work including articles, books, and existing software products. Critically evaluate the strengths and weaknesses of the previous work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proposed Approach}
+
+% state how you propose to solve the software development problem. Show that your proposed approach is feasible, but identify any risks.
+\subsection{Security Architecture} % (fold)
+\label{sub:security_architecture}
+
+\subsubsection{Symmetric Key Cryptography} % (fold)
+\label{ssub:symmetric_key_cryptography}
+
+% subsubsection symmetric_key_cryptography (end)
+\subsubsection{Asymmetric Key Cryptography} % (fold)
+\label{ssub:asymmetric_key_cryptography}
+
+% subsubsection asymmetric_key_cryptography (end)
+% subsection security_architecture (end)
+
+\subsection{Implementation of IoT Protocol on TinyOS} % (fold)
+\label{sub:implementation_of_iot_protocol_on_tinyos}
+
+% subsection implementation_of_iot_protocol_on_tinyos (end)
+
+\subsection{Integration of IoT with Smart Home Router} % (fold)
+\label{sub:implementation_of_iot_on_smart_home_router}
+
+% subsection implementation_of_iot_on_smart_home_router (end)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Work Plan}
+
+\begin{itemize}
+    \item Secure IoT Protocol
+    \item Implement Secure IoT Protocol on TinyOS
+    \item Port Secure IoT Protocol to Homework Automata
+\end{itemize}
+% show how you plan to organize your work, identifying intermediate deliverables and dates.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% it is fine to change the bibliography style if you want
+\bibliographystyle{plain}
+\bibliography{bibliography}
+\end{document}

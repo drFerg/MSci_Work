@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Statement of Problem}{}% 2
+\BOOKMARK [1][-]{section.3}{Background Survey}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{State-of-the-art IoT Protocols}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Homework - Smart Home Router}{section.3}% 5
+\BOOKMARK [2][-]{subsection.3.3}{Symmetric Security - TinySec, MiniSec, ContikiSec}{section.3}% 6
+\BOOKMARK [2][-]{subsection.3.4}{Asymmetric Security - TinyECC}{section.3}% 7
+\BOOKMARK [2][-]{subsection.3.5}{Other Works}{section.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.5.1}{MQTT}{subsection.3.5}% 9
+\BOOKMARK [3][-]{subsubsection.3.5.2}{IETF Work}{subsection.3.5}% 10
+\BOOKMARK [1][-]{section.4}{Proposed Approach}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Security Architecture}{section.4}% 12
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Symmetric Key Cryptography}{subsection.4.1}% 13
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Asymmetric Key Cryptography}{subsection.4.1}% 14
+\BOOKMARK [2][-]{subsection.4.2}{Implementation of IoT Protocol on TinyOS}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.3}{Integration of IoT with Smart Home Router}{section.4}% 16
+\BOOKMARK [1][-]{section.5}{Work Plan}{}% 17
