@@ -42,7 +42,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}\label{intro}
+\section{Introduction}
+\label{sec:introduction}
+
 \begin{chapquote}{Mark Weiser, \textit{The Computer for the Twenty-First Century, 1991}}
     ``The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.''
 \end{chapquote}
@@ -53,25 +55,40 @@ Making matters more interesting, the Internet of Things paradigm is once again b
 
 As these devices enter our homes and pockets, bringing with them their own ecosystems, the user is faced with the increasingly difficult burden of managing all of them and the ecosystems \cite{brundell2011w}, \cite{brown2013multinet}. Due to the sheer number and diversity of these devices, many of which will provide overlapping services and functionality, problems arise in how to ensure these devices not only play nicely together but also ensuring the user's network and information stays secure against new and unanticipated threats.
 
-The Homework home router platform was created to resolve some of these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
+In order for these multiple layered networks of devices to truly fade away into the fabric of our everyday lives, a platform and relevant protocols need to be engineered to not only support this heterogeneous network securely, but also aid the user in managing both the network and the privacy of their information.
+
+The Homework home router platform was created to these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
 
 In regards to the Internet of Things development, previous work demonstrated that it was in need a suitable protocol in order to meet the specific needs of a network of Things \cite{KNoT}. Thus, a new protocol was designed and implemented, which could not only run on even the most constrained battery-powered devices (8MHz), but it could also efficiently scale to support hundreds of Things within the same network.
 
 %TODO: WRITE MORE LINKY LINKY
-In order for our networks of devices to truly fade away into the fabric of our lives, a platform and relevant protocols need to be engineered to not only support this heterogeneous network securely, but also aid the user in managing both the network and the privacy of their information.
+
 %briefly explain the context of the project problem
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Statement of Problem}
 
-The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, several issues need to first be addressed. Intranet of things....
+The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, several issues need to be addressed first.
+
 \begin{itemize}
-    \item Security, integration, encryption
-    \item Usability, interoperability
-    \item Privacy, information security - user controls of data
+    \item [Security:] Due to time constraints the initial design of the IoT protocol didn't consider security concerns. However, the IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
+    \item [Integration:] The current implementation exists as a standalone component with several demo applications. Integration of the IoT protocol into a user-friendly platform is necessary to harness the full power of the Thing's network. The integrated platform would then be able to search and connect to available Things, receive events from the sensors and using user customised rules, use automata to detect if the received events match and then perform actions by pushing commands to actuators in the network.
 \end{itemize}
 
-This project seeks to address these issues
+\subsection{Intranet of Things vs Internet of Things} % (fold)
+\label{sub:intranet_of_things}
+
+As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach, see \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; Thus a more suitable name, the Intranet of Things, will be used. 
+% subsection intranet_of_things (end)
+
+
+Outcomes of the project:
+\begin{itemize}
+  \item[-] A secured IoT protocol.
+  \item[-] Extended home information platform with IoT controller role, able to capture IoT events and generate ones too.
+  \item[-] Use of automata to implement closed loop control of Things in the home.
+\end{itemize}
 % clearly state the problem to be addressed in your forthcoming project. Explain why it would be worthwhile to solve this problem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,12 +104,12 @@ This project seeks to address these issues
 % subsection homework_smart_home_router (end)
 \subsection{Symmetric Security - TinySec, MiniSec, ContikiSec} % (fold)
 \label{sub:tinysec_minisec_contikisec}
-
+\cite{TinySec, luk2007minisec, ContikiSec}
 % subsection tinysec_minisec_contikisec (end)
 
 \subsection{Asymmetric Security - TinyECC} % (fold)
 \label{sub:tinyecc}
-
+\cite{TinyECC}
 % subsection tinyecc (end)
 
 \subsection{Other Works} % (fold)
@@ -103,7 +120,7 @@ This project seeks to address these issues
 % subsubsection mqtt (end)
 \subsubsection{IETF Work} % (fold)
 \label{ssub:ietf_work}
-
+\cite{IETF_COAP_HTTP, IETF_CORE}
 % subsubsection ietf_work (end)
 % subsection other_works (end)
 
