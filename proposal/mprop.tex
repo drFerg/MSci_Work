@@ -69,7 +69,7 @@ In regards to the Internet of Things development, previous work demonstrated tha
 
 \section{Statement of Problem}
 
-The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, several issues need to be addressed first.
+The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, several issues need to first be addressed.
 
 \begin{itemize}
     \item [Security:] Due to time constraints the initial design of the IoT protocol didn't consider security concerns. However, the IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
@@ -83,27 +83,45 @@ As described earlier in section \ref{sec:introduction}, many previous deployment
 % subsection intranet_of_things (end)
 
 
+\subsection{Project Outcomes} % (fold)
+\label{sub:project_outcomes}
+
 Outcomes of the project:
 \begin{itemize}
-  \item[-] A secured IoT protocol.
-  \item[-] Extended home information platform with IoT controller role, able to capture IoT events and generate ones too.
-  \item[-] Use of automata to implement closed loop control of Things in the home.
+  \item[-] An extended IoT protocol with sufficient security to prevent eavesdropping and unsanctioned devices.
+  \item[-] An Extended home information platform (Homework), with the IoT controller role implemented, enabling capturing of IoT events from sensors and creation of commands for actuators.
+  \item[-] Use of Homework's automata to implement closed loop control of Things in the home, subscribing to sensor events, processing rules and publishing to actuators to perform actions.
 \end{itemize}
+% subsection subsection_name (end)
+
 % clearly state the problem to be addressed in your forthcoming project. Explain why it would be worthwhile to solve this problem.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Background Survey}
+\section{Literature Review}
+This section discusses previous work on Internet of Things protocols, WSN security and home networking which provides the motivation and possible aid in solving the previously mentioned issues.
 
 \subsection{State-of-the-art IoT Protocols} % (fold)
 \label{sub:state_of_the_art_iot_protocols}
-
+\input{litreview/iot.tex}
 % subsection state_of_the_art_iot_protocols (end)
 \subsection{Homework - Smart Home Router} % (fold)
 \label{sub:homework_smart_home_router}
-
+\input{litreview/homework.tex}
 % subsection homework_smart_home_router (end)
 \subsection{Symmetric Security - TinySec, MiniSec, ContikiSec} % (fold)
 \label{sub:tinysec_minisec_contikisec}
+\subsubsection{TinySec} % (fold)
+\label{ssub:tinysec}
+\input{litreview/tinysec.tex}
+% subsubsection tinysec (end)
+\subsubsection{MiniSec} % (fold)
+\label{ssub:minisec}
+\input{litreview/minisec.tex}
+% subsubsection minisec (end)
+\subsubsection{ContikiSec} % (fold)
+\label{ssub:contikisec}
+\input{litreview/contikisec.tex}
+% subsubsection contikisec (end)
 \cite{TinySec, luk2007minisec, ContikiSec}
 % subsection tinysec_minisec_contikisec (end)
 
@@ -111,7 +129,7 @@ Outcomes of the project:
 \label{sub:tinyecc}
 \cite{TinyECC}
 % subsection tinyecc (end)
-
+\input{litreview/tinyecc.tex}
 \subsection{Other Works} % (fold)
 \label{sub:other_works}
 \subsubsection{MQTT} % (fold)
