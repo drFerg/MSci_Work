@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{url}
+\usepackage{amsmath}
 % alternative font if you prefer
 %\usepackage{times}
 
@@ -13,7 +14,6 @@
 % other potentially useful packages
 \usepackage{epigraph}
 %\uspackage{amssymb,amsmath}
-%\usepackage{url}
 %\usepackage{fancyvrb}
 %\usepackage[final]{pdfpages}
 
@@ -104,32 +104,56 @@ This section discusses previous work on Internet of Things protocols, WSN securi
 \label{sub:state_of_the_art_iot_protocols}
 \input{litreview/iot.tex}
 % subsection state_of_the_art_iot_protocols (end)
+
 \subsection{Homework - Smart Home Router} % (fold)
 \label{sub:homework_smart_home_router}
 \input{litreview/homework.tex}
 % subsection homework_smart_home_router (end)
+
+%%%%%%%%%
 \subsection{Symmetric Security - TinySec, MiniSec, ContikiSec} % (fold)
 \label{sub:tinysec_minisec_contikisec}
+
 \subsubsection{TinySec} % (fold)
 \label{ssub:tinysec}
 \input{litreview/tinysec.tex}
 % subsubsection tinysec (end)
+
 \subsubsection{MiniSec} % (fold)
 \label{ssub:minisec}
 \input{litreview/minisec.tex}
 % subsubsection minisec (end)
+
 \subsubsection{ContikiSec} % (fold)
 \label{ssub:contikisec}
 \input{litreview/contikisec.tex}
 % subsubsection contikisec (end)
 \cite{TinySec, luk2007minisec, ContikiSec}
 % subsection tinysec_minisec_contikisec (end)
+%%%%%%%%%
 
-\subsection{Asymmetric Security - TinyECC} % (fold)
-\label{sub:tinyecc}
+\subsection{Key Distribution Problem} % (fold)
+\label{sub:key_distribution_problem}
+Tried to solve using Faraday cages...\cite{MessageBottle}
+Propose to use Asymmetric Security aka Public Key crypto
+% subsection key_distribution_problem (end)
+
+\subsection{Asymmetric Security - TinyECC and Certificates} % (fold)
+\label{sub:asymmetric_security}
+\subsubsection{TinyECC} % (fold)
+\label{ssub:tinyecc}
 \cite{TinyECC}
-% subsection tinyecc (end)
+A public key crypto implementation of Elliptic Curve cryptography, supporting higher effective security with smaller keys (than RSA).
 \input{litreview/tinyecc.tex}
+% subsubsection tinyecc (end)
+
+\subsubsection{Certificates and Public Key Infrastructures} % (fold)
+\label{ssub:certificates_and_public_key_infrastructures}
+Discuss the use of certificates and certificate authority to pass trust up the chain.
+% subsubsection certificates_and_public_key_infrastructures (end)
+% subsection asymmetric_security (end)
+
+
 \subsection{Other Works} % (fold)
 \label{sub:other_works}
 \subsubsection{MQTT} % (fold)

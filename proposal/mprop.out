@@ -9,14 +9,17 @@
 \BOOKMARK [3][-]{subsubsection.3.3.1}{TinySec}{subsection.3.3}% 9
 \BOOKMARK [3][-]{subsubsection.3.3.2}{MiniSec}{subsection.3.3}% 10
 \BOOKMARK [3][-]{subsubsection.3.3.3}{ContikiSec}{subsection.3.3}% 11
-\BOOKMARK [2][-]{subsection.3.4}{Asymmetric Security - TinyECC}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.5}{Other Works}{section.3}% 13
-\BOOKMARK [3][-]{subsubsection.3.5.1}{MQTT}{subsection.3.5}% 14
-\BOOKMARK [3][-]{subsubsection.3.5.2}{IETF Work}{subsection.3.5}% 15
-\BOOKMARK [1][-]{section.4}{Proposed Approach}{}% 16
-\BOOKMARK [2][-]{subsection.4.1}{Security Architecture}{section.4}% 17
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Symmetric Key Cryptography}{subsection.4.1}% 18
-\BOOKMARK [3][-]{subsubsection.4.1.2}{Asymmetric Key Cryptography}{subsection.4.1}% 19
-\BOOKMARK [2][-]{subsection.4.2}{Implementation of IoT Protocol on TinyOS}{section.4}% 20
-\BOOKMARK [2][-]{subsection.4.3}{Integration of IoT with Smart Home Router}{section.4}% 21
-\BOOKMARK [1][-]{section.5}{Work Plan}{}% 22
+\BOOKMARK [2][-]{subsection.3.4}{Key Distribution Problem}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.5}{Asymmetric Security - TinyECC and Certificates}{section.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.5.1}{TinyECC}{subsection.3.5}% 14
+\BOOKMARK [3][-]{subsubsection.3.5.2}{Certificates and Public Key Infrastructures}{subsection.3.5}% 15
+\BOOKMARK [2][-]{subsection.3.6}{Other Works}{section.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.6.1}{MQTT}{subsection.3.6}% 17
+\BOOKMARK [3][-]{subsubsection.3.6.2}{IETF Work}{subsection.3.6}% 18
+\BOOKMARK [1][-]{section.4}{Proposed Approach}{}% 19
+\BOOKMARK [2][-]{subsection.4.1}{Security Architecture}{section.4}% 20
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Symmetric Key Cryptography}{subsection.4.1}% 21
+\BOOKMARK [3][-]{subsubsection.4.1.2}{Asymmetric Key Cryptography}{subsection.4.1}% 22
+\BOOKMARK [2][-]{subsection.4.2}{Implementation of IoT Protocol on TinyOS}{section.4}% 23
+\BOOKMARK [2][-]{subsection.4.3}{Integration of IoT with Smart Home Router}{section.4}% 24
+\BOOKMARK [1][-]{section.5}{Work Plan}{}% 25
