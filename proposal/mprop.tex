@@ -69,11 +69,12 @@ In regards to the Internet of Things development, previous work demonstrated tha
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Statement of Problem}
+\label{sec:statement_of_problem}
 Whilst there have been many attempts, both past and recent, to create the perfect Internet of Things network for the home, many still exhibit several issues. This section will first present a typical user scenario to provide a context for this problem, then discuss several of the issues found in existing work, both our previous work and others', which provide the motivation for this project.
 
 \subsection{A Scenario} % (fold)
 \label{sub:scenario}
-In order to establish the context of the problem, a typical user scenario has been created to demonstrate a user purchasing a new Thing and attempting to integrate it into their network securely.
+In order to establish the context of the problem, a typical user scenario has been created to demonstrate a typical novice user purchasing a new Thing and attempting to integrate it into their network securely with minimal knowledge and effort.
 
 \textit{Bob buys a new Thing, a motion sensor, from a shop and brings it home. He wants to connect it to his currently existing home network. To do so, Bob turns on the Thing and presses the connect button on both the Thing and his home router. Using his tablet/PC Bob is able to view the newly available Things in the network that he can connect to, in which he can see his new Thing. Bob is able to view various information about the Thing, including it's type, manufacturer, functions etc. Bob selects the Thing he wants to connect to the network and within a minute the new thing is now part of the network and he can then customise how he wants to use it in the network.}
 
@@ -117,9 +118,11 @@ Outcomes of the project:
 
 \subsection{Structure} % (fold)
 \label{sub:structure}
-The rest of this proposal is split up into the following sections...
+The rest of this proposal is split up into the following sections. Section 3 surveys previous work on the field of wireless sensor networks security, Internet of Things systems and protocols. Section 4 takes what has been learnt from the literature survey and proposes a solution to solve the problem described above. Lastly, section 5 discusses the work plan outlined for the implementation and evaluation part of the project, for the second half of the year.
 % subsection structure (end)
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Literature Review}
 This section discusses previous work on Internet of Things protocols, WSN security and home networking which provides the motivation and possible aid in solving the previously mentioned issues.
 
@@ -158,12 +161,22 @@ Much research has been carried out in securing WSNs, ensuring data within the ne
 
 \subsection{Key Distribution Problem} % (fold)
 \label{sub:key_distribution_problem}
+
+Whilst previous work has demonstrated it is feasible to secure a wireless sensor against eavesdropping, unauthorised participants and replay attacks, the issue of key distribution still remains.
+In the typical academic scenario, this may be a non-issue due to the expertise of the users. However, as described in the scenario in section \ref{sec:statement_of_problem}, the typical home user will only have a very basic knowledge if any at all of how to use and operate the devices, let alone configure and distribute network encryption keys on all of their Things. Therefore, it becomes necessary to investigate another method in which the keys for symmetric cryptography can be distributed, with minimal effort and knowledge required from the user.
+
 Tried to solve using Faraday cages...\cite{MessageBottle}
 Propose to use Asymmetric Security aka Public Key crypto
+\subsubsection{Message in a Bottle} % (fold)
+\label{ssub:message_in_a_bottle}
+
+% subsubsection message_in_a_bottle (end)
+
 % subsection key_distribution_problem (end)
 
-\subsection{Asymmetric Security - TinyECC and Certificates} % (fold)
+\subsection{Asymmetric Security} % (fold)
 \label{sub:asymmetric_security}
+
 \subsubsection{TinyECC} % (fold)
 \label{ssub:tinyecc}
 \cite{TinyECC}
@@ -207,8 +220,8 @@ Alternatively, asymmetric cryptography has also been proved viable on typical WS
            & Symmetric(MiniSec) & Asymmetric(TinyECC) \\ \hline
   ROM size & 3KB                & 15.65KB \\ \hline
   RAM size & 300B               & 1.8KB \\ \hline
-  Encrypt  &                    & 3.2s \\ \hline 
-  Decrypt  &                    & 2.1s \\ \hline
+  Encrypt  & $<$30ms/pkt        & 3.2s/pkt \\ \hline 
+  Decrypt  & $<$30ms/pkt        & 2.1s/pkt \\ \hline
   \end{tabular}
   \caption{Crypto implementation sizes and performances on TelosB mote}
   \end{center}
