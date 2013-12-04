@@ -118,7 +118,7 @@ Outcomes of the project:
 
 \subsection{Structure} % (fold)
 \label{sub:structure}
-The rest of this proposal is split up into the following sections. Section 3 surveys previous work on the field of wireless sensor networks security, Internet of Things systems and protocols. Section 4 takes what has been learnt from the literature survey and proposes a solution to solve the problem described above. Lastly, section 5 discusses the work plan outlined for the implementation and evaluation part of the project, for the second half of the year.
+The rest of this proposal is structured in the following way. Section 3 surveys previous work on the field of wireless sensor networks security, home networks and Internet of Things systems and protocols. Section 4 takes what has been learnt from the literature survey and proposes a solution to solve the problem described above. Lastly, section 5 discusses the work plan outlined for the implementation and evaluation part of the project, for the second half of the year.
 % subsection structure (end)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -137,9 +137,14 @@ This section discusses previous work on Internet of Things protocols, WSN securi
 % subsection homework_smart_home_router (end)
 
 %%%%%%%%%
-\subsection{Wireless Sensor Network Symmetric Security} % (fold)
+\subsection{WSN Security - Symmetric Cryptography} % (fold)
 \label{sub:tinysec_minisec_contikisec}
-Much research has been carried out in securing WSNs, ensuring data within the network isn't compromised, which could alter academic experiment results or leak sensitive data. The rest of this section discusses several attempts to secure WSNs for both the TinyOS and Contiki WSN operating systems.
+Much research has been carried out to secure WSNs, to ensure data within the network can't be compromised, which could lead to an negative alteration of academic experiment results or cause a leakage sensitive data. 
+
+Symmetric key cryptography is a class of cryptographic algorithms which enable two participants to exchange data in secret over a public channel using a shared key, known by both participants. Both encryption and decryption use the same key. One of the key benefits to symmetric algorithms is that it's relatively inexpensive, both in time and space, to encrypt and decrypt data, which makes this ideal for use in a WSN where resources are extremely constrained.
+
+The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some apparent drawbacks of each. 
+
 
 \subsubsection{TinySec} % (fold)
 \label{ssub:tinysec}
@@ -155,7 +160,8 @@ Much research has been carried out in securing WSNs, ensuring data within the ne
 \label{ssub:contikisec}
 \input{litreview/contikisec.tex}
 % subsubsection contikisec (end)
-\cite{TinySec, luk2007minisec, ContikiSec}
+\cite{ContikiSec}
+Discuss port of security to contiki, comparisons of different encryption algorithms, use of OCB. 
 % subsection tinysec_minisec_contikisec (end)
 %%%%%%%%%
 
@@ -165,18 +171,33 @@ Much research has been carried out in securing WSNs, ensuring data within the ne
 Whilst previous work has demonstrated it is feasible to secure a wireless sensor against eavesdropping, unauthorised participants and replay attacks, the issue of key distribution still remains.
 In the typical academic scenario, this may be a non-issue due to the expertise of the users. However, as described in the scenario in section \ref{sec:statement_of_problem}, the typical home user will only have a very basic knowledge if any at all of how to use and operate the devices, let alone configure and distribute network encryption keys on all of their Things. Therefore, it becomes necessary to investigate another method in which the keys for symmetric cryptography can be distributed, with minimal effort and knowledge required from the user.
 
-Tried to solve using Faraday cages...\cite{MessageBottle}
-Propose to use Asymmetric Security aka Public Key crypto
+\subsubsection{USB interface connectivity} % (fold)
+\label{ssub:usb_interface_connectivity}
+A simple method of distributing keys could be to force the user to plug the Thing into their PC or router, which would then automatically program the correct key into the device with minimal user interaction. Whilst this seems attractive at first, the main issue with this method is that it requires every Thing to have a USB port, plus the appropriate circuitry and logic to perform the programming. This not only increases the cost for the Things, as they now require additional components, but it can also increase the physical size and complexity of using them.
+% subsubsection usb_interface_connectivity (end)
+
 \subsubsection{Message in a Bottle} % (fold)
 \label{ssub:message_in_a_bottle}
-
+Tried to solve using small Faraday cages to encapsulate the keying devices...\cite{MessageBottle}
 % subsubsection message_in_a_bottle (end)
-
+\subsubsection{Asymmetric Cryptography} % (fold)
+\label{ssub:asymmetric_cryptography}
+Another possible alternative for distributing the symmetric shared keys, would be to use asymmetric cryptography to establish a secure channel between the two participants and then exchange the key over this secure channel. The following section describes this in more detail and also discusses some previous work and existing solutions.
+% subsubsection asymmetric_cryptography (end)
 % subsection key_distribution_problem (end)
 
-\subsection{Asymmetric Security} % (fold)
+\subsection{WSN Security - Asymmetric Cryptography} % (fold)
 \label{sub:asymmetric_security}
+Asymmetric cryptography, also know as public-key cryptography, is a class of cryptographic algorithms which enable two or more participants to establish a secure channel over an insecure channel with no prior knowledge or shared secrets beforehand. Participants generate a pair of keys before starting to communicate, known as their public and private keys. The private key must be kept secret, whereas the public key can be distributed freely. 
 
+To securely send data to another participant, both must exchange one another's public keys, this can be done on an insecure channel. The newly received public key can then be used to encrypt a packet to send to the other participant. Once a packet has been encrypted with a participant's public key, only they can decrypt it using their private key and read the secret inside, an eavesdropper would only have the public key which can't be used to decrypt the packet, hence the term asymmetric. 
+
+Alternatively, the private key can also be used to sign some data, which other participants can authenticate using the public key. This only assures the recipient that the data was sent by the signee, the only one with the private key; However, because anyone with the public key can view the data, it is therefore not secret.
+
+Whilst asymmetric cryptography seems to solve the problems previously discussed in symmetric cryptography, it also has some issues of its own. Firstly, in terms of size and speed, asymmetric algorithms tend to be several orders of magnitude slower than symmetric algorithms, due to the more complex algorithms used to provide the asymmetry, therefore use of them continuously, especially on a WSN where processing power is severely limited, can reduce the throughput and efficiency of the device.
+Secondly, whilst it's possible to distribute public keys in the open, a man-in-the-middle attack can compromise the security, in which a third party could intercept the public keys and switch them out for their own; After which, the participants would believe they are communicating securely, but are instead passing traffic through the third party.
+
+The rest of this section will discuss an efficient implementation of an asymmetric cryptography algorithm for WSN, as well as a possible solution to the authentication problem.
 \subsubsection{TinyECC} % (fold)
 \label{ssub:tinyecc}
 \cite{TinyECC}
