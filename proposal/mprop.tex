@@ -80,12 +80,12 @@ In order to establish the context of the problem, a typical user scenario has be
 
 \subsection{The Problem} % (fold)
 \label{sub:the_problem}
-The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; However, in order for it to be considered for deployment and integration into existing homes, two main issues need to first be addressed.
+The Internet of Things protocol created in \cite{KNoT} proved to be a successful proof-of-concept; however, in order for it to be considered for deployment and integration into existing homes, two main issues need to first be addressed.
 
 \subsubsection{Security} % (fold)
 \label{ssub:security}
 
-The initial design of the IoT protocol didn't consider security due to time constraints; However, because such rich and sensitive data can be gathered about the user and their home from Thing's, it becomes extremely important to not only protect the data from unauthorised persons, but also protect the network itself. The IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
+The initial design of the IoT protocol didn't consider security due to time constraints; however, because such rich and sensitive data can be gathered about the user and their home from Thing's, it becomes extremely important to not only protect the data from unauthorised persons, but also protect the network itself. The IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
 
 Demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
 % subsubsection security (end)
@@ -99,7 +99,7 @@ The current implementation exists as a standalone library with several demo appl
 \subsection{Intranet of Things vs Internet of Things} % (fold)
 \label{sub:intranet_of_things}
 
-As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach, see \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; Thus a more suitable name, the Intranet of Things, will be used. 
+As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach, see \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; thus a more suitable name, the Intranet of Things, will be used. 
 % subsection intranet_of_things (end)
 
 % subsection the_problem (end)
@@ -182,7 +182,7 @@ Tried to solve using small Faraday cages to encapsulate the keying devices...\ci
 % subsubsection message_in_a_bottle (end)
 \subsubsection{Asymmetric Cryptography} % (fold)
 \label{ssub:asymmetric_cryptography}
-Another possible alternative for distributing the symmetric shared keys, would be to use asymmetric cryptography to establish a secure channel between the two participants and then exchange the key over this secure channel. The following section describes this in more detail and also discusses some previous work and existing solutions.
+Another possible alternative for distributing the symmetric shared keys, would be to use asymmetric cryptography to establish an expensive albeit short-term secure channel between the two participants over an insecure channel and then exchange the key over this. The following section describes this in more detail, as well as some previous work related to WSN and asymmetric cryptography.
 % subsubsection asymmetric_cryptography (end)
 % subsection key_distribution_problem (end)
 
@@ -192,12 +192,24 @@ Asymmetric cryptography, also know as public-key cryptography, is a class of cry
 
 To securely send data to another participant, both must exchange one another's public keys, this can be done on an insecure channel. The newly received public key can then be used to encrypt a packet to send to the other participant. Once a packet has been encrypted with a participant's public key, only they can decrypt it using their private key and read the secret inside, an eavesdropper would only have the public key which can't be used to decrypt the packet, hence the term asymmetric. 
 
-Alternatively, the private key can also be used to sign some data, which other participants can authenticate using the public key. This only assures the recipient that the data was sent by the signee, the only one with the private key; However, because anyone with the public key can view the data, it is therefore not secret.
+Alternatively, the private key can also be used to sign some data, which other participants can authenticate using the public key. This only assures the recipient that the data was sent by the signee, the only one with the private key; however, because anyone with the public key can view the data, it is therefore not secret.
 
 Whilst asymmetric cryptography seems to solve the problems previously discussed in symmetric cryptography, it also has some issues of its own. Firstly, in terms of size and speed, asymmetric algorithms tend to be several orders of magnitude slower than symmetric algorithms, due to the more complex algorithms used to provide the asymmetry, therefore use of them continuously, especially on a WSN where processing power is severely limited, can reduce the throughput and efficiency of the device.
-Secondly, whilst it's possible to distribute public keys in the open, a man-in-the-middle attack can compromise the security, in which a third party could intercept the public keys and switch them out for their own; After which, the participants would believe they are communicating securely, but are instead passing traffic through the third party.
+Secondly, whilst it's possible to distribute public keys in the open, a man-in-the-middle attack can compromise the security, in which a third party could intercept the public keys and switch them out for their own; after which, the participants would believe they are communicating securely, but are instead passing traffic through the third party.
 
-The rest of this section will discuss an efficient implementation of an asymmetric cryptography algorithm for WSN, as well as a possible solution to the authentication problem.
+The rest of this section will discuss two different implementations of asymmetric cryptography algorithms for WSN, as well as a possible solution to the authentication problem.
+
+\subsubsection{TinyPK} % (fold)
+\label{ssub:tinypk}
+TinyPK is an implementation of public-key protocols using the Rivest Shamir Adelman (RSA) algorithm for use on TinyOS WSNs\cite{TinyPK}. The purpose of the paper was to demonstrate that it's viable to selectively use public key protocols to securely distribute shared session keys for later use in symmetric cryptography.
+
+In the context the paper presents, there are two entities, a sensor network and a third party that wishes to connect to the network. Also apparent is a public key infrastructure, which contains a trusted certificate authority. This CA assists with authenticating all communicating members. Prior to deployment, public and private key pairs are generated for all members (static keys). The CA signs each member's public key with its (CA) private key and then gives back the signed public key and the its own public key to the respective owner. This enables any member to authenticate a public key received from another member, assuring it that a man-in-the-middle attack can't have occurred.
+
+One of the issues TinyPK tries to solve, is the high time cost associated with performing private key functions on the motes, stating that they could take tens of minutes to perform. To avoid this, it is assumed that the third party that wishes to connect to the WSN has more resources at hand and can compute the private functions within reasonable time bounds. This in effect means that any signing required on the sensor side needs to either be avoided or be precomputed by the CA using its private key. An example in this context, is a mini certificate used to identify a sensor, containing meta-data about the sensor such as ID, date of construction and type. Because the sensor doesn't have the computational power to sign it, the CA can sign it using the CA's private key, therefore any other device with the public key can read it and trust the CA.
+
+The security protocol is itself a simple challenge-response protocol. First, the third party decides to connect to the sensor network, sends it's CA signed public key and sets a challenge in the form of a nonce to protect against replay attacks. If the receiving sensor is legitimate it will contain the CA's public key which can be used to authenticate the public key, using this the device can then un-sign the challenge nonce. Now that the sensor can prove the third party is legitimate, it can then choose to reply to it using the valid nonce it received along with the session key. This time the packet is encrypted using the third parties received public key, ensuring no-one else can eavesdrop on it. Upon reception the third party verifies the nonce and then stores the session key for future use. 
+
+% subsubsection tinypk (end)
 \subsubsection{TinyECC} % (fold)
 \label{ssub:tinyecc}
 \cite{TinyECC}
@@ -231,7 +243,7 @@ Discuss the use of certificates and certificate authority to pass trust up the c
 % subsection problems_with_previous_work (end)
 Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,luk2007minisec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor i.e. PC. 
 
-Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; Therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in table \ref{tab:crypto_compare}.
+Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in table \ref{tab:crypto_compare}.
 
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
