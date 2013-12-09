@@ -199,6 +199,14 @@ Secondly, whilst it's possible to distribute public keys in the open, a man-in-t
 
 The rest of this section will discuss two different implementations of asymmetric cryptography algorithms for WSN, as well as a possible solution to the authentication problem.
 
+\subsubsection{Certificates and Public Key Infrastructures} % (fold)
+\label{ssub:certificates_and_public_key_infrastructures}
+By itself, asymmetric cryptography only allows two participants to create a secure link over an unsecured channel, preventing eavesdroppers. It does not allow authentication of either participant, meaning that an active eavesdropper could perform a man-in-the-middle attack. 
+
+To counter this, a public key infrastructure can be used to pass the authentication up to trusted body. This trusted body is know as a certificate authority. The CA's job is to issue public key certificates for agents that want to be trusted by others. An agent can obtain a PKC by presenting the CA with its details and public key, which the CA approves and signs the pair using its own private key; it then returns the signed certificate to the agent along with the CA's public key. Now, when the agent carries out an asymmetric key exchange with another party, it can send its certificate to the other party, which can then verify it using its own copy of the CA's public key. This allows two parties to now authenticate each other's public key, ensuring that an active eavesdropper hasn't performed a man-in-the-middle attack and switched out the keys for their own. However, now both parties must trust the CA and obtain a personal PKC and CA private key from it; if the CA were to be compromised, all trust is lost.
+
+% subsubsection certificates_and_public_key_infrastructures (end)
+
 \subsubsection{TinyPK} % (fold)
 \label{ssub:tinypk}
 TinyPK is an implementation of public-key protocols using the Rivest Shamir Adelman (RSA) algorithm for use on TinyOS WSNs\cite{TinyPK}. The purpose of the paper was to demonstrate that it's viable to selectively use public key protocols to securely distribute shared session keys for later use in symmetric cryptography.
@@ -209,18 +217,15 @@ One of the issues TinyPK tries to solve, is the high time cost associated with p
 
 The security protocol is itself a simple challenge-response protocol. First, the third party decides to connect to the sensor network, sends it's CA signed public key and sets a challenge in the form of a nonce to protect against replay attacks. If the receiving sensor is legitimate it will contain the CA's public key which can be used to authenticate the public key, using this the device can then un-sign the challenge nonce. Now that the sensor can prove the third party is legitimate, it can then choose to reply to it using the valid nonce it received along with the session key. This time the packet is encrypted using the third parties received public key, ensuring no-one else can eavesdrop on it. Upon reception the third party verifies the nonce and then stores the session key for future use. 
 
+\textbf{DISCUSS issue of mote authentication happening after key is distributed..is it safe?}
 % subsubsection tinypk (end)
 \subsubsection{TinyECC} % (fold)
 \label{ssub:tinyecc}
 \cite{TinyECC}
 A public key crypto implementation of Elliptic Curve cryptography, supporting higher effective security with smaller keys (than RSA).
+\textbf{DISCUSS efficient implementation, sizes of keys and why it's perfect for WSNs}
 \input{litreview/tinyecc.tex}
 % subsubsection tinyecc (end)
-
-\subsubsection{Certificates and Public Key Infrastructures} % (fold)
-\label{ssub:certificates_and_public_key_infrastructures}
-Discuss the use of certificates and certificate authority to pass trust up the chain.
-% subsubsection certificates_and_public_key_infrastructures (end)
 % subsection asymmetric_security (end)
 
 
@@ -243,7 +248,7 @@ Discuss the use of certificates and certificate authority to pass trust up the c
 % subsection problems_with_previous_work (end)
 Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,luk2007minisec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor i.e. PC. 
 
-Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in table \ref{tab:crypto_compare}.
+Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table below.
 
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
@@ -256,11 +261,12 @@ Alternatively, asymmetric cryptography has also been proved viable on typical WS
   Encrypt  & $<$30ms/pkt        & 3.2s/pkt \\ \hline 
   Decrypt  & $<$30ms/pkt        & 2.1s/pkt \\ \hline
   \end{tabular}
-  \caption{Crypto implementation sizes and performances on TelosB mote}
+  \caption{Cryptographic implementation sizes and performances on the TelosB mote}
   \end{center}
 \end{table}
 
-There has been significant research into WSN security \cite{TinySec, luk2007minisec, ContikiSec, TinyECC,MessageBottle, CertificatePairwise, Karlof_Wagner_2003, SecurityInWSN}, covering both symmetric and asymmetric cryptography for various WSN platforms. However, in networks where symmetric cryptography was used, deployment of shared encryption keys was either not described or burned to ROM\cite{TinySec, luk2007minisec, ContikiSec} prior to a node's deployment. In the case of asymmetric cryptography, research has just proven that it was viable on WSN platforms\cite{TinyECC}. Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
+\textbf{Discuss issue of segmentation of home network and IoT network}
+Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
 
 
 
