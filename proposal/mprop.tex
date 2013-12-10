@@ -50,17 +50,17 @@
     ``The most profound technologies are those that disappear. They weave themselves into the fabric of everyday life until they are indistinguishable from it.''
 \end{chapquote}
 
-The modern home is becoming increasingly filled with a variety of \textit{connected} devices (laptops, tablets, phones, set-top boxes etc.), providing a myriad of different services to users within the home. On top of this, with the advent use of smart phones and introduction of wearable devices, we too are starting to carry around our own personal network of devices everywhere we go, brushing past many others in our daily lives at home, work and on the street. Although all connected to the Internet, these devices are often encapsulated within their own environment and ecosystem, unable to interconnect, creating a fractured and often complex user experience. 
+The modern home is becoming increasingly filled with a variety of \textit{connected} devices (laptops, tablets, phones, set-top boxes etc.), providing a myriad of different services to users within the home. On top of this, with the introduction of smart phones and wearable devices, we too are starting to carry around our own personal network of devices everywhere we go, brushing past many others in our daily lives at home, work and on the street. Although all connected to the Internet, these devices are often encapsulated within their own environment and ecosystem, unable to interconnect, creating a fractured and often complex user experience. 
 
-Making matters more interesting, the Internet of Things paradigm is once again becoming a field of great interest due to the advent of cheap, low power wireless embedded devices \cite{2013IoT}. However, not much consideration has been made for how these Things should be integrated into the existing home network, with many approaches opting to simply bridge the device to the cloud (\cite{SmartThings}, \cite{Twine}, \cite{IETF_CORE}), with obvious concerns for security, privacy and up-time.
+Making matters more interesting, the Internet of Things paradigm is once again becoming a field of great interest due to the advent of cheap, low-power wireless embedded devices \cite{2013IoT}. However, not much consideration has been made for how these Things should be integrated into the existing home network, with many approaches opting to simply bridge the device to the cloud (\cite{SmartThings}, \cite{Twine}, \cite{IETF_CORE}), with obvious concerns for security, privacy and up-time.
 
-As these devices enter our homes and pockets, bringing with them their own ecosystems, the user is faced with the increasingly difficult burden of managing all of them and the ecosystems \cite{brundell2011w}, \cite{brown2013multinet}. Due to the sheer number and diversity of these devices, many of which will provide overlapping services and functionality, problems arise in how to ensure these devices not only play nicely together but also ensuring the user's network and information stays secure against new and unanticipated threats.
+As these devices enter our homes and pockets, bringing with them their own ecosystems, the user is faced with the increasingly difficult burden of managing them and their ecosystems \cite{brundell2011w}, \cite{brown2013multinet}. Due to the sheer number and diversity of these devices, many of which will provide overlapping services and functionality, problems arise with respect to how these devices cooperate, as well as how to ensure that the user's network and information stays secure against new and unanticipated threats.
 
 In order for these multiple layered networks of devices to truly fade away into the fabric of our everyday lives, a platform and relevant protocols need to be engineered to not only support this heterogeneous network securely, but also aid the user in managing both the network and the privacy of their information.
 
-The Homework home router platform was created to these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
+The Homework home router platform was created to address these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
 
-In regards to the Internet of Things development, previous work demonstrated that it was in need a suitable protocol in order to meet the specific needs of a network of Things \cite{KNoT}. Thus, a new protocol was designed and implemented, which could not only run on even the most constrained battery-powered devices (8MHz), but it could also efficiently scale to support hundreds of Things within the same network.
+In regards to the Internet of Things development, previous work demonstrated that it was in need of a suitable protocol in order to meet the specific needs of a network of Things \cite{KNoT}. Thus, a new protocol was designed and implemented, which could not only run on the most constrained battery-powered devices (8MHz), but it could also efficiently scale to support hundreds of Things within the same network.
 
 %TODO: WRITE MORE LINKY LINKY
 
@@ -70,7 +70,7 @@ In regards to the Internet of Things development, previous work demonstrated tha
 
 \section{Statement of Problem}
 \label{sec:statement_of_problem}
-Whilst there have been many attempts, both past and recent, to create the perfect Internet of Things network for the home, many still exhibit several issues. This section will first present a typical user scenario to provide a context for this problem, then discuss several of the issues found in existing work, both our previous work and others', which provide the motivation for this project.
+Whilst there have been many attempts, both past and recent, to create the perfect Internet of Things network for the home, all still exhibit several issues. This section will first present a typical user scenario to provide a context for this problem, then discuss several of the issues found in existing work, both our previous work and others', which provide the motivation for this project.
 
 \subsection{A Scenario} % (fold)
 \label{sub:scenario}
@@ -85,7 +85,12 @@ The Internet of Things protocol created in \cite{KNoT} proved to be a successful
 \subsubsection{Security} % (fold)
 \label{ssub:security}
 
-The initial design of the IoT protocol didn't consider security due to time constraints; however, because such rich and sensitive data can be gathered about the user and their home from Thing's, it becomes extremely important to not only protect the data from unauthorised persons, but also protect the network itself. The IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
+The initial design of the IoT protocol didn't consider security due to time constraints; however, because such rich and sensitive data can be gathered about the user and their home from Things, it becomes extremely important to not only protect the data from unauthorised persons, but also protect the network itself. The IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
+
+\begin{itemize}
+  \item Eavesdropping - An attacker observes the unencrypted traffic between the various devices in the network, and uses this information for illegitimate purposes. This needs to be prevented due to the richness, coverage and sensitivity of the data captured within an IoT, which could be used to perform serious physical attacks, spying, as well as have other serious consequences. Therefore, it's necessary to encrypt all traffic where possible, so that only legitimate participants may observe the information traversing the network.
+  \item Unsanctioned participants - 
+\end{itemize}
 
 Demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
 % subsubsection security (end)
@@ -93,13 +98,13 @@ Demonstrated in the scenario, a user may want to purchase any kind of compatible
 \subsubsection{Integration} % (fold)
 \label{ssub:integration}
 
-The current implementation exists as a standalone library with several demo applications. Integration of the IoT protocol into a user-friendly platform is necessary to harness the full power of a network of Things. The integrated platform would then be able to discover and connect to available Things, subscribe and log events from the sensors and using user customised rules, use automata to detect if these rules are met and then perform actions by publishing commands to actuators in the network.
+The current implementation exists as a standalone library with several demo applications. Integration of the IoT protocol into a user-friendly platform is necessary to harness the full power of a network of Things. The integrated platform would then be able to discover and connect to available Things, subscribe and log events from the sensors, and using user customised rules, use automata to detect if these rules are met and then perform actions by publishing commands to actuators in the network.
 % subsubsection integration (end)
 
 \subsection{Intranet of Things vs Internet of Things} % (fold)
 \label{sub:intranet_of_things}
 
-As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach, see \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; thus a more suitable name, the Intranet of Things, will be used. 
+As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; thus a more suitable name, the Intranet of Things, will be used. 
 % subsection intranet_of_things (end)
 
 % subsection the_problem (end)
@@ -124,7 +129,7 @@ The rest of this proposal is structured in the following way. Section 3 surveys 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Literature Review}
-This section discusses previous work on Internet of Things protocols, WSN security and home networking which provides the motivation and possible aid in solving the previously mentioned issues.
+This section discusses previous work on Internet of Things protocols, WSN security and home networking which provides the motivation and possibly aids in solving the previously mentioned issues.
 
 \subsection{State-of-the-art IoT Protocols} % (fold)
 \label{sub:state_of_the_art_iot_protocols}
@@ -139,7 +144,7 @@ This section discusses previous work on Internet of Things protocols, WSN securi
 %%%%%%%%%
 \subsection{WSN Security - Symmetric Cryptography} % (fold)
 \label{sub:tinysec_minisec_contikisec}
-Much research has been carried out to secure WSNs, to ensure data within the network can't be compromised, which could lead to an negative alteration of academic experiment results or cause a leakage sensitive data. 
+Substantial research has been carried out to secure WSNs, to ensure data within the network can't be compromised, which could lead to an negative alteration of academic experiment results or cause a leakage sensitive data. 
 
 Symmetric key cryptography is a class of cryptographic algorithms which enable two participants to exchange data in secret over a public channel using a shared key, known by both participants. Both encryption and decryption use the same key. One of the key benefits to symmetric algorithms is that it's relatively inexpensive, both in time and space, to encrypt and decrypt data, which makes this ideal for use in a WSN where resources are extremely constrained.
 
