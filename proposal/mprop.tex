@@ -87,10 +87,12 @@ The Internet of Things protocol created in \cite{KNoT} proved to be a successful
 
 The initial design of the IoT protocol didn't consider security due to time constraints; however, because such rich and sensitive data can be gathered about the user and their home from Things, it becomes extremely important to not only protect the data from unauthorised persons, but also protect the network itself. The IoT protocol needs to be sufficiently secured to prevent eavesdropping of the transmitted data and injection of false events by perpetrators masquerading as sanctioned participants in the network. 
 
-\begin{itemize}
-  \item Eavesdropping - An attacker observes the unencrypted traffic between the various devices in the network, and uses this information for illegitimate purposes. This needs to be prevented due to the richness, coverage and sensitivity of the data captured within an IoT, which could be used to perform serious physical attacks, spying, as well as have other serious consequences. Therefore, it's necessary to encrypt all traffic where possible, so that only legitimate participants may observe the information traversing the network.
-  \item Unsanctioned participants - 
-\end{itemize}
+Possible attack vectors:
+\begin{enumerate}
+  \item \textbf{Eavesdropping} - An attacker observes the unencrypted traffic between the various devices in the network, and uses this information for illegitimate purposes. This needs to be prevented due to the richness, coverage and sensitivity of the data captured within an IoT, which could be used to perform serious physical attacks, spying, as well as have other serious consequences. Therefore, it's necessary to encrypt all traffic where possible, so that only legitimate participants may observe the information traversing the network.
+  \item \textbf{Unsanctioned participants} - An attacker infiltrates the network masquerading as a legitimate participant, enabling it to spoof traffic, such as events and commands, as well as observe other traffic. Such an attack would enable an attacker to spy on and manipulate the network of Things, which could lead to various damaging consequences, ranging from energy waste, to more serious home security issues such security locks being disabled enabling other possible crimes.
+  \item \textbf{Node capture} - Due to the placement of Things, sometimes outwith the protective confines of a home or building, they can become vulnerable to an attacker capturing them. Once captured, it may be possible to extract encryption keys, illegally modify the functionality and also replace nodes with maliciously modified ones.
+\end{enumerate}
 
 Demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
 % subsubsection security (end)
