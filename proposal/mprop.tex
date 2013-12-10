@@ -91,6 +91,7 @@ Presented below is a summary of the typical attacks targeted towards WSNs, and i
   \item \textbf{Eavesdropping} - An attacker observes the unencrypted traffic between the various devices in the network, and uses this information for illegitimate purposes. This needs to be prevented due to the richness, coverage and sensitivity of the data captured within an IoT, which could be used to perform serious physical attacks, spying, as well as have other serious consequences. Therefore, it's necessary to encrypt all traffic where possible, so that only legitimate participants may observe the information traversing the network.
   \item \textbf{Unsanctioned participants} - An attacker infiltrates the network masquerading as a legitimate participant, enabling it to spoof traffic, such as events and commands, as well as observe other traffic. Such an attack would enable an attacker to spy on and manipulate the network of Things, which could lead to various damaging consequences, ranging from energy waste, to more serious home security issues such security locks being disabled enabling other possible crimes.
   \item \textbf{Node capture} - Due to the placement of Things, sometimes outwith the protective confines of a home or building, they can become vulnerable to an attacker capturing them. Once captured, it may be possible to extract encryption keys, illegally modify the functionality and also replace nodes with maliciously modified ones.
+  \item \textbf{Denial of service} - 
 \end{enumerate}
 
 Demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
@@ -149,7 +150,7 @@ Substantial research has been carried out to secure WSNs, to ensure data within 
 
 Symmetric key cryptography is a class of cryptographic algorithms which enable two participants to exchange data in secret over a public channel using a shared key, known by both participants. Both encryption and decryption use the same key. One of the key benefits to symmetric algorithms is that it's relatively inexpensive, both in time and space, to encrypt and decrypt data, which makes this ideal for use in a WSN where resources are extremely constrained.
 
-The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some apparent drawbacks of each. 
+The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some drawbacks apparent in each. 
 
 
 \subsubsection{TinySec} % (fold)
@@ -182,9 +183,15 @@ In the typical academic scenario, this may be a non-issue due to the expertise o
 A simple method of distributing keys could be to force the user to plug the Thing into their PC or router, which would then automatically program the correct key into the device with minimal user interaction. Whilst this seems attractive at first, the main issue with this method is that it requires every Thing to have a USB port, plus the appropriate circuitry and logic to perform the programming. This not only increases the cost for the Things, as they now require additional components, but it can also increase the physical size and complexity of using them.
 % subsubsection usb_interface_connectivity (end)
 
-\subsubsection{Message in a Bottle} % (fold)
+\subsubsection{Message-in-a-bottle} % (fold)
 \label{ssub:message_in_a_bottle}
-Tried to solve using small Faraday cages to encapsulate the keying devices...\cite{MessageBottle}
+In an attempt to distribute session keys in a user friendly way, and without the use of physical interfaces or asymmetric cryptography, Message-in-a-bottle utilises several physical techniques to carry out a wireless keying mechanism resilient to typical WSN attack vectors \cite{MessageBottle}. To achieve this, a Faraday cage and RF jamming is used in combination with a wireless session key distribution protocol. 
+
+To distribute the session key to a new uninitialised device, a user places the keying device and the new device entering the network into a Faraday cage\footnote{The authors used a steel pipe sealed at both ends.}. The keying device then wirelessly transmits keying information to the node inside the cage. Meanwhile outside the cage, a keying beacon jams the wireless frequency of the shielded devices, in an attempt to ensure no leakage happens due to imperfections in the cage. After the keying session has complete, signalled by the keying beacon blinking its blue LED, the new node can be taken out of the cage. The keying beacon then communicates with the device, which will then construct the key based on what it received inside the cage, enabling it to connect to the network. If successful the keying beacon will blink its green LED.
+
+Message-in-a-bottle presents a novel method of performing key distribution, however, whilst it reduces the cost of each device due to the absence of a physical connector, it still requires additional hardware (Faraday cage) to perform the key distribution protocol; this not only increases the burden of managing the network (storing and finding the cage), but also still presents an additional non-trivial task for the user to perform, especially in the case of a new network filled with tens of devices. The paper presents an additional method for distributing keys to multiple devices simultaneously, but this requires a large Faraday cage (pot size), further increasing the burden of managing the network. Another issue to consider is that whilst some devices may be small enough to fit in the cage, many others, such as household appliances, will not; therefore, a more appropriate key distribution protocol is necessary for an IoT network.
+
+
 % subsubsection message_in_a_bottle (end)
 \subsubsection{Asymmetric Cryptography} % (fold)
 \label{ssub:asymmetric_cryptography}
@@ -252,7 +259,7 @@ A public key crypto implementation of Elliptic Curve cryptography, supporting hi
 \label{sub:problems_with_previous_work}
 
 % subsection problems_with_previous_work (end)
-Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,luk2007minisec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor i.e. PC. 
+Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,luk2007minisec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
 
 Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table below.
 
@@ -274,8 +281,17 @@ Alternatively, asymmetric cryptography has also been proved viable on typical WS
 \textbf{Discuss issue of segmentation of home network and IoT network}
 Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
 
-
-
+% The goal of the attacker is to compromise the keys shared
+% by the base station and the sensor nodes.
+% We adopt the Dolev-Yao attacker model, where an attacker
+% is present in the network and can overhear, intercept,
+% and inject any messages into the radio communication channel.
+% An attacker could take the form of a more powerful
+% device, such as a laptop equipped with a directional antenna.
+% The attacker is assumed to be present before, during, and after
+% key deployment. Such an omnipotent attacker is in line
+% with other research in this area [2, 22].
+% 3 Protocol
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proposed Approach}
 
@@ -284,7 +300,8 @@ Little has been done to present a fully deployable and dynamic secure WSN that i
 % state how you propose to solve the software development problem. Show that your proposed approach is feasible, but identify any risks.
 \subsection{Solving the Problem} % (fold)
 \label{sub:solving_the_problem}
-
+forward secrecy
+Demonstrative identification.
 % subsection solving_the_problem (end)
 \subsection{Security Architecture} % (fold)
 \label{sub:security_architecture}
