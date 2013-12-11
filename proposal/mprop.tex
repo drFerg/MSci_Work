@@ -150,6 +150,10 @@ Substantial research has been carried out to secure WSNs, to ensure data within 
 
 Symmetric key cryptography is a class of cryptographic algorithms which enable two participants to exchange data in secret over a public channel using a shared key, known by both participants. Both encryption and decryption use the same key. One of the key benefits to symmetric algorithms is that it's relatively inexpensive, both in time and space, to encrypt and decrypt data, which makes this ideal for use in a WSN where resources are extremely constrained.
 
+Symmetric algorithms fall into two main categories, stream based ciphers, where data is encrypted by combining it with a pseudorandom data stream (one time pad), and block based ciphers, where data is segmented into blocks and operated on by a set of functions, often with the previous cipher block feeding into the next input. 
+
+In the case of WSN, block based ciphers have seen exclusive use. However, one issue with a block based cipher is that if two identical blocks are encrypted, both will return equal encrypted blocks, thus a passive adversary could extract partial information about the plaintext sent (semantic security). To solve this and maintain semantic security, an additional security primitive, an initialisation vector, can be used to ensure that this cannot occur. An initialisation vector provides a unique value which is used in the encryption of the first block, ensuring no two identical blocks return the same cipher text block; after the first block, the initialisation vector becomes the previous ciphertext block.
+
 The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some drawbacks apparent in each. 
 
 
@@ -167,8 +171,6 @@ The rest of this section discusses several attempts to secure WSNs using symmetr
 \label{ssub:contikisec}
 \input{litreview/contikisec.tex}
 % subsubsection contikisec (end)
-\cite{ContikiSec}
-Discuss port of security to contiki, comparisons of different encryption algorithms, use of OCB. 
 % subsection tinysec_minisec_contikisec (end)
 %%%%%%%%%
 
@@ -230,15 +232,14 @@ One of the issues TinyPK tries to solve, is the high time cost associated with p
 
 The security protocol is itself a simple challenge-response protocol. First, the third party decides to connect to the sensor network, sends it's CA signed public key and sets a challenge in the form of a nonce to protect against replay attacks. If the receiving sensor is legitimate it will contain the CA's public key which can be used to authenticate the public key, using this the device can then un-sign the challenge nonce. Now that the sensor can prove the third party is legitimate, it can then choose to reply to it using the valid nonce it received along with the session key. This time the packet is encrypted using the third party's received public key, ensuring no-one else can eavesdrop on it. Upon reception the third party verifies the nonce and then stores the session key for future use. 
 
-\textbf{DISCUSS issue of mote authentication happening after key is distributed..is it safe?}
+Because of the high cost of private key on the wireless sensor nodes, it's not possible to authenticate a node prior to passing over the session key, therefore creating a possible weakness. However, to try and resolve this, TinyPK uses an additional Diffie-Hellman challenge over the secure session channel to verify the sensor node's authenticity. This further complicates the process and also allows an unauthenticated sensor node to communicate with the third party prior to the authentication process, possibly making the third party vulnerable, especially if the session key is used network-wide.
+
 % subsubsection tinypk (end)
 \subsubsection{TinyECC} % (fold)
 \label{ssub:tinyecc}
-\cite{TinyECC}
-A public key crypto implementation of Elliptic Curve cryptography, supporting higher effective security with smaller keys (than RSA).
-\textbf{DISCUSS efficient implementation, sizes of keys and why it's perfect for WSNs}
 \input{litreview/tinyecc.tex}
 % subsubsection tinyecc (end)
+
 % subsection asymmetric_security (end)
 
 
@@ -259,24 +260,28 @@ A public key crypto implementation of Elliptic Curve cryptography, supporting hi
 \label{sub:problems_with_previous_work}
 
 % subsection problems_with_previous_work (end)
-Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,luk2007minisec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
+Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,MiniSec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
 
-Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically create shared keys. Whilst there is some improvement in performance, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table below.
+Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically authenticate each other and create shared secret keys. Whilst there is some improvement in performance with the use of ECC over RSA, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table below.
 
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \label{tab:crypto_compare}
   \begin{tabular}{|c|c|c|} 
   \hline
-           & Symmetric(MiniSec) & Asymmetric(TinyECC) \\ \hline
+           & Symmetric(TinySec) & Asymmetric(TinyECC) \\ \hline
   ROM size & 3KB                & 15.65KB \\ \hline
   RAM size & 300B               & 1.8KB \\ \hline
-  Encrypt  & $<$30ms/pkt        & 3.2s/pkt \\ \hline 
-  Decrypt  & $<$30ms/pkt        & 2.1s/pkt \\ \hline
+  Encrypt  & $<$2ms/pkt         & 3.2s/pkt \\ \hline 
+  Decrypt  & $<$2ms/pkt         & 2.1s/pkt \\ \hline
   \end{tabular}
-  \caption{Cryptographic implementation sizes and performances on the TelosB mote}
+  \caption[]{Cryptographic implementation sizes and performances of TinySec and TinyECC, on the Mica2(8Mhz) and TelosB (8Mhz)mote respectively\footnotemark. \cite{TinySec,TinyECC}}
   \end{center}
 \end{table}
+
+\footnotetext{Based on TinySec's implementation (8MHz CPU) where encrypt/decrypt operations take 0.38ms to perform over 64 bit(8 byte) blocks, with TinyOS's default packet size set to 29 bytes.}
+
+However, by using public key cryptography to initially bootstrap the symmetric cryptography with session keys, the computational impact of using PKC needs to only be dealt with once at boot-time, whilst allowing for dynamic session key assignment. This is similar to TinyPK, however, because of the innovation of ECC, it's no longer necessary to perform a reduced and more complicated authentication process\cite{TinyPK}.
 
 \textbf{Discuss issue of segmentation of home network and IoT network}
 Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
