@@ -286,31 +286,29 @@ However, by using public key cryptography to initially bootstrap the symmetric c
 \textbf{Discuss issue of segmentation of home network and IoT network}
 Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
 
-% The goal of the attacker is to compromise the keys shared
-% by the base station and the sensor nodes.
-% We adopt the Dolev-Yao attacker model, where an attacker
-% is present in the network and can overhear, intercept,
-% and inject any messages into the radio communication channel.
-% An attacker could take the form of a more powerful
-% device, such as a laptop equipped with a directional antenna.
-% The attacker is assumed to be present before, during, and after
-% key deployment. Such an omnipotent attacker is in line
-% with other research in this area [2, 22].
-% 3 Protocol
+In contrast to this, a local approach, where the connectivity, device management and policies are managed within the home might be a better approach. Furthering this, combining the IoT network with the traditional home network filled with PCs, tablets and mobile devices, to create a single network of devices, where the user can control, manage and configure in one place, would create a more seamless and user friendly experience. As discussed in section \ref{sub:homework_smart_home_router}, the Homework project attempts to reinvent the home network, enabling novice users to have full control over the network, without the need of expensive hardware or the cloud\footnote{Homework project demonstrated implementation on a EEPC 1000H netbook with an Atom 1.6GHz CPU and 2GB RAM}. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proposed Approach}
 
+After surveying the previous work completed in the various related fields, it's now possible to propose a feasible approach that can be undertaken in order to achieve the aims of this project. This section will discuss the two independent but related aims and the proposed approach to solve each one, to create a secure IoT platform integrated into the existing Homework platform.
 
 
 % state how you propose to solve the software development problem. Show that your proposed approach is feasible, but identify any risks.
 \subsection{Solving the Problem} % (fold)
 \label{sub:solving_the_problem}
-forward secrecy
-Demonstrative identification - using the button and confirming with screen/lights
+The aims of this project are two-fold; firstly, secure the currently existing IoT protocol developed in our previous work against eavesdroppers and unsanctioned participants; secondly, integrate the IoT controller role into the Homework information plane architecture, enabling the IoT network to be managed and controlled by Homework and in effect, the user through policies.
 
 % subsection solving_the_problem (end)
 \subsection{Security Architecture} % (fold)
 \label{sub:security_architecture}
+As previously discussed, there have been many attempts to create a secure WSN, both utilising symmetric and asymmetric cryptography; however, there have been very few attempts to demonstrate their use in tandem, to provide a dynamic secure network that allows nodes to enter and leave the network, without prior knowledge or pre-installed secrets. Some attempts have been made to circumvent the need for using asymmetric cryptography for key distribution, due to its prohibitive cost in time and space on constrained devices, but these attempts were not only complex \cite{TinyPK}, but also infeasible\cite{MessageBottle}. With the innovations made with ECC, asymmetric cryptography has become a far more feasible approach to secure key distribution.
+forward secrecy
+
+As described in section \ref{ssub:security}, there are a variety of possible attack vectors that can be employed by attackers; for the purpose of this project, only the first two, eavesdropping and unsanctioned participants, will be considered. Node capture is relatively difficult to protect against due to the nature of the placement of Things within the environment, thus it will be left up to the user to ensure devices within the network are kept safe, just as they would with other belongings. Similarly, denial-of-service is again difficult to protect against due to the nature of wireless networking where RF jamming can occur; however, some attempt will be made to reduce the effect of packet-based DoS attacks, which aim to overload the recipient by initiating complex processing tasks. 
+
+
+Demonstrative identification - using the button and confirming with screen/lights
 
 \subsubsection{Symmetric Key Cryptography} % (fold)
 \label{ssub:symmetric_key_cryptography}
