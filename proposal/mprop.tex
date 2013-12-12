@@ -319,7 +319,7 @@ In order to authenticate the devices and ensure a man-in-the-middle attack canno
 
 \subsubsection{Symmetric Cryptography} % (fold)
 \label{ssub:symmetric_key_cryptography}
-For the symmetric part of the security protocol, MiniSec\cite{MiniSec} will be used to ensure that eavesdroppers can't see what data is traversing the network and stop unsanctioned participants from performing replay attacks or injecting bad data into the network. In order for this to be achieved, both encryption and authentication needs to be used. MiniSec provides this combined encryption and authentication in one pass over the packet using the OCB mode of operation. For each node connected to the controller, a unique session key will be used. This will help reduce the cost of a single node being captured, as only the connection between those the node and the controller would be compromised, as opposed to the case where the whole network would be compromised if a network-wide session key is used, such as in TinySec\cite{TinySec}. However, if a node is captured, it may still be possible illegally alter the device, therefore the risk of node capture can't be fully mitigated.
+For the symmetric part of the security protocol, MiniSec\cite{MiniSec} will be used to ensure that eavesdroppers can't see what data is traversing the network and stop unsanctioned participants from performing replay attacks or injecting bad data into the network. In order for this to be achieved, both encryption and authentication needs to be used. MiniSec provides this combined encryption and authentication in one pass over the packet using the OCB mode of operation. For each node connected to the controller, a unique session key will be used. This will help reduce the cost of a single node being captured, as only the connection between the node and the controller would be compromised, as opposed to the case in which the whole network would be compromised if a network-wide session key were to be used, such as in TinySec\cite{TinySec}. However, if a node is captured, it may still be possible illegally alter the device or retrieve its public/private keys, therefore the risk of node capture can't be fully mitigated.
 
 For a normal packet, using MiniSec to encrypt and authenticate the payload will add an additional 3 bytes of overhead. This consists of removing the group (grp) and CRC fields as they are no longer necessary, replacing them with a source address field and message authentication code (MAC)\footnote{Unfortunate collision between abbreviations for media access control and message authentication code, the latter will only be referred to in this report.}. The MAC field incorporates both integrity (replacing CRC), and verification, which is needed to ensure a packet is authentic and hasn't been altered by an attacker. Additionally, as mentioned previously in section \ref{ssub:minisec}, MiniSec provides replay prevention through the use of its IV counter embedded in the length field.
 
@@ -329,7 +329,7 @@ As previously mentioned, the current implementation of MiniSec uses the now un-r
 
 \subsubsection{Security protocol} % (fold)
 \label{ssub:security_protocol}
-Flesh out description, possibly include sequence diagram?
+\textbf{Flesh out description}
 \begin{itemize}
   \item Bootstrap CA certificates and keys prior to deployment
   \item Initiate discovery mode on Thing and controller
@@ -340,6 +340,13 @@ Flesh out description, possibly include sequence diagram?
   \item Symmetric cryptography started, ACK from Thing sent to confirm transfer.
   \item Communications commence
 \end{itemize}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{images/sequence_diagram.jpg}
+\caption{Security sequence diagram}
+\label{fig:sequence_diagram}
+\end{figure}
 
 % subsubsection security_protocol (end)
 % subsection security_architecture (end)
@@ -353,7 +360,7 @@ Currently, their exists implementations of our IoT protocol for both the Contiki
 \label{ssub:hardware}
 Similar to the previous work\cite{KNoT}, this project will also use the TelosB motes as the target hardware platform. These devices have an 8MHz CPU, 10KB RAM and 48KB ROM, plus a variety of basic sensors.
 
-Whilst speed and security have been talked about in depth in relation to constrained devices, another key concern of the proposed solution is the resource consumption, for this approach to be feasible, it must not exceed the available resources for the hardware available i.e. TeloB mote. Based on the individual compile sizes of each module, shown in table \ref{tab:compile_sizes}, the proposed approach appears to be feasible.
+Whilst speed and security have been discussed in-depth in relation to constrained devices, in order for this approach to be deemed feasible, another key concern of the proposed solution that must be considered is the resource consumption. The total resources of the combined components must not exceed the available resources for the hardware available i.e. TeloB mote. Based on the individual compile sizes of each module, shown in table \ref{tab:compile_sizes}, the proposed approach appears to be feasible.
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
@@ -374,7 +381,9 @@ Whilst speed and security have been talked about in depth in relation to constra
 
 \subsection{Integration of IoT with Smart Home Router} % (fold)
 \label{sub:implementation_of_iot_on_smart_home_router}
-The latter half of the project will be focused on implementing the necessary proxy on the host machine to enable the Homework platform communicate with the IoT network. TinyOS provides comprehensive tools for communicating between a device running TinyOS and a host machine, available in Java, C and Python. The Homework platform also provides Java and C bindings, enabling other applications to communicate with the database, publishing and subscribing to events to the event stream. Additionally, using the Glasgow automata programming language, relevant automaton will need to be created to demonstrate some basic closed loops interactions enabled by the use of the Homework platform.
+The latter half of the project will be focused on implementing a proxy on the host machine, which will not only enable the Homework platform to communicate with the IoT network, but also allow it to manage and control the network of Things using its event processing capabilities. 
+
+TinyOS provides comprehensive tools for communicating between a device running TinyOS and a host machine, available in Java, C and Python. The Homework platform also provides Java and C bindings, enabling other applications to communicate with the database, publishing and subscribing to events in the event stream. Additionally, using the Glasgow automata programming language, relevant automaton will need to be created to demonstrate some basic closed loops interactions enabled by the use of the Homework platform e.g. an automata subscribes to a motion event, and publishes a turn on light event when a motion event occurs; this would then pass through the proxy to the IoT and switch the light on.
 
 Diagram of network architecture goes here
 % subsection implementation_of_iot_on_smart_home_router (end)
