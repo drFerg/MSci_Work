@@ -262,11 +262,10 @@ Because of the high cost of private key on the wireless sensor nodes, it's not p
 % subsection problems_with_previous_work (end)
 Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,MiniSec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
 
-Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically authenticate each other and create shared secret keys. Whilst there is some improvement in performance with the use of ECC over RSA, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table below.
+Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits of previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically authenticate each other and create shared secret keys. Whilst there is some improvement in performance with the use of ECC over RSA, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table \ref{tab:crypto_compare}.
 
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
-  \label{tab:crypto_compare}
   \begin{tabular}{|c|c|c|} 
   \hline
            & Symmetric(TinySec) & Asymmetric(TinyECC) \\ \hline
@@ -276,17 +275,18 @@ Alternatively, asymmetric cryptography has also been proved viable on typical WS
   Decrypt  & $<$2ms/pkt         & 2.1s/pkt \\ \hline
   \end{tabular}
   \caption[]{Cryptographic implementation sizes and performances of TinySec and TinyECC, on the Mica2(8Mhz) and TelosB (8Mhz)mote respectively\footnotemark. \cite{TinySec,TinyECC}}
+  \label{tab:crypto_compare}
   \end{center}
 \end{table}
 
-\footnotetext{Based on TinySec's implementation (8MHz CPU) where encrypt/decrypt operations take 0.38ms to perform over 64 bit(8 byte) blocks, with TinyOS's default packet size set to 29 bytes.}
+\footnotetext{Based on TinySec's implementation (8MHz CPU) where encrypt/decrypt operations take 0.38ms to perform over 64 bit(8 byte) blocks, with TinyOS's default packet size set to 29 bytes. MiniSec doesn't provide timed results of the implementation, only energy consumed.}
 
 However, by using public key cryptography to initially bootstrap the symmetric cryptography with session keys, the computational impact of using PKC needs to only be dealt with once at boot-time, whilst allowing for dynamic session key assignment. This is similar to TinyPK, however, because of the innovation of ECC, it's no longer necessary to perform a reduced and more complicated authentication process\cite{TinyPK}.
 
 \textbf{Discuss issue of segmentation of home network and IoT network}
 Little has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. 
 
-In contrast to this, a local approach, where the connectivity, device management and policies are managed within the home might be a better approach. Furthering this, combining the IoT network with the traditional home network filled with PCs, tablets and mobile devices, to create a single network of devices, where the user can control, manage and configure in one place, would create a more seamless and user friendly experience. As discussed in section \ref{sub:homework_smart_home_router}, the Homework project attempts to reinvent the home network, enabling novice users to have full control over the network, without the need of expensive hardware or the cloud\footnote{Homework project demonstrated implementation on a EEPC 1000H netbook with an Atom 1.6GHz CPU and 2GB RAM}. 
+In contrast to this, a local approach, where the connectivity, device management and policies are managed within the home might be a better approach. Furthering this, combining the IoT network with the traditional home network filled with PCs, tablets and mobile devices, to create a single network of devices, where the user can control, manage and configure in one place, would create a more seamless and user friendly experience. As discussed in section \ref{sub:homework_smart_home_router}, the Homework project attempts to reinvent the home network, enabling novice users to have full control over the network, without the need of expensive hardware or the cloud\footnote{Homework project demonstrated implementation on an EEPC 1000H netbook with an Atom 1.6GHz CPU and 2GB RAM}. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proposed Approach}
@@ -302,36 +302,82 @@ The aims of this project are two-fold; firstly, secure the currently existing Io
 % subsection solving_the_problem (end)
 \subsection{Security Architecture} % (fold)
 \label{sub:security_architecture}
-As previously discussed, there have been many attempts to create a secure WSN, both utilising symmetric and asymmetric cryptography; however, there have been very few attempts to demonstrate their use in tandem, to provide a dynamic secure network that allows nodes to enter and leave the network, without prior knowledge or pre-installed secrets. Some attempts have been made to circumvent the need for using asymmetric cryptography for key distribution, due to its prohibitive cost in time and space on constrained devices, but these attempts were not only complex \cite{TinyPK}, but also infeasible\cite{MessageBottle}. With the innovations made with ECC, asymmetric cryptography has become a far more feasible approach to secure key distribution.
-forward secrecy
+As previously discussed, there have been many attempts to create a secure WSN, both utilising symmetric and asymmetric cryptography; however, there have been very few attempts to demonstrate their use in tandem, to provide a dynamic secure network that allows nodes to enter and leave the network, without prior knowledge or pre-installed secrets. Some attempts have been made to circumvent the need for using asymmetric cryptography for key distribution, due to its prohibitive cost in time and space on constrained devices; however, these attempts were not only complex \cite{TinyPK}, but also infeasible\cite{MessageBottle}. With the innovations made with ECC, asymmetric cryptography has become a far more feasible approach for secure key distribution. Therefore, for this project, asymmetric cryptography will be used to initially bootstrap the session keys for later use in symmetric cryptography, enabling new devices to securely join the network without prior knowledge.
 
-As described in section \ref{ssub:security}, there are a variety of possible attack vectors that can be employed by attackers; for the purpose of this project, only the first two, eavesdropping and unsanctioned participants, will be considered. Node capture is relatively difficult to protect against due to the nature of the placement of Things within the environment, thus it will be left up to the user to ensure devices within the network are kept safe, just as they would with other belongings. Similarly, denial-of-service is again difficult to protect against due to the nature of wireless networking where RF jamming can occur; however, some attempt will be made to reduce the effect of packet-based DoS attacks, which aim to overload the recipient by initiating complex processing tasks. 
+\subsubsection{Attack vectors} % (fold)
+\label{ssub:attack_vectors}
+As described in section \ref{ssub:security}, there are a variety of possible attack vectors that can be employed by attackers; for the purpose of this project, only the first two, eavesdropping and unsanctioned participants, will be considered. Node capture is relatively difficult to protect against due to the nature of the placement of Things within the environment, thus it will be left up to the user to ensure devices within the network are kept safe, just as they would with other property. Similarly, denial-of-service is difficult to protect against due to the nature of wireless networking where RF jamming can occur; however, some attempt will be made to reduce the effect of packet-based DoS attacks, which aim to overload the recipient by initiating complex processing tasks such as asymmetric cryptography tasks. 
+% subsubsection attack_vectors (end)
 
 
-Demonstrative identification - using the button and confirming with screen/lights
+\subsubsection{Asymmetric Cryptography} % (fold)
+\label{ssub:asymmetric_key_cryptography}
+For the asymmetric cryptography part of the security protocol, TinyECC\cite{TinyECC} will be used to initially authenticate new nodes and bootstrap the session keys that will then be used for symmetric cryptography. 
 
-\subsubsection{Symmetric Key Cryptography} % (fold)
+In order to authenticate the devices and ensure a man-in-the-middle attack cannot occur in the network upon initial contact, a public key infrastructure will need to be set up. This will consist of a global certificate authority, which will sign the public keys of all Things, including the Homework router. The CA will return its public key along with the newly created public key certificate for that device, to be burned onto the device prior to deployment. Using these certificates, a device can prove its identity and authenticity to any other node in the network which contains the CA's public key. 
+% subsubsection asymmetric_key_cryptography (end)
+
+\subsubsection{Symmetric Cryptography} % (fold)
 \label{ssub:symmetric_key_cryptography}
+For the symmetric part of the security protocol, MiniSec\cite{MiniSec} will be used to ensure that eavesdroppers can't see what data is traversing the network and stop unsanctioned participants from performing replay attacks or injecting bad data into the network. In order for this to be achieved, both encryption and authentication needs to be used. MiniSec provides this combined encryption and authentication in one pass over the packet using the OCB mode of operation. For each node connected to the controller, a unique session key will be used. This will help reduce the cost of a single node being captured, as only the connection between those the node and the controller would be compromised, as opposed to the case where the whole network would be compromised if a network-wide session key is used, such as in TinySec\cite{TinySec}. However, if a node is captured, it may still be possible illegally alter the device, therefore node capture can't be fully mitigated.
+
+For a normal packet, using MiniSec to encrypt and authenticate the payload will add an additional 3 bytes of overhead. This consists of removing the group (grp) and CRC fields as they are no longer necessary, replacing them with a source address field and message authentication code (MAC)\footnote{Unfortunate collision between abbreviations for media access control and message authentication code, the latter will only be referred to in this report.}. The MAC field incorporates both integrity (replacing CRC), and verification, which is needed to ensure a packet is authentic and hasn't been altered by an attacker. Additionally, as mentioned previously in section \ref{ssub:minisec}, MiniSec provides replay prevention through the use of its IV counter embedded in the length field.
+
 
 % subsubsection symmetric_key_cryptography (end)
-\subsubsection{Asymmetric Key Cryptography} % (fold)
-\label{ssub:asymmetric_key_cryptography}
 
-% subsubsection asymmetric_key_cryptography (end)
+\subsubsection{Security protocol} % (fold)
+\label{ssub:security_protocol}
+Flesh out description, possibly include sequence diagram?
+\begin{itemize}
+  \item Bootstrap CA certificates and keys prior to deployment
+  \item Initiate discovery mode on Thing and controller
+  \item Asymmetric cryptography authenticates devices
+  \item User selects device to connect to and verifies it, demonstrative identification
+  \item Devices now exchange session key
+  \item Asymmetric cryptography torn down
+  \item Symmetric cryptography started, ACK from Thing sent to confirm transfer.
+  \item Communications commence
+\end{itemize}put in sequence diagram????
+
+% subsubsection security_protocol (end)
 % subsection security_architecture (end)
+
 
 \subsection{Implementation of IoT Protocol on TinyOS} % (fold)
 \label{sub:implementation_of_iot_protocol_on_tinyos}
+Currently, their exists implementations of our IoT protocol for both the Contiki\footnote{Contiki implementation available at: \url{https://github.com/fergul/KNoT}} and Arduino\footnote{Arduino implementation available at: \url{https://github.com/fergul/KNoT_panstamp}} platforms. However most of the security research carried out on WSNs has been implemented only for TinyOS, bar ContikiSec. There is an implementation of ECC for Contiki, but it is not feature complete and the project appears to have stalled\cite{ContikiECC}. Therefore, it will be necessary to port the protocol over to TinyOS. Due to the event based structure of the existing code base, this should be a trivial task.
 
+\subsubsection{Hardware} % (fold)
+\label{ssub:hardware}
+Similar to the previous work\cite{KNoT}, this project will also use the TelosB motes as the target hardware platform. These devices have an 8MHz CPU, 10KB RAM and 48KB ROM, plus a variety of basic sensors.
+
+Whilst speed and security have been talked about in depth in relation to constrained devices, another key concern of the proposed solution is the resource consumption, for this approach to be feasible, it must not exceed the available resources for the hardware available i.e. TeloB mote. Based on the individual compile sizes of each module, shown in table \ref{tab:compile_sizes}, the proposed approach appears to be feasible.
+\begin{table}[h] %makes a float (prevents splitting over pages)
+  \begin{center} 
+  \begin{tabular}{|c|c|c|} 
+  \hline
+  \textbf{Components} & \textbf{ROM Size}  & \textbf{RAM Size}\\  \hline
+  MiniSec             & 1.8KB              & 300B \\     \hline
+  TinyECC             & 15.65KB            & 3KB\\       \hline
+  IoT                 & 2.4KB              & 994B\\      \hline 
+  \textbf{Total}      & ~19.9KB            & ~4.3KB\\    \hline
+  \end{tabular}
+  \caption[]{Estimated total implementation size based on individual compiled sizes}
+  \label{tab:compile_sizes}
+  \end{center}
+\end{table}
+
+% subsubsection hardware (end)
 % subsection implementation_of_iot_protocol_on_tinyos (end)
 
 \subsection{Integration of IoT with Smart Home Router} % (fold)
 \label{sub:implementation_of_iot_on_smart_home_router}
-
+Creation of proxy for controller role in IoT, then create relevant automata to manage publish and subscribe events to and from the IoT network.
 % subsection implementation_of_iot_on_smart_home_router (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Work Plan}
-
+Discuss plan, identify deliverable and draw a pretty gannt chart.
 \begin{itemize}
   \item Extend IoT protocol to include security 
   \item Port Secure IoT protocol on TinyOS
