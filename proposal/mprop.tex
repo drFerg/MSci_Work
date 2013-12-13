@@ -4,6 +4,12 @@
 \usepackage{url}
 \usepackage{amsmath}
 \usepackage{caption}
+\usepackage{epigraph}
+
+%\uspackage{amssymb,amsmath}
+%\usepackage{fancyvrb}
+%\usepackage[final]{pdfpages}
+
 % alternative font if you prefer
 %\usepackage{times}
 
@@ -13,10 +19,10 @@
 
 
 % other potentially useful packages
-\usepackage{epigraph}
-%\uspackage{amssymb,amsmath}
-%\usepackage{fancyvrb}
-%\usepackage[final]{pdfpages}
+
+
+% For MetaPost diagrams from Dia
+\DeclareGraphicsRule{.1}{mps}{*}{}
 
 % Inspirational Quote type setting
 \makeatletter
@@ -306,7 +312,7 @@ As previously discussed, there have been many attempts to create a secure WSN, b
 
 \subsubsection{Attack vectors} % (fold)
 \label{ssub:attack_vectors}
-As described in section \ref{ssub:security}, there are a variety of possible attack vectors that can be employed by attackers; for the purpose of this project, only the first two, eavesdropping and unsanctioned participants, will be fully considered and mitigated against. Node capture is relatively difficult to protect against due to the nature of the placement of Things within the environment, thus it will be left up to the user to ensure devices within the network are kept safe, just as they would with other property. Similarly, denial-of-service is difficult to protect against due to the nature of wireless networking where RF jamming can occur; however, some attempt will be made to reduce the effect of packet-based DoS attacks, which aim to overload the recipient by initiating complex processing tasks such as asymmetric cryptography tasks. 
+As described in section \ref{ssub:security}, there are a variety of possible attack vectors that can be employed by attackers; for the purpose of this project, only the first two, eavesdropping and unsanctioned participants, will be fully considered and mitigated against. Node capture is relatively difficult to protect against due to the nature of the placement of Things within the environment, thus it will be left up to the user to ensure devices within the network are kept safe, just as they would with other property. Similarly, denial-of-service is difficult to protect against due to the nature of wireless networking where RF jamming can occur; however, some attempt will be made to reduce the effect of packet-based DoS attacks, which aim to overload the target by initiating complex processing tasks such as asymmetric cryptography tasks. 
 % subsubsection attack_vectors (end)
 
 
@@ -314,7 +320,7 @@ As described in section \ref{ssub:security}, there are a variety of possible att
 \label{ssub:asymmetric_key_cryptography}
 For the asymmetric cryptography part of the security protocol, TinyECC\cite{TinyECC} will be used to initially authenticate new nodes and bootstrap the session keys that will then be used for symmetric cryptography. Once the key exchange is complete, the TinyECC code can be removed from RAM, as it won't be needed again unless the node disconnects for the network or is rebooted. Section \ref{ssub:security_protocol} discusses the key exchange process in more detail.
 
-Whilst TinyECC makes asymmetric cryptography feasible on constrained devices, it's still extremely costly, taking several seconds to compute. Therefore, if asymmetric key exchange packets were to always be processed, it could open up the device to DoS attacks, whereby an attacker attempts to overload the node by continuously sending these packets to the target. To attempt to reduce the impact of this, the user will be required to press a button on the device that will cause the device to enter discovery mode for a short time period. Whilst in discovery mode, the device will accept the costly asymmetric key exchange packets; then, once the device has exited discovery mode, it will drop all asymmetric key exchange packets it receives, reducing the computational overload.
+Whilst TinyECC makes asymmetric cryptography feasible on constrained devices, it's still extremely costly, taking several seconds to compute. Therefore, if asymmetric key exchange packets were to always be processed, it could open up the device to DoS attacks, whereby an attacker attempts to overload the node by continuously sending these packets to the target. To attempt to reduce the impact of this, the user will be required to press a button on the device that will cause the device to enter discovery mode for a short time period. Whilst in discovery mode, the device will accept the costly asymmetric key exchange packets; then, once the device has exited discovery mode, it will drop all asymmetric key exchange packets it receives, reducing the computational overhead.
 
 In order to authenticate the devices and ensure a man-in-the-middle attack cannot occur in the network upon initial contact, a public key infrastructure will need to be set up. This will consist of a global certificate authority, which will sign the public keys of all Things, including the Homework router. The CA will return its public key along with the newly created public key certificate for that device, to be burned onto the device prior to deployment. Using these certificates, a device can prove its identity and authenticity to any other node in the network which contains the CA's public key. 
 % subsubsection asymmetric_key_cryptography (end)
@@ -388,6 +394,12 @@ The latter half of the project will be focused on implementing a proxy on the ho
 TinyOS provides comprehensive tools for communicating between a device running TinyOS and a host machine, available in Java, C and Python. The Homework platform also provides Java and C bindings, enabling other applications to communicate with the database, publishing and subscribing to events in the event stream. Additionally, using the Glasgow automata programming language, relevant automaton will need to be created to demonstrate some basic closed loops interactions enabled by the use of the Homework platform e.g. an automata subscribes to a motion event, and publishes a turn on light event when a motion event occurs; this would then pass through the proxy to the IoT and switch the light on.
 
 Diagram of network architecture goes here
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{images/homework_proxy.1}
+\caption{Controller - Sensor message diagram}
+\label{fig:sequence_diagram}
+\end{figure}
 % subsection implementation_of_iot_on_smart_home_router (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Work Plan}
