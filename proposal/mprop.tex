@@ -108,13 +108,13 @@ Presented below is a summary of the typical attacks targeted towards WSNs, and i
 \subsubsection{Integration} % (fold)
 \label{ssub:integration}
 
-The current implementation exists as a standalone library with several demo applications. Integration of the IoT protocol into a user-friendly platform is necessary to harness the full power of a network of Things. The integrated platform would then be able to discover and connect to available Things, subscribe and log events from the sensors, and using user customised rules, use automata to detect if these rules are met and then perform actions by publishing commands to actuators in the network.
+The current implementation exists as a standalone library with several demo applications. Integration of the IoT protocol into a more powerful and user-friendly platform is necessary to harness the full power of a network of Things. The integrated platform would then be able to discover and connect to hundreds of available Things, subscribe and log events from the sensors, and using user customised rules, run automata to detect if these rules are met and then publish commands to actuators in the network to perform actions within the home.
 % subsubsection integration (end)
 
 \subsection{Intranet of Things vs Internet of Things} % (fold)
 \label{sub:intranet_of_things}
 
-As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; thus a more suitable name, the Intranet of Things, will be used. 
+As described earlier in section \ref{sec:introduction}, many previous deployments of Internet of Things networks have taken a cloud first approach \cite{SmartThings, Twine}. Whilst this yields certain benefits, such as easy external access and integration with other services \cite{IFTTT, Xively}, it also poses several questions regards data security, privacy and up-time. For this project, the focus will be on developing a home first platform, in which all Things communication will be kept local, with no cloud processing involved; thus a more suitable name, the Intranet of Things, will be used for the duration of this project. 
 % subsection intranet_of_things (end)
 
 % subsection the_problem (end)
@@ -125,7 +125,7 @@ Outcomes of the project:
 \begin{itemize}
   \item[-] An extended IoT protocol with sufficient security to prevent eavesdropping and unsanctioned devices.
   \item[-] An Extended home information platform (Homework), with the IoT controller role implemented, enabling capturing of IoT events from sensors and creation of commands for actuators.
-  \item[-] Use of Homework's automata to implement closed loop control of Things in the home, subscribing to sensor events, processing rules and publishing to actuators to perform actions.
+  \item[-] Use of Homework's automata to implement closed loop control of Things in the home, subscribing to sensor events, processing rules and publishing to actuators to perform actions within the IoT.
 \end{itemize}
 % subsection subsection_name (end)
 
@@ -158,11 +158,11 @@ Substantial research has been carried out to secure WSNs, to ensure data within 
 
 Symmetric key cryptography is a class of cryptographic algorithms which enable two participants to exchange data in secret over a public channel using a shared key, known by both participants. Both encryption and decryption use the same key. One of the key benefits to symmetric algorithms is that it's relatively inexpensive, both in time and space, to encrypt and decrypt data, which makes this ideal for use in a WSN where resources are extremely constrained.
 
-Symmetric algorithms fall into two main categories, stream based ciphers, where data is encrypted by combining it with a pseudorandom data stream (one time pad), and block based ciphers, where data is segmented into blocks and operated on by a set of functions, often with the previous cipher block feeding into the next input. 
+Symmetric algorithms fall into two main categories, stream-based ciphers, where data is encrypted by combining it with a pseudorandom data stream (one time pad), and block-based ciphers, where data is segmented into blocks and operated on by a set of functions, often with the previous cipher block feeding into the next input. 
 
-In the case of WSN, block based ciphers have seen exclusive use. However, one issue with a block based cipher is that if two identical blocks are encrypted, both will return equal encrypted blocks, thus a passive adversary could extract partial information about the plaintext sent (semantic security). To solve this and maintain semantic security, an additional security primitive, an initialisation vector, can be used to ensure that this cannot occur. An initialisation vector provides a unique value which is used in the encryption of the first block, ensuring no two identical blocks return the same cipher text block; after the first block, the initialisation vector becomes the previous ciphertext block.
+In the case of WSN, block-based ciphers have seen exclusive use. However, one issue with a standard block-based cipher is that if two identical blocks are encrypted, both will return equal encrypted blocks, thus a passive adversary could extract partial information about the plaintext sent (semantic security). To solve this and maintain semantic security, an additional security primitive, an initialisation vector, can be used to ensure that this cannot occur. An initialisation vector provides a unique value which is used in the encryption of the first block, ensuring no two identical blocks return the same cipher text block; after the first block, the initialisation vector becomes the previous ciphertext block.
 
-The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some drawbacks apparent in each. 
+The rest of this section discusses several attempts to secure WSNs using symmetric key cryptography for both the TinyOS and Contiki WSN operating systems, mentioning both the benefits and some drawbacks apparent in each one. 
 
 
 \subsubsection{TinySec} % (fold)
@@ -190,16 +190,14 @@ In the typical academic scenario, this may be a non-issue due to the expertise o
 
 \subsubsection{USB interface connectivity} % (fold)
 \label{ssub:usb_interface_connectivity}
-A simple method of distributing keys could be to force the user to plug the Thing into their PC or router, which would then automatically program the correct key into the device with minimal user interaction. Whilst this seems attractive at first, the main issue with this method is that it requires every Thing to have a USB port, plus the appropriate circuitry and logic to perform the programming. This not only increases the cost for the Things, as they now require additional components, but it can also increase the physical size and complexity of using them.
+A simple method of distributing keys would be to require the user to plug the Thing into their PC or router, which would then automatically program the correct key into the device with minimal user interaction. Whilst this seems attractive at first, the main issue with this method is that it requires every Thing to have a USB port, plus the appropriate circuitry and logic to perform the programming. This not only increases the cost for the Things, as they now require additional components, but it can also increase the physical size and complexity of their design and in using them.
 % subsubsection usb_interface_connectivity (end)
 
 \subsubsection{Message-in-a-bottle} % (fold)
 \label{ssub:message_in_a_bottle}
-In an attempt to distribute session keys in a user friendly way, and without the use of physical interfaces or asymmetric cryptography, Message-in-a-bottle utilises several physical techniques to carry out a wireless keying mechanism resilient to typical WSN attack vectors \cite{MessageBottle}. To achieve this, a Faraday cage and RF jamming is used in combination with a wireless session key distribution protocol. 
+In an attempt to distribute session keys in a user friendly way, and without the use of physical interfaces or asymmetric cryptography, Message-in-a-bottle utilises several physical techniques to carry out a wireless keying mechanism resilient to typical WSN attack vectors \cite{MessageBottle}. To distribute the session key to a new device, the user places the keying device and the new device into a Faraday cage\footnote{The authors used a steel pipe sealed at both ends.}. The keying device then wirelessly transmits keying information to the node inside the cage. Meanwhile outside the cage, a keying beacon jams the wireless frequency of the shielded devices, in an attempt to ensure no leakage happens due to imperfections in the cage. After five seconds the exchange completes and the user removes the device, which will then construct the key based on what it received inside the cage, enabling it to connect to the network.
 
-To distribute the session key to a new uninitialised device, a user places the keying device and the new device entering the network into a Faraday cage\footnote{The authors used a steel pipe sealed at both ends.}. The keying device then wirelessly transmits keying information to the node inside the cage. Meanwhile outside the cage, a keying beacon jams the wireless frequency of the shielded devices, in an attempt to ensure no leakage happens due to imperfections in the cage. After the keying session has complete, signalled by the keying beacon blinking its blue LED, the new node can be taken out of the cage. The keying beacon then communicates with the device, which will then construct the key based on what it received inside the cage, enabling it to connect to the network. If successful the keying beacon will blink its green LED.
-
-Message-in-a-bottle presents a novel method of performing key distribution, however, whilst it reduces the cost of each device due to the absence of a physical connector, it still requires additional hardware (Faraday cage) to perform the key distribution protocol; this not only increases the burden of managing the network (storing and finding the cage), but also still presents an additional non-trivial task for the user to perform, especially in the case of a new network filled with tens of devices. The paper presents an additional method for distributing keys to multiple devices simultaneously, but this requires a large Faraday cage (pot size), further increasing the burden of managing the network. Another issue to consider is that whilst some devices may be small enough to fit in the cage, many others, such as household appliances, will not; therefore, a more appropriate key distribution protocol is necessary for an IoT network.
+Message-in-a-bottle presents a novel method of performing key distribution, however, whilst it reduces the cost of each device due to the absence of a physical connector, it still requires additional hardware (Faraday cage) to perform the key distribution protocol; this not only increases the burden of managing the network (using, storing and finding the cage), but also still presents an additional non-trivial task for the user to perform, especially in the case of a new network filled with tens of devices. The paper presents an additional method for distributing keys to multiple devices simultaneously, but this requires a large Faraday cage (pot size), further increasing the burden of managing the network. Another issue to consider is that whilst some devices may be small enough to fit in the cage, many others, such as household appliances, will not; therefore, a more appropriate key distribution protocol is necessary for an IoT network.
 
 
 % subsubsection message_in_a_bottle (end)
@@ -249,20 +247,6 @@ Because of the high cost of private key on the wireless sensor nodes, it's not p
 % subsubsection tinyecc (end)
 
 % subsection asymmetric_security (end)
-
-
-\subsection{Other Works} % (fold)
-\label{sub:other_works}
-\subsubsection{MQTT} % (fold)
-\label{ssub:mqtt}
-
-% subsubsection mqtt (end)
-\subsubsection{IETF Work} % (fold)
-\label{ssub:ietf_work}
-\cite{IETF_COAP_HTTP, IETF_CORE}
-% subsubsection ietf_work (end)
-% subsection other_works (end)
-
 % present an overview of relevant previous work including articles, books, and existing software products. Critically evaluate the strengths and weaknesses of the previous work.
 \subsection{Problems with previous work} % (fold)
 \label{sub:problems_with_previous_work}
@@ -338,17 +322,16 @@ As previously mentioned, the current implementation of MiniSec uses the now unre
 
 \subsubsection{Security protocol} % (fold)
 \label{ssub:security_protocol}
-\textbf{Flesh out description}
-\begin{itemize}
-  \item Bootstrap CA certificates and keys prior to deployment
-  \item Initiate discovery mode on Thing and controller
-  \item Asymmetric cryptography authenticates devices
-  \item User selects device to connect to and verifies it, demonstrative identification
-  \item Devices now exchange session key
-  \item Asymmetric cryptography torn down
-  \item Symmetric cryptography started, ACK from Thing sent to confirm transfer.
-  \item Communications commence
-\end{itemize}
+The security protocol is split up into three main parts. The bootstrapping phase, in which the devices are all independently (in time and space) issued unique public key certificates and the corresponding private keys, as well as the public key of the CA. The asymmetric phase, in which a new device is brought into the network and the router(controller) initiates contact with the device, they both authenticate each other and then the router sends the device the session key. The symmetric phase, in which the two devices now communicate using symmetric cryptography with the previously transmitted session key.
+\begin{enumerate}
+  \item Bootstrap devices with public key certificate and privates keys (+ CA public key) prior to deployment.
+  \item Initiate discovery mode on Thing and router(controller).
+  \item Router and Thing authenticate one another.
+  \item User is presented with a list of authenticated devices to connect to and selects the one they want.
+  \item Devices now exchange session key using secure channel.
+  \item Asymmetric cryptography structures free'd and symmetric cryptography started. Thing then ACKs router over symmetric channel to signify handshake has complete.
+  \item IoT communications commence.
+\end{enumerate}
 
 \begin{figure}[h!]
 \centering
@@ -369,7 +352,7 @@ Currently, their exists implementations of our IoT protocol for both the Contiki
 \label{ssub:hardware}
 Similar to the previous work\cite{KNoT}, this project will also use the TelosB motes as the target hardware platform. These devices have an 8MHz CPU, 10KB RAM and 48KB ROM, plus a variety of basic sensors.
 
-Whilst speed and security have been discussed in-depth in relation to constrained devices, in order for this approach to be deemed feasible, another key concern of the proposed solution that must be considered is the resource consumption. The total resources of the combined components must not exceed the available resources for the hardware available i.e. TeloB mote. Based on the individual compile sizes of each module, shown in table \ref{tab:compile_sizes}, the proposed approach appears to be feasible.
+Whilst speed and security have been discussed in-depth in relation to constrained devices, in order for this approach to be deemed feasible, another key concern of the proposed solution that must be considered is the resource consumption. The total resources of the combined components must not exceed the available resources for the hardware available i.e. TeloB mote. Based on the individual compile sizes of each module, shown in table \ref{tab:compile_sizes}, the proposed approach appears to be feasible and well below the limits of the device.
 \begin{table}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
@@ -401,43 +384,57 @@ TinyOS provides comprehensive tools for communicating between a device running T
 \caption{Controller - Sensor message diagram}
 \label{fig:sequence_diagram}
 \end{figure}
-\newpage
+
 % subsection implementation_of_iot_on_smart_home_router (end)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Work Plan}
-This section will discuss the plan of work to be completed during the following semester of thirteen weeks. During the semester there are several key deadlines...
+This section will discuss the plan of work to be completed, highlight the target deliverables and discuss some possible risks the project could face in the following semester. The semester is thirteen weeks long, with several intermediate deliverables to break up the workload.
 
-\subsection{Deliverables} % (fold)
+
+\subsection{Tasks \& Deliverables} % (fold)
 \label{sub:deliverables}
-Within the project there are several deliverables, each of which 
-\begin{itemize}
-  \item Extend IoT protocol to include security 
-  \item Port Secure IoT protocol on TinyOS
-  \item Create host proxy for Secure IoT Protocol
-  \item Create automata for Homework
-  \item Report
-\end{itemize}
+Within the project there are several tasks to be completed which go towards the two main aims, shown below. For each task, there are some sub-tasks and an overall deliverable. These tasks are also shown along with their durations and deadlines in a Gantt chart in figure \ref{gantt:work_plan} in section \ref{sub:gantt_chart}. 
+
+\begin{enumerate}
+  \item Port Secure IoT protocol to TinyOS.\footnotesize{\textit{(Deliverable 1)}}
+  \item Extend IoT protocol to include security protocols. \footnotesize{\textit{(Deliverable 2)}}
+  \begin{enumerate}
+    \item Implement asymmetric security protocol.
+    \item Implement symmetric security protocol.
+  \end{enumerate}
+  \item Homework integration. \footnotesize{\textit{(Deliverable 3)}}
+  \begin{enumerate}
+    \item Create host proxy for Secure IoT Protocol to connect to controller device and Homework DB.
+    \item Create monitoring application for Homework and test with demo policies.
+  \end{enumerate}
+  \item Project report. \footnotesize{\textit{(Deliverable 4)}}
+\end{enumerate}
+
+Testing will be an ongoing process throughout the duration of the project in order to ensure the protocol implementation is working correctly and is omitted from the gantt chart. For the latter part of the project, the monitoring application will function as a test of the entire system's functionality, including the protocol and integration.
 
 % subsection deliverables (end)
+
+
+\subsection{Risks} % (fold)
+\label{sub:risks}
+Whilst the project has been well researched, planned and plenty of time allocated to it, there are still some risks that need to be considered and managed. Below are some of the key risks, their possible consequences and the techniques used to try and mitigate them.
+\begin{itemize}
+  \item Support - Much of this project relies on third party libraries or code, which after researching and testing briefly, is deemed to be well supported and sufficient for the needs of the project. However, as the project develops, problems or bugs may arise with other's work, leading to unforeseen issues or delays.
+  \item Architecture difficulties - TinyOS's architecture is based entirely on a split-phase event style architecture, however the previous implementations have been developed for imperative style systems. Therefore, they may be some difficulty in porting over certain aspects into an event style, which may stall/delay the project.
+  \item Flawed security - As with all security protocols and algorithms, careful planning, verification and peer-review is absolutely necessary. The security protocol designed was strongly influenced by previous work and existing protocols in use today, such as the Chip and Pin system\footnote{Chip and Pin link} and TinyPK. However, whilst precautions have been made, it is still possible an attacker may discover an unseen vulnerability in the system. 
+  \item Project overruns - Due to a misjudgement in difficulty or scale, the project could overrun, leading to only a subset of the original tasks being completed and possibly not achieving the project aims.
+\end{itemize}
+% subsection risks (end)
 
 \subsection{Gantt Chart} % (fold)
 \label{sub:gantt_chart}
 \input{proposal_gannt.tex}
 % subsection gantt_chart (end)
-
-\subsection{Risks} % (fold)
-\label{sub:risks}
-\begin{itemize}
-  \item Place catches fire
-  \item Run out of time
-  \item Stuff breaks and wont get fixed
-  \item AHHHHH
-\end{itemize}
-% subsection risks (end)
 % show how you plan to organize your work, identifying intermediate deliverables and dates.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % it is fine to change the bibliography style if you want
+\newpage
 \bibliographystyle{plain}
 \bibliography{bibliography}
 \end{document}
