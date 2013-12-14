@@ -18,10 +18,6 @@
 % and see documentation for commands
 %\usepackage{fancyheadings}
 
-
-% other potentially useful packages
-
-
 % For MetaPost diagrams from Dia
 \DeclareGraphicsRule{.1}{mps}{*}{}
 
@@ -316,13 +312,15 @@ For the symmetric part of the security protocol, MiniSec\cite{MiniSec} will be u
 
 For a normal packet, using MiniSec to encrypt and authenticate the payload will add an additional 3 bytes of overhead. This consists of removing the group (grp) and CRC fields as they are no longer necessary, replacing them with a source address field and message authentication code (MAC)\footnote{Unfortunate collision between abbreviations for media access control and message authentication code, the latter will only be referred to in this report.}. The MAC field incorporates both integrity (replacing CRC), and verification, which is needed to ensure a packet is authentic and hasn't been altered by an attacker. Additionally, as mentioned previously in section \ref{ssub:minisec}, MiniSec provides replay prevention through the use of its IV counter embedded in the length field.
 
+One limitation of the protocol is the length of the IV counter, once it repeats, semantic security is lost and a eavesdropper could retrieve some information. To counter this issue, a new session key can be issued at any time before the counter wrap-around and transmitted over the still secure channel; this will ensure semantic security is maintained and an expensive asymmetric re-key isn't necessary. Issuing new session keys is also good practice, ensuring active attackers won't have enough time to break any given key.
+
 As previously mentioned, the current implementation of MiniSec uses the now unrecommended security algorithm, Skipjack. Lenstra and Verheul recommended use of Skipjack until 2012 based on its 80 bit key length\cite{SkipjackRecommendation}. For the purposes of this project Skipjack will be used as a proof-of-concept, and if time is made available, an attempt to integrate a more secure algorithm, such as AES, will be made.
 
 % subsubsection symmetric_key_cryptography (end)
 
 \subsubsection{Security protocol} % (fold)
 \label{ssub:security_protocol}
-The security protocol is split up into three main parts. The bootstrapping phase, in which the devices are all independently (in time and space) issued unique public key certificates and the corresponding private keys, as well as the public key of the CA. The asymmetric phase, in which a new device is brought into the network and the router(controller) initiates contact with the device, they both authenticate each other and then the router sends the device the session key. The symmetric phase, in which the two devices now communicate using symmetric cryptography with the previously transmitted session key.
+The security protocol is split up into three main parts, as shown in figure \ref{fig:sequence_diagram}. The bootstrapping phase, in which the devices are all independently (in time and space) issued unique public key certificates and the corresponding private keys, as well as the public key of the CA. The asymmetric phase, in which a new device is brought into the network and the router(controller) initiates contact with the device, they both authenticate each other and then the router sends the device the session key. The symmetric phase, in which the two devices now communicate using symmetric cryptography with the previously transmitted session key.
 \begin{enumerate}
   \item Bootstrap devices with public key certificate and privates keys (+ CA public key) prior to deployment.
   \item Initiate discovery mode on Thing and router(controller).
@@ -333,11 +331,13 @@ The security protocol is split up into three main parts. The bootstrapping phase
   \item IoT communications commence.
 \end{enumerate}
 
+
 \begin{figure}[h!]
-\centering
-\includegraphics[scale=0.5]{images/sequence_diagram.jpg}
+\begin{center}
+\input{images/sequence_diagram.tex}
 \caption{Security sequence diagram}
 \label{fig:sequence_diagram}
+\end{center}
 \end{figure}
 
 % subsubsection security_protocol (end)
