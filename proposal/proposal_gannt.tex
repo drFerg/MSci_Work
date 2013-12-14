@@ -1,0 +1,28 @@
+\begin{figure}[ht!]
+    \begin{center}
+    \scalebox{0.8}{
+        \begin{gantt}{14}{13}[xunitlength=0.1cm,fontsize=\small]
+            \begin{ganttitle}
+                \titleelement{Weeks}{13}
+            \end{ganttitle}
+            \begin{ganttitle}
+                \numtitle{1}{1}{13}{1}
+            \end{ganttitle}
+            \ganttgroup{Implementation}{0.2}{9}
+            \ganttbar{Port IoT protocol to TinyOS}{0}{3}
+            \ganttmilestone[color=red]{Port complete}{3}
+            \ganttgroup{Add security extensions}{2}{4}
+                \ganttbar[color=black]{Asymmetric Extension}{2}{2}
+                \ganttbar[color=black]{Symmetric Extension}{4}{2}
+            \ganttmilestone[color=red]{Extensions complete}{6}
+            \ganttgroup{Homework integration}{6}{3}
+                \ganttbar[color=black]{Create controller proxy}{6}{2}
+                \ganttbar[color=black]{Create monitoring application}{7}{2}
+            \ganttmilestone[color=red]{Implementation complete}{9}
+            \ganttbar{Write report}{9}{4}
+        \end{gantt}
+        }
+        \caption{Work plan timeline}
+        \label{gantt:work_plan}
+    \end{center}
+\end{figure}
