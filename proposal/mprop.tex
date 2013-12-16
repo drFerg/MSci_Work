@@ -61,7 +61,7 @@ As these devices enter our homes and pockets, bringing with them their own ecosy
 
 In order for these multiple layered networks of devices to truly fade away into the fabric of our everyday lives, a platform and relevant protocols need to be engineered to not only support this heterogeneous network securely, but also aid the user in managing both the network and the privacy of their information.
 
-The Homework home router platform was created to address these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
+The Homework home router platform\cite{HomeworkControl} was created to address these issues. Rather than assume every user is a network administrator, the project investigated the needs and abilities of the average user in order to propose the future of home networking, re-inventing the protocols, models and architectures to truly suit the home environment. This re-invention of the home router allows a user to easily install, manage and use their home network, without the need of a Cisco qualification.
 
 In regards to the Internet of Things development, previous work demonstrated that it was in need of a suitable protocol in order to meet the specific needs of a network of Things \cite{KNoT}. Thus, a new protocol was designed and implemented, which could not only run on the most constrained battery-powered devices (8MHz), but it could also efficiently scale to support hundreds of Things within the same network.
 
@@ -88,7 +88,7 @@ The Internet of Things protocol created in \cite{KNoT} proved to be a successful
 \subsubsection{Security} % (fold)
 \label{ssub:security}
 
-The initial design of the IoT protocol didn't consider security due to time constraints; however, because not only can such rich and sensitive data can be gathered about the user and their home from Things(devices), but the closed loop of control can be affected by illegal packet injection, to negatively alter its behaviour; therefore it becomes extremely important to not only protect the data from unauthorised access, but also protect the network itself. Demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
+The initial design of the IoT protocol didn't consider security due to time constraints; however, because not only can such rich and sensitive data can be gathered about the user and their home from Things(devices), but the closed loop of control can be affected by illegal packet injection, to negatively alter its behaviour; therefore it becomes extremely important to not only protect the data from unauthorised access, but also protect the network itself. As demonstrated in the scenario, a user may want to purchase any kind of compatible Thing from a shop and then want bring it into their home network with minimal effort. The Thing itself would have no prior knowledge of the network and needs a secure mechanism to enter the network without compromising the rest of the network or exposing its own data to unauthorised users. 
 
 Presented below is a summary of the typical attacks targeted towards WSNs, and in this case an IoT.
 \begin{enumerate}
@@ -98,6 +98,7 @@ Presented below is a summary of the typical attacks targeted towards WSNs, and i
   \item \textbf{Denial of service} - An attacker attempts to block or overwhelm the target, so that legitimate requests to contact the target will be unsuccessful. In the case of WSN this can occur from RF jamming, or by a packet based overload where the target is forced to continuously process computationally expensive packets for an extended period of time, such as with asymmetric cryptographic operations. 
 \end{enumerate}
 
+The attack vectors to be tackled by this project will be discussed in section \ref{ssub:attack_vectors}.
 
 % subsubsection security (end)
 
@@ -244,11 +245,11 @@ Because of the high cost of private key operations on the wireless sensor nodes,
 
 % subsection asymmetric_security (end)
 % present an overview of relevant previous work including articles, books, and existing software products. Critically evaluate the strengths and weaknesses of the previous work.
-\subsection{Problems with previous work} % (fold)
+\subsection{Summary of issues with previous efforts} % (fold)
 \label{sub:problems_with_previous_work}
 
 % subsection problems_with_previous_work (end)
-Little work has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,MiniSec, ContikiSec} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
+Little work has been done to present a fully deployable and dynamic secure WSN that is suitable for the home. Typical wireless sensor network security has considered and used symmetric cryptography\cite{TinySec,MiniSec, ContikiSec}\footnote{MiniSec is the most secure symmetric implementation available at the time of writing for TinyOS. Another implementation called SenSec, referenced by several other later papers, was unavailable both in paper-form and its implementation.} for securing networks in the wild, however key distribution has been bootstrapped (burned to ROM) prior to deployment. This would not only increase the difficulty of bringing a new Thing into a home network, but would also require each Thing have additional hardware in order to interface with the key distributor e.g. a PC or router. 
 
 Alternatively, asymmetric cryptography has also been proved viable on typical WSN platforms thanks to elliptic curve cryptography which provides significant performance benefits over previously existing methods\cite{TinyECC}; therefore allowing pairs of nodes in a network to dynamically authenticate each other using certificates and share secret keys over a secure channel using each other's public keys. Whilst there is some improvement in performance with the use of ECC over RSA, it still considerably slower and consumes far more resources than symmetric cryptography, as shown in the table \ref{tab:crypto_compare}.
 
@@ -256,11 +257,11 @@ Alternatively, asymmetric cryptography has also been proved viable on typical WS
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
   \hline
-           & Symmetric(TinySec) & Asymmetric(TinyECC) \\ \hline
-  ROM size & 3KB                & 15.65KB \\ \hline
-  RAM size & 300B               & 1.8KB \\ \hline
-  Encrypt  & $<$2ms/pkt         & 3.2s/pkt \\ \hline 
-  Decrypt  & $<$2ms/pkt         & 2.1s/pkt \\ \hline
+           & \textbf{Symmetric(TinySec)} & \textbf{Asymmetric(TinyECC)} \\ \hline
+  \textbf{ROM size} & 3KB                & 15.65KB \\ \hline
+  \textbf{RAM size} & 300B               & 1.8KB \\ \hline
+  \textbf{Encrypt}  & $<$2ms/pkt         & 3.2s/pkt \\ \hline 
+  \textbf{Decrypt}  & $<$2ms/pkt         & 2.1s/pkt \\ \hline
   \end{tabular}
   \caption[]{Cryptographic implementation sizes and performances of TinySec and TinyECC, on the Mica2(8Mhz) and TelosB (8Mhz)mote respectively\footnotemark. \cite{TinySec,TinyECC}}
   \label{tab:crypto_compare}
@@ -273,7 +274,7 @@ However, by using public key cryptography to initially bootstrap the symmetric c
 
 For the latter half of the project, existing attempts at integrating the IoT into the home still present some problems. As previously discussed in prior work\cite{KNoT}, many Things are simply embedded with a WI-FI transceiver enabling them to talk the Internet individually, creating a disjoint network of Things all managed and interacting independently, creating a significant burden for the user. To make matters worse, Symantec recently discovered a new Linux worm\cite{IoTWorm} that appears to be targeted at Internet of Things devices, of which many home users are unaware that they are vulnerable. Other attempts, such as Smart Things, present a cloud approach whereby there are also considerable risks related to security, robustness and privacy. 
 
-In contrast to these other attempts, a local approach, where the connectivity, device management and policies are managed within the home might be a better approach, ensuring the network can only be accessed from one point externally, therefore reducing the overhead for managing and updating software to combat new vulnerabilities. Furthering this, combining the IoT network with the traditional home network filled with PCs, tablets and mobile devices, to create a single network of devices, where the user can control, manage and configure in one place, would create a more seamless and user friendly experience. As discussed in section \ref{sub:homework_smart_home_router}, the Homework project attempts to reinvent the home network, enabling novice users to have full control over their network, without the need of network expertise, expensive hardware or the cloud\footnote{Homework project demonstrated its implementation on an EEPC 1000H netbook with an Atom 1.6GHz CPU and 2GB RAM} and by combining this with the IoT protocol, it could create an effective and powerful all-in-one home information platform and router. 
+In contrast to these other attempts, a local approach, where the connectivity, device management and policies are managed within the home might be a better approach, ensuring the network can only be accessed from one point externally, therefore reducing the overhead for managing and updating software to combat new vulnerabilities. Furthering this, combining the IoT network with the traditional home network filled with PCs, tablets and mobile devices, to create a single network of devices, where the user can control, manage and configure in one place, would create a more seamless and user friendly experience. As discussed in section \ref{sub:homework_smart_home_router}, the Homework project attempts to reinvent the home network, enabling novice users to have full control over their network, without the need of network expertise, expensive hardware or the cloud\footnote{Homework project demonstrated its implementation on an EEPC 1000H netbook with an Atom 1.6GHz CPU and 2GB RAM.} and by combining this with the IoT protocol, it could create an effective and powerful all-in-one home information platform and router. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proposed Approach}
@@ -321,10 +322,11 @@ As previously mentioned, the current implementation of MiniSec uses the now unre
 \subsubsection{Security protocol} % (fold)
 \label{ssub:security_protocol}
 The security protocol is split up into three main parts, as shown in figure \ref{fig:sequence_diagram}. The bootstrapping phase, in which the devices are all independently (in time and space) issued unique public key certificates and the corresponding private keys, as well as the public key of the CA. The asymmetric phase, in which a new device is brought into the network and the router(controller) initiates contact with the device, they both authenticate each other and then the router sends the device the session key. The symmetric phase, in which the two devices now communicate using symmetric cryptography with the previously transmitted session key.
+The basic communication steps are as followed:
 \begin{enumerate}
   \item Bootstrap devices with public key certificate and privates keys (+ CA public key) prior to deployment.
   \item Initiate discovery mode on Thing and router(controller).
-  \item Router and Thing authenticate one another.
+  \item Router and Thing authenticate one another. (A nonce is used to prevent replays.)
   \item User is presented with a list of authenticated devices to connect to and selects the one they want to connect to.
   \item Devices now exchange session key using secure channel (via authenticated public keys).
   \item Asymmetric cryptography structures free'd and symmetric cryptography started. Thing then ACKs router over symmetric channel to signify handshake has complete.
