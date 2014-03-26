@@ -28,7 +28,7 @@
 
 % *** CITATION PACKAGES ***
 %
-%\usepackage{cite}
+\usepackage{cite}
 % cite.sty was written by Donald Arseneau
 % V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
 % \cite{} output to follow that of IEEE. Loading the cite package will
@@ -277,17 +277,15 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Securing and Integrating the Internet of Things}
+\title{Securing and Integrating an Intranet of Things\\ within the Home}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Fergus Leahy, Paul Harvey, Prof. Joseph Sventek}
-\IEEEauthorblockA{School of Computing Science\\
-University of Glasgow\\
-Glasgow, UK\\
-Email: {fergus.leahy, joseph.sventek}@glasgow.ac.uk}
+\author{\IEEEauthorblockN{Fergus W. Leahy, Joseph Sventek, Paul Harvey}
+\IEEEauthorblockA{School of Computing Science\\ University of Glasgow\\
+Email: \{fergus.leahy, joseph.sventek\}@glasgow.ac.uk}
 }
 
 \maketitle
@@ -301,12 +299,16 @@ The abstract goes here.
 % no keywords
 
 \section{Introduction}
+The modern home is becoming increasingly filled with variety of connected devices, each providing a myriad of different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have began to invade our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. 
 
-\subsection{Existing Security}
+As these devices enter our homes, bringing with them their own ecosystems, protocols, standards and more, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, many of which provide overlapping services and functionality, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated attack vectors.
 
-
-\subsubsection{Integration}
-
+The main contributions of this paper are as follows:
+\begin{itemize}
+  \item A port of IoT protocol to TinyOS, previously implemented on the Contiki and Arduino platforms.
+  \item Secure Internet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication and end-to-end secrecy between Things within the network. 
+  \item Homework Database Cache integration, a Java-based proxy enabling the IoT to communicate with a stream database, publish/subscribe engine and automaton, to provide a closed loop of interaction.
+\end{itemize}
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -390,16 +392,81 @@ The abstract goes here.
 % footnotes above bottom floats. This can be corrected via the \fnbelowfloat
 % command of the stfloats package.
 
-\section{section name} % (fold)
-\label{sec:section_name}
 
-% section section_name (end)
+\section{Background} % (fold)
+\label{sec:background}
+
+\subsection{Hardware and Software Platforms} % (fold)
+\label{sec:hardware_and_software_platforms}
+
+\subsection{Internet of Things Protocols} % (fold)
+\label{sub:internet_of_things_protocols}
+\cite{KNoT}
+% subsection internet_of_things_protocols (end)
+
+
+
+% section hardware_and_software_platforms (end)
+\subsection{Existing Security} % (fold)
+\label{sub:existing_security}
+
+TinySec paragraph \cite{TinySec}
+
+MiniSec paragraph \cite{MiniSec}
+
+TinyPK paragraph \cite{TinyPK}
+
+TinyECC paragraph \cite{TinyECC}
+
+% subsection existing_security (end)
+\subsection{Integration} % (fold)
+\label{sub:integration}
+Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
+% subsection integration (end)
+
+% section background (end)
+
+\section{Motivation} % (fold)
+\label{sec:problem_definition}
+
+% section problem_definition (end)
+\section{Design} % (fold)
+\label{sec:design}
+\subsection{Security} % (fold)
+\label{sub:security}
+
+% subsection security (end)
+\subsection{Integration} % (fold)
+\label{sub:design_integration}
+
+% subsection design_integration (end)
+% section design (end)
+\section{Asymmetric Security} % (fold)
+\label{sec:asymmetric_security}
+
+% section asymmetric_security (end)
+
+\section{Symmetric Security} % (fold)
+\label{sec:symmetric_security}
+
+% section symmetric_security (end)
+\section{Integration} % (fold)
+\label{sec:integration}
+
+% section integration (end)
+
+\section{Evaluation} % (fold)
+\label{sec:evaluation}
+Code size, ASym timings/optimisations.
+% section evaluation (end)
 
 \section{Conclusion}
-The conclusion goes here.
 
 
+\section{Future Work} % (fold)
+\label{sec:future_work}
 
+% section future_work (end)
 
 % conference papers do not normally have an appendix
 
@@ -436,13 +503,8 @@ The authors would like to thank... many great peepz
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
-
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
-\end{thebibliography}
+\bibliographystyle{./sty/IEEEtran}
+\bibliography{./sty/examples/IEEEabrv,bibliography}
 
 
 
