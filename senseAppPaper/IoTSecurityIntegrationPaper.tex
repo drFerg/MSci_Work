@@ -283,7 +283,7 @@
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Fergus W. Leahy, Joseph Sventek, Paul Harvey}
+\author{\IEEEauthorblockN{Fergus Leahy, Joseph Sventek, Paul Harvey}
 \IEEEauthorblockA{School of Computing Science\\ University of Glasgow\\
 Email: \{fergus.leahy, joseph.sventek\}@glasgow.ac.uk}
 }
@@ -292,23 +292,153 @@ Email: \{fergus.leahy, joseph.sventek\}@glasgow.ac.uk}
 
 
 \begin{abstract}
-%\boldmath
 The abstract goes here.
 \end{abstract}
 
 % no keywords
 
 \section{Introduction}
-The modern home is becoming increasingly filled with variety of connected devices, each providing a myriad of different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have began to invade our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. 
+The modern home is becoming increasingly filled with variety of connected devices, each providing a myriad of different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have began to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. 
 
-As these devices enter our homes, bringing with them their own ecosystems, protocols, standards and more, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, many of which provide overlapping services and functionality, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated attack vectors.
+As these devices enter our homes in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
+
+Many existing devices present a severe lack of thoughtful integration into existing networks and infrastructure. A common approach has been to integrate traditional power-hungry 802.11 WIFI chipsets and offer services directly to Internet\cite{IETF_COAP_HTTP,Xively} or connecting to a cloud service\cite{SmartThings,Twine}; whilst gaining the benefits of the Internet and Cloud (anywhere access, power/storage), both also have multiple weaknesses by relying on such connectivity (reliability, security, privacy, data-ownership) and have resulted in attacks similar to Stuxnet where devices have come under attack\cite{IoTWorm}.
+
+Talk of homework
+
+This paper presents a solution to securing an Internet of Things, by instead starting with securing an Intranet of Things within the home, ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control. 
 
 The main contributions of this paper are as follows:
 \begin{itemize}
   \item A port of IoT protocol to TinyOS, previously implemented on the Contiki and Arduino platforms.
   \item Secure Internet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication and end-to-end secrecy between Things within the network. 
-  \item Homework Database Cache integration, a Java-based proxy enabling the IoT to communicate with a stream database, publish/subscribe engine and automaton, to provide a closed loop of interaction.
+  \item Homework Database Cache integration, a Java-based proxy enabling the IoT to communicate with a stream database, publish/subscribe engine and automata, to provide a closed loop of interaction.
 \end{itemize}
+
+\section{Background} % (fold)
+\label{sec:background}
+
+\subsection{Hardware and Software Platforms} % (fold)
+\label{sec:hardware_and_software_platforms}
+
+\subsection{Internet of Things Protocols} % (fold)
+\label{sub:internet_of_things_protocols}
+\cite{KNoT}
+% subsection internet_of_things_protocols (end)
+
+
+
+% section hardware_and_software_platforms (end)
+\subsection{Existing Security} % (fold)
+\label{sub:existing_security}
+
+TinySec paragraph \cite{TinySec}
+
+MiniSec paragraph \cite{MiniSec}
+
+TinyPK paragraph \cite{TinyPK}
+
+TinyECC paragraph \cite{TinyECC}
+
+% subsection existing_security (end)
+\subsection{Integration} % (fold)
+\label{sub:integration}
+Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
+% subsection integration (end)
+
+% section background (end)
+
+\section{Motivation} % (fold)
+\label{sec:problem_definition}
+
+% section problem_definition (end)
+\section{Design} % (fold)
+\label{sec:design}
+\subsection{Security} % (fold)
+\label{sub:security}
+
+% subsection security (end)
+\subsection{Integration} % (fold)
+\label{sub:design_integration}
+
+% subsection design_integration (end)
+% section design (end)
+\section{Asymmetric Security} % (fold)
+\label{sec:asymmetric_security}
+
+% section asymmetric_security (end)
+
+\section{Symmetric Security} % (fold)
+\label{sec:symmetric_security}
+
+% section symmetric_security (end)
+\section{Integration} % (fold)
+\label{sec:integration}
+
+% section integration (end)
+
+\section{Evaluation} % (fold)
+\label{sec:evaluation}
+Code size, ASym timings/optimisations.
+% section evaluation (end)
+
+\section{Conclusion}
+
+
+\section{Future Work} % (fold)
+\label{sec:future_work}
+
+\begin{itemize}
+  \item improve symmetric security
+  \item add internet connectivity securely
+  \item implement on a wider range of devices
+\end{itemize}
+% section future_work (end)
+
+% conference papers do not normally have an appendix
+
+
+% use section* for acknowledgement
+\section*{Acknowledgment}
+
+
+The authors would like to thank... many great peepz
+
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+\bibliographystyle{./sty/IEEEtran}
+\bibliography{./sty/examples/IEEEabrv,bibliography}
+
+
+
+
+% that's all folks
+\end{document}
+
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -391,125 +521,4 @@ The main contributions of this paper are as follows:
 % exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the \fnbelowfloat
 % command of the stfloats package.
-
-
-\section{Background} % (fold)
-\label{sec:background}
-
-\subsection{Hardware and Software Platforms} % (fold)
-\label{sec:hardware_and_software_platforms}
-
-\subsection{Internet of Things Protocols} % (fold)
-\label{sub:internet_of_things_protocols}
-\cite{KNoT}
-% subsection internet_of_things_protocols (end)
-
-
-
-% section hardware_and_software_platforms (end)
-\subsection{Existing Security} % (fold)
-\label{sub:existing_security}
-
-TinySec paragraph \cite{TinySec}
-
-MiniSec paragraph \cite{MiniSec}
-
-TinyPK paragraph \cite{TinyPK}
-
-TinyECC paragraph \cite{TinyECC}
-
-% subsection existing_security (end)
-\subsection{Integration} % (fold)
-\label{sub:integration}
-Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
-% subsection integration (end)
-
-% section background (end)
-
-\section{Motivation} % (fold)
-\label{sec:problem_definition}
-
-% section problem_definition (end)
-\section{Design} % (fold)
-\label{sec:design}
-\subsection{Security} % (fold)
-\label{sub:security}
-
-% subsection security (end)
-\subsection{Integration} % (fold)
-\label{sub:design_integration}
-
-% subsection design_integration (end)
-% section design (end)
-\section{Asymmetric Security} % (fold)
-\label{sec:asymmetric_security}
-
-% section asymmetric_security (end)
-
-\section{Symmetric Security} % (fold)
-\label{sec:symmetric_security}
-
-% section symmetric_security (end)
-\section{Integration} % (fold)
-\label{sec:integration}
-
-% section integration (end)
-
-\section{Evaluation} % (fold)
-\label{sec:evaluation}
-Code size, ASym timings/optimisations.
-% section evaluation (end)
-
-\section{Conclusion}
-
-
-\section{Future Work} % (fold)
-\label{sec:future_work}
-
-% section future_work (end)
-
-% conference papers do not normally have an appendix
-
-
-% use section* for acknowledgement
-\section*{Acknowledgment}
-
-
-The authors would like to thank... many great peepz
-
-
-
-
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
-\bibliographystyle{./sty/IEEEtran}
-\bibliography{./sty/examples/IEEEabrv,bibliography}
-
-
-
-
-% that's all folks
-\end{document}
-
 
