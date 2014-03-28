@@ -258,10 +258,6 @@
 % Read the url.sty source comments for usage information. Basically,
 % \url{my_url_here}.
 
-
-
-
-
 % *** Do not adjust lengths that control margins, column widths, etc. ***
 % *** Do not use packages that alter fonts (such as pslatex).         ***
 % There should be no need to do such things with IEEEtran.cls V1.6 and later.
@@ -302,11 +298,11 @@ The modern home is becoming increasingly filled with variety of connected device
 
 As these devices enter our homes in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
 
-Many existing devices present a severe lack of thoughtful integration into existing networks and infrastructure. A common approach has been to integrate traditional power-hungry 802.11 WIFI chipsets and offer services directly to Internet\cite{IETF_COAP_HTTP,Xively} or connecting to a cloud service\cite{SmartThings,Twine}; whilst gaining the benefits of the Internet and Cloud (anywhere access, power/storage), both also have multiple weaknesses by relying on such connectivity (reliability, security, privacy, data-ownership) and have resulted in attacks similar to Stuxnet where devices have come under attack\cite{IoTWorm}.
+Many existing devices present a severe lack of thoughtful integration into existing networks and infrastructure. A common approach has been to integrate traditional power-hungry 802.11 WIFI chipsets and offer services directly to Internet\cite{IETF_CORE,Xively} or connecting to a cloud service\cite{SmartThings,Twine}; whilst gaining the benefits of the Internet and Cloud (anywhere access, scalable power/storage), both also have multiple weaknesses by relying on such connectivity (reliability, security, privacy, data-ownership) and have resulted in attacks similar to Stuxnet where devices have come under attack\cite{IoTWorm}.
 
-Talk of homework
+Talk about homework
 
-This paper presents a solution to securing an Internet of Things, by instead starting with securing an Intranet of Things within the home, ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control. 
+This paper presents a solution to securing an Internet of Things, by instead starting with securing an Intranet of Things within the home and ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
 
 The main contributions of this paper are as follows:
 \begin{itemize}
@@ -323,58 +319,80 @@ The main contributions of this paper are as follows:
 
 \subsection{Internet of Things Protocols} % (fold)
 \label{sub:internet_of_things_protocols}
-\cite{KNoT}
+In our previous research\cite{KNoT}, existing protocols for traditional connectivity, domotics and IoTs were found to be inadequate for the typical IoT architecture and the types of devices it's designed to run on i.e. low power embedded devices. Existing protocols either cast a Thing to fit into the traditional RESTful client-server architecture\cite{IETF_COAP_HTTP}, are Cloud orientated\cite{SmartThings,Twine}, are extremely inefficient\cite{xAP} or are simply too heavyweight for such low power and constrained devices (TCP/IP), where battery power is a scarce resource. 
+
+To remedy this, a model for the typical IoT was created consisting of sensors and actuators, as well as controllers which orchestrated the network. On top of this model a lightweight and efficient protocol was designed and implemented, ensuring robust, low power and scalable networking is possible with a network of Things ranging from 10s to 100s of devices.
 % subsection internet_of_things_protocols (end)
 
 
 
 % section hardware_and_software_platforms (end)
-\subsection{Existing Security} % (fold)
+\subsection{Security in Wireless Sensor Networks} % (fold)
 \label{sub:existing_security}
+Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs, thus running expensive cryptography schemes in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to parts of the problems, but have yet to create a complete solution and efficient solution for enabling nodes to dynamically join a secure network without some shared secret known a priori.
 
-TinySec paragraph \cite{TinySec}
+The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography libraries. The rest of this section will discuss several of the previous works of both types of cryptography.
 
-MiniSec paragraph \cite{MiniSec}
+TinySec and Minisec paragraph \cite{TinySec}
+
+MiniSec paragraph \cite{MiniSec} mention failure to see a corelation between the paper and implementation provided (IV cheat and major flaws)
 
 TinyPK paragraph \cite{TinyPK}
 
 TinyECC paragraph \cite{TinyECC}
 
 % subsection existing_security (end)
-\subsection{Integration} % (fold)
+\subsection{Smart Home Router} % (fold)
 \label{sub:integration}
 Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
 % subsection integration (end)
 
 % section background (end)
 
-\section{Motivation} % (fold)
-\label{sec:problem_definition}
+\section{Aims} % (fold)
+\label{sec:aims}
 
-% section problem_definition (end)
+\subsection{Security Aims} % (fold)
+\label{sub:security_aims}
+
+Within security this paper aims to mitigate the following attack vectors:
+\begin{itemize}
+  \item Eavesdropping
+  \item Masquerading
+  \item Man-in-the-middle
+\end{itemize}
+As a result of protecting against the other forms of attack, the risk of node capture is substantially reduced.
+% subsection security_aims (end)
+\subsection{Integration Aims} % (fold)
+\label{sub:integration_aims}
+
+% subsection integration_aims (end)
+% section design_goals  (end)
 \section{Design} % (fold)
 \label{sec:design}
 \subsection{Security} % (fold)
 \label{sub:security}
-
+talk about combining asymmetric and symmetric to bootstrap keys and perform secure and authenticated handover
 % subsection security (end)
 \subsection{Integration} % (fold)
 \label{sub:design_integration}
-
+discuss architecture and use of automata to react to the network
 % subsection design_integration (end)
 % section design (end)
+
 \section{Asymmetric Security} % (fold)
 \label{sec:asymmetric_security}
-
+Discuss the crypto used, the cert verification and key handover as well as optimisation
 % section asymmetric_security (end)
 
 \section{Symmetric Security} % (fold)
 \label{sec:symmetric_security}
-
+discuss the crypto used and MAC
+as well as IV syncing and key refresh (skipjack)
 % section symmetric_security (end)
 \section{Integration} % (fold)
 \label{sec:integration}
-
+discuss impelemenation of automata and 
 % section integration (end)
 
 \section{Evaluation} % (fold)
@@ -392,6 +410,7 @@ Code size, ASym timings/optimisations.
   \item improve symmetric security
   \item add internet connectivity securely
   \item implement on a wider range of devices
+  \item port controller to PC to better support expensive PKC
 \end{itemize}
 % section future_work (end)
 
