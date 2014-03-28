@@ -273,7 +273,7 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{Securing and Integrating an Intranet of Things\\ within the Home}
+\title{Securing and Integrating an Intranet of Things\\ with a Smart Home Router}
 
 
 % author names and affiliations
@@ -294,20 +294,18 @@ The abstract goes here.
 % no keywords
 
 \section{Introduction}
-The modern home is becoming increasingly filled with variety of connected devices, each providing a myriad of different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have began to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. 
+The modern home is becoming increasingly filled with variety of connected devices, each providing a myriad of different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have began to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. As these devices enter our homes in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
 
-As these devices enter our homes in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
+Many existing devices present a severe lack of thoughtful integration into existing networks, infrastructure and the devices themselves. A common approach has been to integrate traditional power-hungry 802.11 WIFI chipsets and offer services directly to the Internet\cite{IETF_CORE,Xively} or connecting to a cloud service\cite{SmartThings,Twine}, thus gaining the benefits of anywhere access and scalable power/storage. However, this solution not only severely limits the lifetime of many battery operated Things, but it also opens up multiple points of failure by relying on such connectivity to the Internet or Cloud (reliability, security, privacy, data-ownership). This has already resulted in attacks similar to that of Stuxnet\cite{IoTWorm}. 
 
-Many existing devices present a severe lack of thoughtful integration into existing networks and infrastructure. A common approach has been to integrate traditional power-hungry 802.11 WIFI chipsets and offer services directly to Internet\cite{IETF_CORE,Xively} or connecting to a cloud service\cite{SmartThings,Twine}; whilst gaining the benefits of the Internet and Cloud (anywhere access, scalable power/storage), both also have multiple weaknesses by relying on such connectivity (reliability, security, privacy, data-ownership) and have resulted in attacks similar to Stuxnet where devices have come under attack\cite{IoTWorm}.
+In this paper we present a solution to securing an Intranet of Things, taking advantage of a combination of symmetric and asymmetric cryptographic algorithms and primitives to enable efficient, secure and authenticated entry into a new network without shared secrets known a priori. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
 
-Talk about homework
-
-This paper presents a solution to securing an Internet of Things, starting with securing an Intranet of Things within the home and ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
+Whilst previous work has demonstrated it's possible to adequately secure wireless sensor networks from a variety of attacks\cite{TinySec,TinyECC,MiniSec}, existing research has yet to create a complete solution to enable new devices to join an existing network without the need of a shared secret (pre-shared key)\cite{TinySec,MiniSec} or complex user interaction to transfer the network key\cite{MessageBottle}. 
 
 The main contributions of this paper are as follows:
 \begin{itemize}
   \item A port of IoT protocol to TinyOS, previously implemented on the Contiki and Arduino platforms.
-  \item Secure Internet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication and end-to-end secrecy between Things within the network. 
+  \item A secure Intranet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication and end-to-end secrecy between Things within the network. 
   \item Homework Database Cache integration, a Java-based proxy enabling the IoT to communicate with a stream database, publish/subscribe engine and automata, to provide a closed loop of interaction.
 \end{itemize}
 
@@ -324,25 +322,6 @@ In our previous research\cite{KNoT}, existing protocols for traditional connecti
 To remedy this, a model for the typical IoT was created consisting of sensors and actuators, as well as controllers which orchestrated the network. On top of this model a lightweight and efficient protocol was designed and implemented, ensuring robust, low power and scalable networking is possible with a network of Things ranging from 10s to 100s of devices.
 % subsection internet_of_things_protocols (end)
 
-
-
-% section hardware_and_software_platforms (end)
-\subsection{Security in Wireless Sensor Networks} % (fold)
-\label{sub:existing_security}
-Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs, thus running expensive cryptography schemes in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to parts of the problems, but have yet to create a complete solution and efficient solution for enabling nodes to dynamically join a secure network without some shared secret known a priori.
-
-The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography. The rest of this section will discuss the most significant of these previous works of both types of cryptography.
-
-TinySec\cite{TinySec}, a symmetric cryptography library for TinyOS 1.0, was some of the first work created to try and solve this security problem, intending to demonstrate that software-based cryptography was possible on constrained devices with a minimal power overhead, around 10\% for both encryption and authentication. To achieve this, TinySec was designed around WSNs extreme resource constraints, taking advantage of some of these constraints, such as the limited networking bandwidth, optimising the security primitives in order to reduce the security overhead added to each packet.
-
-MiniSec, another symmetric cryptography library for TinyOS 1.0 and a successor to TinySec, was created to further improve the security provided by TinySec and add replay prevention whilst still maintaining the minimal overheads which TinySec achieved.
-MiniSec paragraph \cite{MiniSec} mention failure to see a correlation between the paper and implementation provided (IV cheat and major flaws)
-
-TinyPK paragraph \cite{TinyPK}
-
-TinyECC paragraph \cite{TinyECC}
-
-% subsection existing_security (end)
 \subsection{Smart Home Router} % (fold)
 \label{sub:integration}
 Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
@@ -350,9 +329,9 @@ Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
 
 % section background (end)
 
-\section{Aims} % (fold)
-\label{sec:aims}
-
+\section{Problem} % (fold)
+\label{sec:Problem}
+Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs; thus, running expensive cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to parts of the problems, but have yet to create a complete solution and efficient solution for enabling nodes to dynamically join a secure network without some shared secret known a priori.
 \subsection{Security Aims} % (fold)
 \label{sub:security_aims}
 
@@ -401,6 +380,23 @@ discuss impelemenation of automata and
 Code size, ASym timings/optimisations.
 % section evaluation (end)
 
+\section{Related Work} % (fold)
+\label{sec:related_work}
+The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography. The rest of this section will discuss the most significant of these previous works of both types of cryptography.
+
+TinySec\cite{TinySec}, a symmetric cryptography library for TinyOS 1.0, was some of the first work created to try and solve this security problem, intending to demonstrate that software-based cryptography was possible on constrained devices with a minimal power overhead, around 10\% for both encryption and authentication. To achieve this, TinySec was designed around WSNs extreme resource constraints, taking advantage of some of these constraints, such as the limited networking bandwidth, optimising the security primitives in order to reduce the security overhead added to each packet. One such optimisation was the use of a reduced initialisation vector for the cipher block chaining mode of operation, which combined several of the existing header fields and added a 2 byte counter, ensuring IVs wouldn't clash between nodes sending the same packet. Whilst the IV is significantly smaller than conventional security protocols, which would reduce time till IV reuse, TinySec argued that this wasn't an issue, demonstrating that using an average send rate of 1 packet per minute, IV reuse would not occur for 45 days.
+
+MiniSec, another symmetric cryptography library for TinyOS 1.0 and a successor to TinySec, was created to further improve the security provided by TinySec, add replay prevention and also improve upon the minimal security overheads which TinySec achieved. To achieve the increase in security, MiniSec chose to increase the initialisation vector size from 2 bytes to 8 bytes, however, instead of transmitting the whole 8 bytes, MiniSec sends only the 3 last bits (LB) within the pre-existing packet length field, thus incurring no additional overhead on top of the normal TinyOS packet for the IV. To ensure the LB optimisation works correctly, both communicating nodes must maintain state for the counter and perform counter resynchronisation upon significant packet loss (\textgreater$2^3$ packets). This counter state is also used to ensure replay prevention, requiring all received packets to have a higher IV than the local state.
+
+MiniSec paragraph \cite{MiniSec} mention failure to see a correlation between the paper and implementation provided (IV cheat and major flaws)
+
+
+
+TinyECC paragraph \cite{TinyECC}
+TinyPK paragraph \cite{TinyPK}
+Message in bottle \cite{MessageBottle}
+
+% section related_work (end)
 \section{Conclusion}
 
 
