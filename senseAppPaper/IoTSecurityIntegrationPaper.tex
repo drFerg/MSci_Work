@@ -302,7 +302,7 @@ Many existing devices present a severe lack of thoughtful integration into exist
 
 Talk about homework
 
-This paper presents a solution to securing an Internet of Things, by instead starting with securing an Intranet of Things within the home and ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
+This paper presents a solution to securing an Internet of Things, starting with securing an Intranet of Things within the home and ensuring devices within the home are safe against local threats. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
 
 The main contributions of this paper are as follows:
 \begin{itemize}
@@ -331,11 +331,12 @@ To remedy this, a model for the typical IoT was created consisting of sensors an
 \label{sub:existing_security}
 Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs, thus running expensive cryptography schemes in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to parts of the problems, but have yet to create a complete solution and efficient solution for enabling nodes to dynamically join a secure network without some shared secret known a priori.
 
-The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography libraries. The rest of this section will discuss several of the previous works of both types of cryptography.
+The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography. The rest of this section will discuss the most significant of these previous works of both types of cryptography.
 
-TinySec and Minisec paragraph \cite{TinySec}
+TinySec\cite{TinySec}, a symmetric cryptography library for TinyOS 1.0, was some of the first work created to try and solve this security problem, intending to demonstrate that software-based cryptography was possible on constrained devices with a minimal power overhead, around 10\% for both encryption and authentication. To achieve this, TinySec was designed around WSNs extreme resource constraints, taking advantage of some of these constraints, such as the limited networking bandwidth, optimising the security primitives in order to reduce the security overhead added to each packet.
 
-MiniSec paragraph \cite{MiniSec} mention failure to see a corelation between the paper and implementation provided (IV cheat and major flaws)
+MiniSec, another symmetric cryptography library for TinyOS 1.0 and a successor to TinySec, was created to further improve the security provided by TinySec and add replay prevention whilst still maintaining the minimal overheads which TinySec achieved.
+MiniSec paragraph \cite{MiniSec} mention failure to see a correlation between the paper and implementation provided (IV cheat and major flaws)
 
 TinyPK paragraph \cite{TinyPK}
 
@@ -407,7 +408,7 @@ Code size, ASym timings/optimisations.
 \label{sec:future_work}
 
 \begin{itemize}
-  \item improve symmetric security
+  \item improve symmetric security (port AES)
   \item add internet connectivity securely
   \item implement on a wider range of devices
   \item port controller to PC to better support expensive PKC
