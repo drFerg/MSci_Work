@@ -338,11 +338,11 @@ Deployable security in wireless sensor networks continues to be a significant pr
 In the context of the IoT, security is of paramount importance due to the rich and sensitive nature of the data that sensors gather, as well as the level of control available from actuators, which, if compromised by any one of the attacks below, could pose serious health and safety risks for the user and home. 
 
 \begin{itemize}
-  \item Eavesdropping - An attacker can overhear messages broadcast by nodes in the network. 
-  \item Masquerading
-  \item Man-in-the-middle
-  \item Replay
-  \item Node Capture
+  \item Eavesdropping - An attacker can overhear messages broadcast by nodes in the network.  
+  \item Masquerading - An attacker masquerades as a legitimate node within the network and is able to inject packets into the network and abuse the closed loop of control within the network with potentially dangerous consequences. 
+  \item Man-in-the-middle - An attacker intercepts a communications between two nodes and is able to overhear, manipulate and inject packets without either node detecting it. 
+  \item Replay - An attacker records messages between nodes in the network and rebroadcasts them in an attempt to manipulate the network. This attack can be performed even if packets are encrypted. 
+  \item Node Capture - An attacker captures a node and can retrieve any data/keys stored on the device which can lead to other attacks.
 \end{itemize}
 As a result of protecting against the other forms of attack, the risk of node capture is substantially reduced.
 % subsection security_aims (end)
