@@ -300,12 +300,12 @@ Many existing devices present a severe lack of thoughtful integration into exist
 
 In this paper we present a solution to securing an Intranet of Things, taking advantage of a combination of symmetric and asymmetric cryptographic algorithms and primitives to enable efficient, secure and authenticated entry into a new network without shared secrets known a priori. Secondly, this paper demonstrates integrating the IoT into a state-of-the-art smart router, Homework\cite{HomeworkProject}, for enabling a dynamic and powerful closed loop of control without the need for external connectivity to the Internet or Cloud. 
 
-Whilst previous work has demonstrated it's possible to adequately secure wireless sensor networks from a variety of attacks\cite{TinySec,TinyECC,MiniSec}, existing research has yet to create a complete solution to enable new devices to join an existing network without the need of a shared secret (pre-shared key)\cite{TinySec,MiniSec} or complex user interaction to transfer the network key\cite{MessageBottle}. 
+Whilst previous work has demonstrated it's possible to adequately secure wireless sensor networks from a variety of attacks\cite{TinySec,TinyECC,MiniSec}, existing research has yet to create a complete solution to enable new devices to join an existing network without the need of a shared secret (pre-shared key)\cite{TinySec,MiniSec} or complex user interaction to transfer the network key\cite{MessageBottle}.
 
 The main contributions of this paper are as follows:
 \begin{itemize}
   \item A port of IoT protocol to TinyOS, previously implemented on the Contiki and Arduino platforms.
-  \item A secure Intranet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication and end-to-end secrecy between Things within the network. 
+  \item A secure Intranet of Things protocol, enabling new devices to securely join an existing network without a pre-shared key, providing authentication, end-to-end secrecy, replay and man-in-the-middle protection between Things within the network. 
   \item Homework Database Cache integration, a Java-based proxy enabling the IoT to communicate with a stream database, publish/subscribe engine and automata, to provide a closed loop of interaction.
 \end{itemize}
 
@@ -331,15 +331,18 @@ Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
 
 \section{Problem} % (fold)
 \label{sec:Problem}
-Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs; thus, running expensive cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to parts of the problems, but have yet to create a complete solution and efficient solution for enabling nodes to dynamically join a secure network without some shared secret known a priori.
-\subsection{Security Aims} % (fold)
-\label{sub:security_aims}
+Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs; thus, running expensive conventional cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to the first and second part of the problem, but has yet to present a complete and efficient solution for enabling nodes to dynamically join a secure network without a shared secret known a priori.
 
-Within security this paper aims to mitigate the following attack vectors:
+\subsection{Security} % (fold)
+\label{sub:security}
+In the context of the IoT, security is of paramount importance due to the rich and sensitive nature of the data that sensors gather, as well as the level of control available from actuators, which, if compromised by any one of the attacks below, could pose serious health and safety risks for the user and home. 
+
 \begin{itemize}
-  \item Eavesdropping
+  \item Eavesdropping - An attacker can overhear messages broadcast by nodes in the network. 
   \item Masquerading
   \item Man-in-the-middle
+  \item Replay
+  \item Node Capture
 \end{itemize}
 As a result of protecting against the other forms of attack, the risk of node capture is substantially reduced.
 % subsection security_aims (end)
@@ -348,8 +351,10 @@ As a result of protecting against the other forms of attack, the risk of node ca
 
 % subsection integration_aims (end)
 % section design_goals  (end)
+
 \section{Design} % (fold)
 \label{sec:design}
+
 \subsection{Security} % (fold)
 \label{sub:security}
 talk about combining asymmetric and symmetric to bootstrap keys and perform secure and authenticated handover
