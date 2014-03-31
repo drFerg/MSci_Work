@@ -189,7 +189,7 @@
 
 
 
-%\usepackage[caption=false]{caption}
+\usepackage{caption}
 %\usepackage[font=footnotesize]{subfig}
 % subfig.sty, also written by Steven Douglas Cochran, is the modern
 % replacement for subfigure.sty. However, subfig.sty requires and
@@ -264,9 +264,10 @@
 % (Unless specifically asked to do so by the journal or conference you plan
 % to submit to, of course. )
 
-
+\usepackage{tikz}
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
+\DeclareGraphicsRule{.1}{mps}{*}{}
 
 
 \begin{document}
@@ -312,14 +313,11 @@ The main contributions of this paper are as follows:
 \section{Background} % (fold)
 \label{sec:background}
 
-\subsection{Hardware and Software Platforms} % (fold)
-\label{sec:hardware_and_software_platforms}
-
 \subsection{Internet of Things Protocols} % (fold)
 \label{sub:internet_of_things_protocols}
 In our previous research\cite{KNoT}, existing protocols for traditional connectivity, domotics and IoTs were found to be inadequate for the typical IoT architecture and the types of devices it's designed to run on i.e. low power embedded devices. Existing protocols either cast a Thing to fit into the traditional RESTful client-server architecture\cite{IETF_COAP_HTTP}, are Cloud orientated\cite{SmartThings,Twine}, are extremely inefficient\cite{xAP} or are simply too heavyweight for such low power and constrained devices (TCP/IP), where battery power is a scarce resource. 
 
-To remedy this, a model for the typical IoT was created consisting of sensors and actuators, as well as controllers which orchestrated the network. On top of this model a lightweight and efficient protocol was designed and implemented, ensuring robust, low power and scalable networking is possible with a network of Things ranging from 10s to 100s of devices.
+To remedy this, a model for the typical IoT was created consisting of sensors and actuators, as well as controllers which orchestrated the network. On top of this model a lightweight and efficient protocol was designed and implemented for the Contiki operating system, ensuring robust, low power and scalable networking is possible with a network of Things ranging from many tens to hundreds of devices.
 % subsection internet_of_things_protocols (end)
 
 \subsection{Smart Home Router} % (fold)
@@ -329,55 +327,148 @@ Homework Cache \cite{InformationPlane} \cite{DEBSChallenge}
 
 % section background (end)
 
-\section{Problem} % (fold)
-\label{sec:Problem}
-Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs; thus, running expensive conventional cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as redistribute new keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to the first and second part of the problem, but has yet to present a complete and efficient solution for enabling nodes to dynamically join a secure network without a shared secret known a priori.
-
+\section{Motivation} % (fold)
+\label{sec:motivation}
 \subsection{Security} % (fold)
 \label{sub:security}
-In the context of the IoT, security is of paramount importance due to the rich and sensitive nature of the data that sensors gather, as well as the level of control available from actuators, which, if compromised by any one of the attacks below, could pose serious health and safety risks for the user and home. 
+Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in WSNs; thus, running expensive conventional cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are also extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment as well as (re)distribute keys for the network, enables the network to scale, replace failed nodes and protect against attackers with ease. Previous work has demonstrated various solutions to the first and second part of this problem\cite{TinySec,MiniSec,TinyECC}, but have largely ignored the third part, assuming that keys or shared secrets are distributed at install time.
 
+The first key problem this paper attempts to solve is securing the IoT in a usable manner to ensure the user's devices, network and data are secure against possible attacks and also allow new approved devices join the network with minimal effort. Due to the scale of an IoTs network, containing potentially tens if not hundreds of devices, this needs to be possible without the user being required to manually configure each device with a security key.
+
+In the context of the IoT, security is of paramount importance due to the rich and sensitive nature of the data that sensors gather, as well as the level of control available from actuators, which, if compromised by any one of the attacks below, could pose serious health and safety risks for the user and home.
+
+\textit{Types of Attack:}
 \begin{itemize}
-  \item Eavesdropping - An attacker can overhear messages broadcast by nodes in the network.  
-  \item Masquerading - An attacker masquerades as a legitimate node within the network and is able to inject packets into the network and abuse the closed loop of control within the network with potentially dangerous consequences. 
+  \item Eavesdropping - An attacker can overhear messages broadcast by nodes in the network, using the information learned to potentially perform a physical attack (when house doors are unlocked), or log for later analysis (activity monitoring).  
+  \item Masquerading - An attacker masquerades as a legitimate node within the network and is able to inject packets into the network and abuse the closed loop of control within the network with potentially dangerous consequences e.g., transmit cold temperature readings to trick the boiler to increase the temperature.
   \item Man-in-the-middle - An attacker intercepts a communications between two nodes and is able to overhear, manipulate and inject packets without either node detecting it. 
   \item Replay - An attacker records messages between nodes in the network and rebroadcasts them in an attempt to manipulate the network. This attack can be performed even if packets are encrypted. 
-  \item Node Capture - An attacker captures a node and can retrieve any data/keys stored on the device which can lead to other attacks.
+  \item Denial of service - An attacker abuses the resources available on a node by overwhelming it with expensive operations e.g., verifying a certificate.
+  \item Node Capture - An attacker captures a node and can retrieve any data/keys stored on the device, potentially compromising the security of the network.
 \end{itemize}
-As a result of protecting against the other forms of attack, the risk of node capture is substantially reduced.
-% subsection security_aims (end)
-\subsection{Integration Aims} % (fold)
-\label{sub:integration_aims}
 
+% subsection security_aims (end)
+\subsection{Integration} % (fold)
+\label{sub:integration_aims}
+The second problem this paper presents is that existing commercial IoTs are trapped within manufacturer eco-systems, with each device connecting directly to the Internet or a Cloud service to enable functionality, unable to communicate directly to other Things within the local network. Whilst the previous work in developing an IoT protocol was successful in demonstrating a network of Things communicating directly with one another, it was limited to only operate within the constraints controller device, which orchestrates the network; thus, to create a more powerful IoTs network, integrating the controller role into a PC service which is able to receive, aggregate, process and react to events in a dynamic and configurable manner is necessary.
 % subsection integration_aims (end)
 % section design_goals  (end)
 
 \section{Design} % (fold)
 \label{sec:design}
+\subsection{Assumptions} % (fold)
+\label{sub:assumptions}
+In designing the security protocol several assumptions are made:
+\begin{itemize}
+  \item The controller in the network has sufficient resources available to process and store a large number of public keys for nodes within the network.
+  \item The controller has sufficient resources available to generate and store secure pair-wise session keys for each node in the network.  
+  \item The network is deployed over a geographically small enough area, the home, such that it's unnecessary to perform packet gathering and compression between the source sensor and sink controller. Thus, intermediary nodes need not store keys for each of the surrounding nodes and can, if necessary, forward any encrypted packets received towards their destination.
+  \item As the majority of nodes deployed in an IoT are situated within a secure property e.g., the home or office, and due to the increased cost of tamper-proofing them, node capture is not deemed to be a significant issue and will not be mitigated against in this security protocol. However, due to the use of pair-wise session keys being used between the nodes and controller, the risk presented by node capture is substantially lowered.
+\end{itemize}
+% subsection assumptions (end)
+
+\subsection{Hardware and Software Platforms} % (fold)
+\label{sec:hardware_and_software_platforms}
+Whilst many newer and more powerful sensor platforms are available today, much of the existing work for WSNs and WSN security has been developed for the TelosB mote, a 8Mhz TI MSP430 microcontroller with 48KB ROM and 10KB RAM, due to its low power operation and TinyOS support. TinyOS is a lightweight operating system designed for embedded devices in WSNs and has strong support in academia, with many libraries and tools available. 
+
+The IoT protocol previously discussed was developed for the Contiki operating system running on TelosB motes due to Contiki's relative similarity with imperative style programming, as opposed to TinyOS's event style programming. However, due to the number of security implementations available for TinyOS, including MiniSec and TinyECC, the IoT protocol will need to be ported across to TinyOS. 
 
 \subsection{Security} % (fold)
 \label{sub:security}
-talk about combining asymmetric and symmetric to bootstrap keys and perform secure and authenticated handover
-% subsection security (end)
+In this section we present the design of our security protocol, enabling new devices to join the network without the need of a shared secret or any physical interaction with the controller.
+As discussed later in section \ref{sec:related_work} there are many existing security protocols available for TinyOS: including TinySec\cite{TinySec} and MiniSec\cite{MiniSec} for symmetric cryptography and TinyECC\cite{TinyECC} for asymmetric cryptography, as well as a variety of other key distribution schemes\cite{TinyPK,TinyPBC,Shi2013235,ContikiSec,MessageBottle,CertificatePairwise,MizanurRahman2010858}. The security protocol design we propose does not claim to demonstrate a completely new protocol, but is instead a novel combination of the previously described work, MiniSec and TinyECC, based on a conventional security algorithm, Transport Layer Security algorithm (TLS), commonly used in desktop machines today.
+
+As described in section \ref{sec:motivation}, the key problem with previous approaches to WSN security is either the assumption that a shared secret, key or ID is pre-installed onto some or all of the nodes and thus not an issue, or the structure of the network is planned and predetermined, with designated high power nodes. However, this is impractical for networks containing many tens of nodes, entering in a piecemeal fashion and for administration by a novice user expecting device installation to be trivial. Thus, a secure key distribution method must be devised to ensure new nodes can join the network without the need to be reprogrammed.
+
+To solve this problem we propose the following security protocol design described below and in figure \ref{fig:sequence_diagram}. Our design attempts to alleviate complex physical interactions between devices performed by the user\cite{MessageBottle} and remove the need to design and configure the network, which for the average home user would be non-trivial. Later sections \ref{sec:asymmetric_security} and \ref{sec:symmetric_security}, describe the choices made in designing this protocol.
+\begin{enumerate}
+  \item [0)] Bootstrap nodes with Public/Private key pair, public key certificate and the CA's public key.
+  \item Initiate discovery mode on the node; node now accepts and verifies incoming certificate requests.
+  \item Initiate query on controller; controller sends a broadcast query with its public key certificate.
+  \item The sensor receives the request with the certificate, verifies the authenticity of it using the CA public key and if successful it sends a response with its own certificate.
+  \item The controller receives the response with the sensor's certificate, verifies the authenticity of it using the CA public key and replies with an acknowledgement.
+  \item The sensor receives the response ack, generates a random nonce value (to protect against replay attacks), then encrypts it with the controller's public and signs it with its own private key before sending it to the controller.
+  \item The controller receives the signed and encrypted nonce. It first verifies the signature, if invalid it can either request the nonce again or abort the key exchange and waste no further resources. Otherwise it then decrypts the nonce value. The controller then generates a new symmetric key, encrypts it and the nonce with the sensor's public key and signs with its own private key.
+  \item The sensor receives the signed and encrypted key and nonce. It first verifies the signature, if invalid it can either request the key response again or abort the key exchange. Otherwise it then decrypts the key and nonce value, verifying that the nonce is equal to the one it sent earlier, confirming the key response has not been replayed. Using the symmetric key, the sensor then initialises the symmetric encryption code and then sends a handover message to the controller to signal it received the key and is ready to communicate using it.
+  \item The controller then receives the symmetric handover message and replies with an acknowledge. The two devices can now communicate securely.
+\end{enumerate} 
+
+\begin{figure}[h!]
+\begin{center}
+\input{./images/sequence.tex}
+\caption{Security protocol sequence diagram}
+\label{fig:sequence_diagram}
+\end{center}
+\end{figure}
+
 \subsection{Integration} % (fold)
 \label{sub:design_integration}
-discuss architecture and use of automata to react to the network
+TODO: discuss architecture \ref{fig:architecture} of IoT, proxy, Homework and use of automata to react to the network
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.25]{../proposal/images/homework_proxy.1}
+\caption{Integration architecture between IoT, the proxy and Homework}
+\label{fig:architecture}
+\end{figure}
+
 % subsection design_integration (end)
-% section design (end)
 
 \section{Asymmetric Security} % (fold)
 \label{sec:asymmetric_security}
-Discuss the crypto used, the cert verification and key handover as well as optimisation
-% section asymmetric_security (end)
+\subsection{TinyECC} % (fold)
+\label{sub:tinyecc}
+
+
+To enable secure key distribution, asymmetric cryptography provided by elliptic curve cryptography (ECC) using TinyECC\cite{TinyECC} will be used. Whilst TinyECC demonstrates the feasibility of using software based public key cryptography via ECC on low power microcontrollers, it is still extremely expensive in respect to code size (\textgreater15KB), RAM utilisation (3KB) and operational speed, taking up to 5 seconds per operation. Therefore, it's necessary to use it as little as possible and switch over to the far cheaper symmetric key cryptography to keep the connection secure for the rest of its lifetime, in which encrypt and decrypt operations takes \textless 2ms.
+% subsubsection tinyecc (end)
+
+\subsection{Denial of service protection} % (fold)
+\label{sub:denial_of_service_protection}
+Because of the significant cost in verifying a certificate, it would be possible for an attacker to perform a denial of service attack on a node by sending it fake certificates. To reduce the severity of this attack, Things in the network will only accept and process asymmetric packets throughout a set window of time after the user presses a button on the device. This also provides demonstrative identification for the user, enabling them to physically control and understand which devices are communicating.
+% subsection denial_of_service_protection (end)
+
+\subsection{Man-in-the-middle protection} % (fold)
+\label{sub:man_in_the_middle_protection}
+
+However, using TinyECC alone will not ensure authentication and won't protect against man-in-the-middle attacks. To perform authentication we propose the use of an offline trusted certificate authority to create public key certificates for nodes. These certificates are then installed on the nodes at compile time along with the nodes private/public key pair and the CA's public key.This enables new nodes to have their public key certificate authenticated by other nodes using the CA's public key, before the node's respective public keys are used to exchange the key.
+
+After the nodes have verified each other's authenticity, they are then able to exchange the symmetric key in secret using asymmetric encryption and decryption, followed by handing the connection over to use just symmetric cryptography. 
+
+% subsection man_in_the_middle_protection (end)
+\subsection{Optimisations} % (fold)
+\label{sub:optimisations}
+
+% subsection optimisations (end)
+To enable ECC to operate within reasonable time bounds on microcontroller platforms, such as the TelosB mote, various optimisations were made in TinyECC, which use precomputed tables and values created at initialisation to speed up the cryptographic operations. When using TinyECC to perform encryption and authentication, the state computed by these operations overlaps, requiring re-initialisation between operations. To reduce this overhead, we implemented state saving and switching, requiring initialisation to be performed only once for each encryption and authentication modules, saving valuable seconds over the entire key exchange. The benefits are further detailed in the evaluation in section \ref{sec:evaluation}.
 
 \section{Symmetric Security} % (fold)
 \label{sec:symmetric_security}
-discuss the crypto used and MAC
-as well as IV syncing and key refresh (skipjack)
+\subsection{Block cipher algorithm and mode of operation} % (fold)
+\label{sub:cipher_block_algorithm_and_mode_of_operation}
+After the handover has occurred, symmetric cryptography will be used to keep the connection secure for the duration of its lifetime. The symmetric cryptography used is based on the MiniSec implementation ported from Rogoway et al's OCB\cite{OCB} and Law et al's Skipjack\cite{Skipjack} implementations. However, due to the inadequacy of various parts of the extended implementation by MiniSec\cite{MiniSecLink}, including being written for TinyOS 1.0, allowing only one encrypted connection per node, various memory allocation bugs and inefficient IV synchronisation, much of the code was rewritten to be work correctly and more efficiently for TinyOS 2.1. 
+% subsection cipher_block_algorithm_and_mode_of_operation (end)
+
+\subsection{Man-in-the-middle and Masquerading protection} % (fold)
+\label{sub:man_in_the_middle_and_masquerading_protection}
+Similar to the asymmetric component of the protocol, to prevent man-in-the-middle and masquerading attacks, authentication is necessary, ensuring that a message sent from a Thing in the network is genuine and hasn't been tampered with in transit. To do this a message authentication code (MAC) block needs to be generated from the encrypted data. Unlike cipher block chaining (CBC) and CBC message authentication code (CBC-MAC), which encrypt/decrypt and authenticate the data independently using two unique keys; by using the offset code book (OCB) mode of operation for block ciphering, both encryption/decryption and authentication are completed in one pass over the data using just one key, realising a slight decrease in time\cite{ContikiSec} and significant saving in space used for storing the key.
+% subsection man_in_the_middle_and_masquerading_protection (end)
+
+\subsection{Semantic security} % (fold)
+\label{sub:semantic_security}
+In order to ensure semantic security, in which duplicate packets don't encrypt to the same ciphertext, a 64-bit monotonically increasing initialisation vector (IV) is used for each connection. This would normally require the 64-bits IV to be transmitted to the receiving node, which is extremely costly when attached to each packet. However, using the last bits (LB) optimisation coined in MiniSec, we are able to just transmit the last n bits of the counter and with some resynchronisation logic on both ends, withstand packet loss of up to $2^n$ packets before resynchronisation occurs. In our protocol we chose to send the last 6 bits of the counter, due to sharing the byte with another field.
+% subsection semantic_security (end)
+
+When MiniSec was developed, Skipjack was chosen as the underlying block-cipher due to its efficient implementation and low memory footprint\cite{Skipjack}. However, Skipjack uses a maximum key length of 80-bits, which as of 2010 NIST classifies as insecure for long term use\cite{NIST}. As a temporary measure, the controller can choose to re-issue a new session key for each node after an arbitrary period of time.  
 % section symmetric_security (end)
+
+
+% subsection security (end)
+
+
 \section{Integration} % (fold)
 \label{sec:integration}
-discuss impelemenation of automata and 
+TODO: discuss implementation of proxy and automata
 % section integration (end)
 
 \section{Evaluation} % (fold)
@@ -387,19 +478,18 @@ Code size, ASym timings/optimisations.
 
 \section{Related Work} % (fold)
 \label{sec:related_work}
-The majority of the previous work breaks down into two categories, symmetric and asymmetric cryptography. The rest of this section will discuss the most significant of these previous works of both types of cryptography.
+There has been a myriad of different attempts to efficiently secure WSNs \cite{TinySec,MiniSec,TinyECC,TinyPK,TinyPBC,Shi2013235,ContikiSec,MessageBottle,CertificatePairwise,MizanurRahman2010858}, however none matched the requirements of the IoT.
 
-TinySec\cite{TinySec}, a symmetric cryptography library for TinyOS 1.0, was some of the first work created to try and solve this security problem, intending to demonstrate that software-based cryptography was possible on constrained devices with a minimal power overhead, around 10\% for both encryption and authentication. To achieve this, TinySec was designed around WSNs extreme resource constraints, taking advantage of some of these constraints, such as the limited networking bandwidth, optimising the security primitives in order to reduce the security overhead added to each packet. One such optimisation was the use of a reduced initialisation vector for the cipher block chaining mode of operation, which combined several of the existing header fields and added a 2 byte counter, ensuring IVs wouldn't clash between nodes sending the same packet. Whilst the IV is significantly smaller than conventional security protocols, which would reduce time till IV reuse, TinySec argued that this wasn't an issue, demonstrating that using an average send rate of 1 packet per minute, IV reuse would not occur for 45 days.
+TinySec\cite{TinySec}, a symmetric cryptography library for TinyOS 1.0, was some of the first work developed for TinyOS to try and solve this security problem, intending to demonstrate that software-based cryptography was possible on constrained devices with a minimal power overhead, around 10\% for both encryption and authentication. To achieve this, TinySec was designed around WSNs extreme resource constraints, taking advantage of some of these constraints, such as the limited networking bandwidth, optimising the security primitives in order to reduce the security overhead added to each packet. One such optimisation was the use of a reduced initialisation vector for the cipher block chaining mode of operation, which combined several of the existing header fields and added a 2 byte counter, ensuring IVs wouldn't clash between nodes sending the same packet. Whilst the IV is significantly smaller than conventional security protocols, which would reduce time till IV reuse, TinySec argued that this wasn't an issue, demonstrating that using an average send rate of 1 packet per minute, IV reuse would not occur for 45 days.
 
-MiniSec, another symmetric cryptography library for TinyOS 1.0 and a successor to TinySec, was created to further improve the security provided by TinySec, add replay prevention and also improve upon the minimal security overheads which TinySec achieved. To achieve the increase in security, MiniSec chose to increase the initialisation vector size from 2 bytes to 8 bytes, however, instead of transmitting the whole 8 bytes, MiniSec sends only the 3 last bits (LB) within the pre-existing packet length field, thus incurring no additional overhead on top of the normal TinyOS packet for the IV. To ensure the LB optimisation works correctly, both communicating nodes must maintain state for the counter and perform counter resynchronisation upon significant packet loss (\textgreater$2^3$ packets). This counter state is also used to ensure replay prevention, requiring all received packets to have a higher IV than the local state.
-
-MiniSec paragraph \cite{MiniSec} mention failure to see a correlation between the paper and implementation provided (IV cheat and major flaws)
-
-
+MiniSec, another symmetric cryptography library for TinyOS 1.0 and a successor to TinySec, was created to further improve the security provided by TinySec, add replay prevention and also improve upon the minimal security overheads which TinySec achieved. To achieve the increase in security, MiniSec chose to increase the initialisation vector size from 2 bytes to 8 bytes, however, instead of transmitting the whole 8 bytes, MiniSec sends only the 3 last bits (LB) within the pre-existing packet length field, thus incurring no additional overhead on top of the normal TinyOS packet for the IV. To ensure the LB optimisation works correctly, both communicating nodes must maintain state for the counter and perform counter resynchronisation upon significant packet loss (\textgreater$2^3$ packets). This counter state is also used to ensure replay prevention, requiring all received packets to have a higher IV than the local state.\footnote{Whilst the MiniSec paper presented an efficient symmetric cryptography protocol design, the corresponding implementation provided at \cite{MiniSecLink} does not appear to function correctly (with various runtime issues) or implement the IV counter using the LB optimisation described.}
 
 TinyECC paragraph \cite{TinyECC}
-TinyPK paragraph \cite{TinyPK}
-Message in bottle \cite{MessageBottle}
+
+There are many other complex key distribution schemes which require hierarchical networks of devices \cite{MizanurRahman2010858,Shi2013235} and predetermined deployment strategies to enable efficient key distribution. \cite{MizanurRahman2010858} presents a solution for such a hierarchical network, consisting of a network of heterogeneous nodes, in which high power nodes store node IDs for surrounding low power nodes and provide authentication for the key exchange process between low power nodes using ECC. However, this scheme requires expensive high power nodes that need to have the low power node IDs stored ahead of time, and also need to be tamper resistant to protect against node capture, further increasing the cost. Another viable alternative, pairings-based key distribution schemes, such as TinyPBC\cite{TinyPBC}, provide efficient key pairings (\textless5s) but require nodes know each other's ID a priori, which can prove difficult to do with authentication. 
+
+TODO: Discuss TinyPK  \cite{TinyPK}Message in bottle \cite{MessageBottle}
+
 
 % section related_work (end)
 \section{Conclusion}
