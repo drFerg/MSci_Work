@@ -1,0 +1,169 @@
+% Written by metapost version 1.803
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Sensor",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(31.5613,-0.1643)--
+ (31.5613,7.3425)--(0,7.3425)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Actuator",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(37.1003,-0.1643)--
+ (37.1003,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Reliab",_n1,1.00000,0.0000,0.0000,);
+_s("le",_n1,1.00000,28.0346,0.0000,);
+_s("RPC",_n1,1.00000,38.5550,0.0000,);
+setbounds _p to (0,-0.1643)--(59.5860,-0.1643)--
+ (59.5860,7.3425)--(0,7.3425)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Unreliab",_n1,1.00000,0.0000,0.0000,);
+_s("le",_n1,1.00000,36.8913,0.0000,);
+_s("Unicast",_n1,1.00000,47.4117,0.0000,);
+setbounds _p to (0,-0.1643)--(80.6268,-0.1643)--
+ (80.6268,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Legend",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-2.2167)--(33.2350,-2.2167)--
+ (33.2350,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("T",_n1,1.00000,0.0000,0.0000,);
+_s("emper",_n1,1.00000,4.8917,0.0000,);
+_s("ature",_n1,1.00000,33.0259,0.0000,);
+setbounds _p to (0,-2.0772)--(58.4999,-2.0772)--
+ (58.4999,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("sensor",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(29.8976,-0.1643)--
+ (29.8976,5.3947)--(0,5.3947)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Presence",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(44.8513,-0.1643)--
+ (44.8513,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("sensor",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(29.8976,-0.1643)--
+ (29.8976,5.3947)--(0,5.3947)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Centr",_n1,1.00000,0.0000,0.0000,);
+_s("al",_n1,1.00000,24.2587,0.0000,);
+setbounds _p to (0,-0.1643)--(32.0096,-0.1643)--
+ (32.0096,7.3425)--(0,7.3425)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("heating",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-2.2167)--(32.6770,-2.2167)--
+ (32.6770,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Lights",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-2.2167)--(26.5800,-2.2167)--
+ (26.5800,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Door",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(24.3583,-0.1643)--
+ (24.3583,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("sensor",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(29.8976,-0.1643)--
+ (29.8976,5.3947)--(0,5.3947)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Alar",_n1,1.00000,0.0000,0.0000,);
+_s("m",_n1,1.00000,17.9624,0.0000,);
+setbounds _p to (0,-0.1643)--(26.2612,-0.1643)--
+ (26.2612,7.1979)--(0,7.1979)--cycle;
+_p endgroup
+mpxbreak
+begingroup save _p,_r,_s,_n; picture _p; _p=nullpicture;
+string _n[];
+vardef _s(expr _t,_f,_m,_x,_y)(text _c)=
+  addto _p also _t infont _f scaled _m shifted (_x,_y) _c; enddef;
+_n1="phvr8r";
+_s("Controller",_n1,1.00000,0.0000,0.0000,);
+setbounds _p to (0,-0.1643)--(43.1775,-0.1643)--
+ (43.1775,7.3425)--(0,7.3425)--cycle;
+_p endgroup
+mpxbreak

@@ -1,28 +1,6 @@
-\documentclass[conference]{./sty/IEEEtran}
+\documentclass{mpaper}
 % Some very useful LaTeX packages include:
 % (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
 
 
 
@@ -43,149 +21,6 @@
 % The latest version can be obtained at:
 % http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
 % The documentation is contained in the cite.sty file itself.
-
-
-
-
-
-
-% *** GRAPHICS RELATED PACKAGES ***
-%
-\ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at: 
-% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
-% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
-
-
-
-
-
-% *** MATH PACKAGES ***
-%
-%\usepackage[cmex10]{amsmath}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics. If using
-% it, be sure to load this package with the cmex10 option to ensure that
-% only type 1 fonts will utilized at all point sizes. Without this option,
-% it is possible that some math symbols, particularly those within
-% footnotes, will be rendered in bitmap form which will result in a
-% document that can not be IEEE Xplore compliant!
-%
-% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
-
-
-
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
-% There is also a support site at:
-% http://algorithms.berlios.de/index.html
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
-
-
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
-
-
-%\usepackage{mdwmath}
-%\usepackage{mdwtab}
-% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
-% especially mdwmath.sty and mdwtab.sty which are used to format equations
-% and tables, respectively. The MDWtools set is already installed on most
-% LaTeX systems. The lastest version and documentation is available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-%\usepackage{eqparbox}
-% Also of notable interest is Scott Pakin's eqparbox package for creating
-% (automatically sized) equal width boxes - aka "natural width parboxes".
-% Available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
-
-
-
-
-
-% *** SUBFIGURE PACKAGES ***
-%\usepackage[tight,footnotesize]{subfigure}
-% subfigure.sty was written by Steven Douglas Cochran. This package makes it
-% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
-% work, it is a good idea to load it with the tight package option to reduce
-% the amount of white space around the subfigures. subfigure.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at:
-% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
-% subfigure.sty has been superceeded by subfig.sty.
 
 
 
@@ -210,43 +45,6 @@
 
 
 
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure. The latest version and documentation can be found at:
-% http://www.ctan.org/tex-archive/macros/latex/base/
-
-
-
-%\usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
-% Documentation is contained in the stfloats.sty comments as well as in the
-% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
-% does not allow \baselineskip to stretch. Authors submitting work to the
-% IEEE should note that IEEE rarely uses double column equations and
-% that authors should try to avoid such use. Do not be tempted to use the
-% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
-% not format its papers in such ways.
-
-
-
-
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
@@ -267,7 +65,7 @@
 \usepackage{tikz}
 \usepackage{bytefield}
 % correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
+\hyphenation{op-tical net-works semi-conduc-tor data-base}
 \DeclareGraphicsRule{.1}{mps}{*}{}
 
 
@@ -275,40 +73,38 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{A Secure Intranet of Things for the Home}
+\title{Integrating a Secure Intranet of Things into a Smart Home Router}
 
 
 % author names and affiliations
 % use a multiple column layout for up to three different
 % affiliations
-\author{\IEEEauthorblockN{Fergus Leahy, Joseph Sventek, Paul Harvey}
-\IEEEauthorblockA{School of Computing Science\\ University of Glasgow\\
-Email: fergus.leahy@glasgow.ac.uk, joseph.sventek@glasgow.ac.uk, p.harvey.1@research.gla.ac.uk}
-}
+\author{Fergus Leahy}
+\matricnum{0908622L}
 
 \maketitle
 
 
 \begin{abstract}
-The Internet of Things (IoT) is a rapidly growing area of computing, with manufacturers rushing to market and standards bodies sticking to tried and tested architectures. However, when considering an Internet of Things within the home, many of these activities are ill-thought out, inappropriate and even possibly physically dangerous, as evidenced by various attacks\cite{BelkinWemo,IoTWorm}. We introduce the concept of an \textit{Intranet} of Things (iot) by defining a suitable model and device roles to represent the ecosystem of devices typically found within an Intranet of Things. We subsequently present a secure iot protocol implemented on the TelosB mote for TinyOS, which enables users to easily and securely add new Things to the network with minimal configuration, as well as protect the devices, data and user privacy against common attacks. 
+The Internet of Things (IoT) is a rapidly growing area of computing, with manufacturers rushing to market and standards bodies sticking to tried and tested architectures. However, when considering an Internet of Things within the home, many of these activities are ill-thought out, inappropriate and even possibly physically dangerous, as evidenced by various attacks\cite{BelkinWemo,IoTWorm}. We introduce the concept of an \textit{Intranet} of Things (iot) by defining a suitable model and device roles to represent the ecosystem of devices typically found within an Intranet of Things. We subsequently present a secure iot protocol implemented on the TelosB mote for TinyOS, which enables users to easily and securely add new Things to the network with minimal configuration, as well as protect the devices, data and user privacy against common attacks. Additionally, we demonstrate integrating our iot protocol into the Homework router Cache, a high-performance complex event processing engine, providing a powerful and customisable closed-loop of control for the iot.
 \end{abstract}
 
 % no keywords
 
 \section{Introduction}
+\label{sec:introduction}
 The modern home is becoming increasingly filled with a variety of connected devices, each providing myriad different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have begun to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. As these devices enter our homes, in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
 
 Many such devices present a severe lack of thoughtful integration into existing networks, infrastructure and the technology into the devices themselves. Existing approaches either integrate traditional power-hungry 802.11 WIFI chipsets or run 6LowPan, a scaled down IPv6 for low-power 802.15.4 radios. However, both of these approaches can severely limit the lifetime of a device running on batteries. With TCP/IP built into these devices, naturally many of them offer services directly to the Internet\cite{MQTT,IETF_CORE,Xively} or connect to a cloud service\cite{SmartThings,Twine}. Whilst this reaps the benefits of anywhere access and scalable power/storage, it opens up multiple points of failure by relying on such connectivity to the Internet or Cloud, including reliability, security, privacy and data-ownership; such an approach has already resulted in attacks similar to that of Stuxnet\cite{IoTWorm}.
 
-In this paper we present a solution for creating a low-power and secure Intranet of Things (iot) for the home, by designing an entirely new protocol with the iot model, described in section \ref{ssub:iot_model}, in mind and taking advantage of a combination of symmetric and asymmetric cryptographic algorithms, as well as primitives to enable efficient, secure and authenticated entry into a new network with minimal user configuration.
-
-% Whilst previous work has demonstrated it's possible to adequately secure wireless sensor networks from a variety of attacks\cite{TinySec,TinyECC,MiniSec}, existing research has yet to create a complete solution to enable new devices to join an existing network without the need of a shared secret (pre-shared key)\cite{TinySec,MiniSec} or complex user interaction to transfer the network key\cite{MessageBottle}.
+In this paper we present a solution for creating a low-power and secure Intranet of Things (iot) integrated into the Homework router platform, by designing an entirely new protocol with the iot model, described in section \ref{ssub:iot_model}, in mind and taking advantage of a combination of symmetric and asymmetric cryptographic algorithms, as well as primitives to enable efficient, secure and authenticated entry into a new network with minimal user configuration. By integrating the iot protocol into the Homework router, we are able to create a powerful, customisable and scalable closed-loop of control within the local network, without relying on connectivity to the Internet or Cloud\cite{DEBSChallenge,HomeworkProject}.
 
 The main contributions of this paper are:
 \begin{itemize}
   \item An Intranet of Things model describing three equivalence classes of Things and their operational semantics within the network.
   \item The design and implementation of a secure fit-for-purpose iot protocol, implemented over TinyOS running on TeloB motes.
-  \item A user-friendly security scheme for low-power Things, using symmetric and asymmetric cryptography to enable new trusted devices to enter the network securely while minimising user interaction and configuration.  
+  \item A user-friendly security scheme for low-power Things, using symmetric and asymmetric cryptography to enable new trusted devices to enter the network securely while minimising user interaction and configuration.
+  \item A controller implementation integrated into the Homework Cache, provided by a modified controller role for TinyOS and a Java-based proxy communicating between the iot and Homework Cache. Additionally, to ``close the loop'', a sample Homework automaton has been created to demonstrate the integration.
 \end{itemize}
 
 
@@ -344,6 +140,14 @@ The types of attack to which IoT networks are vulnerable are:
   \item Node Capture - An attacker captures a node and can retrieve data/keys stored on the device, potentially compromising the security of the network.
 \end{itemize}
 
+\subsection{Integration} % (fold)
+\label{sub:integration}
+Without integrating the iot into a more powerful and user-accessible platform, the iot risks becoming static and inflexible, incapable of meeting the needs of the constantly changing and evolving lives of the users. To tackle this problem, most existing activities have pursued Cloud integration\cite{SmartThings,Twine,Belkin}; as described section \ref{sec:introduction}, whilst this approach provides benefits such as scalable power/storage and anywhere-access, reliability and security become serious issues, especially in cases where Things become part of security systems or health-care devices.
+
+Similarly, within the home networking domain, they are many issues regarding integration and usability of commodity home network routers, in which, despite their widespread adoption, the majority of routers are still not designed for the average user, making controlling and managing a home network a difficult and neglected task. In an attempt to solve this, the Homework project redesigned the home router from the ground up, re-engineering the protocols, models and architectures to truly suit the target users and the home environment\cite{HomeworkProject,Homework}. A key component of the platform is the Cache\cite{Cache}, a high-performance complex event processing engine, enabling the router to perform closed-loop control over the network and events which occur. On top of this, users can create customised rules to alert them of certain usage patterns occurring within the network.
+
+Thus, the third and last problem this paper addresses is integrating the aforementioned secure iot protocol into the Homework Cache, to utilise the event processing engine for ``closing the loop'' in an iot.
+% subsection integration (end)
 % subsection security_aims (end)
 % section design_goals  (end)
 
@@ -439,7 +243,41 @@ Figure \ref{fig:pdu} shows the secure protocol data unit layout for the iot prot
 % subsection iot_protocol (end)
 % subsubsection protocol_data_unit (end)
 
+\subsection{Integration} % (fold)
+In this section we will present the architecture design for integrating the iot into the Homework Cache, as well as describe in more detail how the closed-loop of control will function using the Cache and its related concepts.
 
+As shown in figure \ref{fig:integration}, the integration architecture comprises of 3 main components, the iot network managed by the controller device, the iot proxy and the Homework Cache.
+\label{sub:integration}
+\begin{figure}[ht!]
+\begin{center}
+  \includegraphics[scale=0.25]{images/homework_proxy.1}
+\caption{iot integration into Homework Cache}
+\label{fig:integration}
+\end{center}
+\end{figure}
+\subsubsection*{Controller role} % (fold)
+\label{ssub:controller_role}
+In our previously described iot model, the controller role manages the network and orchestrates the closed-loop of control, receiving sensor messages and issuing actuator commands. The current implementation of the controller is implemented on TelosB mote for TinyOS. Thus in order for the controller to communicate with the Cache, the TelosB mote is connected to the host PC and provides a bridge into the iot network, allowing a PC-side application to issue commands for the controller to carry out and receive responses from the network e.g., sensor messages. 
+% subsubsection controller_role (end)
+
+\subsubsection*{iot Proxy} % (fold)
+\label{ssub:iot_proxy}
+To allow the controller and Cache to communicate, a suitable designed proxy is necessary. TinyOS provides the necessary libraries to facilitate mote-to-PC communication for a variety of languages, including Java, Python and C. These libraries communicate over serial to the mote and translate the incoming packets to the correct format and endianness. For the proposed design the Java library is used, due to the abundance of documentation available for it.
+
+Within the Java-based proxy, there are two threads:
+\begin{itemize}
+   \item A receiver thread which receives incoming packets from the iot network and then inserts the relevant messages formatted as tuples into the Cache, e.g., sensor 2 temperature is 22C.
+   \item A sender thread that registers automata to the Cache and then receives messages from these automata, such as alerts and commands, and forwards them to the controller to be actioned within the network e.g., sensor 2 is too hot, turn down the thermostat. 
+ \end{itemize}
+% subsubsection iot_proxy (end)
+
+\subsubsection*{Homework Cache} % (fold)
+\label{ssub:homework_cache}
+The Cache combines both publish/subscribe and stream database concepts, to create a powerful and flexible complex event processing engine. Within the cache, automata, written in the Glasgow Automaton Programming Language (GAPL), are used to detect complex events patterns which occur over the cached streams and relations within the database. 
+As previously mentioned, the proxy will register automata against the cache, after which, the automata subscribe to the necessary topics within the Cache; each time a tuple is inserted into a relevant topic in the Cache by the receiver thread, automata subscribed to this topic will receive an event containing the tuple. The automata can then process the tuple, lookup/update/insert tuples into relation tables or streams within the database and then, if necessary, send a relevant event to the sender thread, to be forwarded to the iot network.
+
+This enables the iot closed-loop of control to not only obey simple rules, such as the temperature falling below limit, but also allows for complex patterns to be ascertained over longer periods of time, such as detecting when users are home most and adjusting the heating appropriately before they arrive home. Similarly, because of the dynamic nature of automata, which can be registered and removed freely during run-time, new rules can be added and old ones modified easily, evolving in-sync with the user and their lifestyle.
+% subsection homework_cache (end)
 \subsection{Security} % (fold)
 \label{sub:security}
 In this section we present the design of our security protocol, enabling new devices to join the network without the need of a shared secret or any physical interaction with the controller.
@@ -468,6 +306,8 @@ Prior to deployment, nodes will need to be bootstrapped with unique public/priva
 \label{fig:sequence_diagram}
 \end{center}
 \end{figure}
+
+% subsection integration (end)
 
 \section{Asymmetric Security} % (fold)
 \label{sec:asymmetric_security}
@@ -529,7 +369,7 @@ The most important requirement of our protocol is to minimise radio transmission
 
 In order to create a user-friendly, dynamic and flexible key distribution scheme, we opted to use public-key cryptography with TinyECC. In section \ref{sec:asymmetric_security}, we argued that whilst TinyECC still exhibits a considerable cost in terms of storage, speed and overhead, the full key exchange only has to be performed once and is amortised over the lifetime of the node; subsequent key exchanges could use the existing symmetric-secured channel. Table \ref{tab:ECC_optimisations} shows the average time for switching between modes and the overall time for the entire key exchange outlined in section \ref{sec:asymmetric_security}. TinyECC uses precomputed tables and values based on the public-key to be used for an operation, thus when using different public-keys multiple times to perform a sequence of encrypted and authenticated actions, such as in the proposed iot protocol, these tables need to be recomputed each time in order for them to be effective; this adds a significant overhead of around 20 seconds between the communicating nodes. To reduce this, we added an optimisation to save previously initialised state, thus removing the need to recompute the state for a given public-key the next time it is used; this gives us a fully authenticated and secure key exchange taking just under a minute to complete, split between the two nodes. Because the ECC computations are split between the two nodes, porting the controller role to a more powerful platform would significantly reduce the exchange time, further minimising the time the sensor/actuator node needs to power and listen on the radio. 
 
-\begin{table}[h] %makes a float (prevents splitting over pages)
+\begin{table*}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|c|} 
   \hline
@@ -541,10 +381,10 @@ In order to create a user-friendly, dynamic and flexible key distribution scheme
   \caption[Table]{Secure iot protocol size for Controller, Sensor and Actuator roles on the TelosB (8Mhz, 48KB ROM, 10KB RAM)mote.}
   \label{tab:implementation}
   \end{center}
-\end{table}
-\vspace{-0.5cm}
+\end{table*}
 
-\begin{table}[h] %makes a float (prevents splitting over pages)
+
+\begin{table*}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
   \hline
@@ -555,9 +395,9 @@ In order to create a user-friendly, dynamic and flexible key distribution scheme
   \caption[Table]{Comparison of payload overhead for our Secure iot (Symmetric security payload) vs 6LowPan with 16-bit addresses + AES-CCM.}
   \label{tab:pdu_sizes}
   \end{center}
-\end{table}
-\vspace{-0.5cm}
-\begin{table}[h] %makes a float (prevents splitting over pages)
+\end{table*}
+
+\begin{table*}[h] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
   \hline
@@ -569,8 +409,8 @@ In order to create a user-friendly, dynamic and flexible key distribution scheme
   \caption[Table]{Comparison of the module switch over and overall asymmetric key exchange durations with normal TinyECC and TinyECC with the save state optimisations implemented.}
   \label{tab:ECC_optimisations}
   \end{center}
-\end{table}
-\vspace{-0.5cm}
+\end{table*}
+
 % section evaluation (end)
 
 \section{Related Work} % (fold)
@@ -636,8 +476,8 @@ Whilst we have presented a solid foundation for the iot, in the form of a secure
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\bibliographystyle{./sty/IEEEtran}
-\bibliography{./sty/examples/IEEEabrv,bibliography}
+\bibliographystyle{abbrv}
+\bibliography{bibliography}
 
 
 
