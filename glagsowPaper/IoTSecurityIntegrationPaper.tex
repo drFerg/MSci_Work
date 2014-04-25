@@ -64,6 +64,8 @@
 \usepackage{amsmath} 
 \usepackage{tikz}
 \usepackage{bytefield}
+\usepackage{listings}
+\usepackage{color}
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor data-base}
 \DeclareGraphicsRule{.1}{mps}{*}{}
@@ -93,16 +95,16 @@ The Internet of Things (IoT) is a rapidly growing area of computing, with manufa
 
 \section{Introduction}
 \label{sec:introduction}
-The modern home is becoming increasingly filled with a variety of connected devices, each providing myriad different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have begun to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. As these devices enter our homes, in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with an increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
+The modern home is becoming increasingly filled with a variety of connected devices, each providing myriad different and often overlapping services within the home. More recently, ``smart-appliances'' and the Internet of Things have begun to enter our homes, attempting to digitize our already existing ``dumb-appliances'' and objects within the home. As these devices enter our homes, in an often piecemeal fashion, bringing with them their own distinct ecosystems, protocols and standards, the user is faced with the increasingly difficult burden of managing this network of heterogeneous devices. Due to the sheer number and diversity of these devices, problems arise with respect to how these devices co-operate, as well as how to ensure the user's network and information remains secure against new and unanticipated threats.
 
-Many such devices present a severe lack of thoughtful integration into existing networks, infrastructure and the technology into the devices themselves. Existing approaches either integrate traditional power-hungry 802.11 WIFI chipsets or run 6LowPan, a scaled down IPv6 for low-power 802.15.4 radios. However, both of these approaches can severely limit the lifetime of a device running on batteries. With TCP/IP built into these devices, naturally many of them offer services directly to the Internet\cite{MQTT,IETF_CORE,Xively} or connect to a cloud service\cite{SmartThings,Twine}. Whilst this reaps the benefits of anywhere access and scalable power/storage, it opens up multiple points of failure by relying on such connectivity to the Internet or Cloud, including reliability, security, privacy and data-ownership; such an approach has already resulted in attacks similar to that of Stuxnet\cite{IoTWorm}.
+Many such devices present a severe lack of thoughtful integration into existing networks, infrastructure and the technology into the devices themselves. Existing approaches either integrate traditional power-hungry 802.11 WIFI chipsets or run 6LowPan, a scaled down IPv6 for low-power 802.15.4 radios. However, both of these approaches can severely limit the lifetime of a battery-powered device. With TCP/IP built into these devices, naturally, many of them offer services directly to the Internet\cite{MQTT,IETF_CORE,Xively} or connect to a cloud service\cite{SmartThings,Twine}. Whilst this reaps the benefits of anywhere access and scalable compute power/storage, it opens up multiple points of failure by relying on such connectivity to the Internet or Cloud, including reliability, security, privacy and data-ownership; such an approach has already resulted in attacks similar to that of Stuxnet\cite{IoTWorm}.
 
-In this paper we present a solution for creating a low-power and secure Intranet of Things (iot) integrated into the Homework router platform, by designing an entirely new protocol with the iot model, described in section \ref{ssub:iot_model}, in mind and taking advantage of a combination of symmetric and asymmetric cryptographic algorithms, as well as primitives to enable efficient, secure and authenticated entry into a new network with minimal user configuration. By integrating the iot protocol into the Homework router, we are able to create a powerful, customisable and scalable closed-loop of control within the local network, without relying on connectivity to the Internet or Cloud\cite{DEBSChallenge,HomeworkProject}.
+In this paper we present a solution for creating a low-power and secure Intranet of Things (iot) integrated into the Homework router platform, by designing an entirely new protocol with a realistic iot model, described in section \ref{ssub:iot_model}, in mind and taking advantage of a combination of symmetric and asymmetric cryptographic algorithms, as well as primitives to enable efficient, secure and authenticated entry into a new network with minimal user configuration. By integrating the iot protocol into the Homework router, we are able to create a powerful, customisable and scalable closed-loop of control within the local network, without relying on connectivity to the Internet or Cloud\cite{DEBSChallenge,HomeworkProject}.
 
 The main contributions of this paper are:
 \begin{itemize}
   \item An Intranet of Things model describing three equivalence classes of Things and their operational semantics within the network.
-  \item The design and implementation of a secure fit-for-purpose iot protocol, implemented over TinyOS running on TeloB motes.
+  \item The design and implementation of a secure, fit-for-purpose iot protocol, implemented over TinyOS running on TeloB motes.
   \item A user-friendly security scheme for low-power Things, using symmetric and asymmetric cryptography to enable new trusted devices to enter the network securely while minimising user interaction and configuration.
   \item A controller implementation integrated into the Homework Cache, provided by a modified controller role for TinyOS and a Java-based proxy communicating between the iot and Homework Cache. Additionally, to ``close the loop'', a sample Homework automaton has been created to demonstrate the integration.
 \end{itemize}
@@ -115,9 +117,9 @@ The main contributions of this paper are:
 \label{sec:motivation}
 \subsection{A Secure Intranet of Things Protocol} % (fold)
 \label{sub:intranet_of_things_protocol}
-In recent years the Internet of Things has resurfaced, from it's beginnings as RFID-tracked products in a warehouse stock floor, transformed into embedding low-power wireless devices into everyday objects around us under the guise of ``smart-appliances''. Many manufacturers have rushed to market with new smart devices to replace our old unintelligent ones, but in so doing, they've integrated these devices and services into our home networks and the Internet without much thought or consideration for the device's and network's power, reliability, security and privacy. 
+In recent years the Internet of Things has resurfaced, from its beginnings as RFID-tracked products in a warehouse stock floor, transformed into embedded low-power wireless devices in everyday objects around us, under the guise of ``smart-appliances''. Many manufacturers have rushed to market with new smart devices to replace our old unintelligent ones, but in so doing, they've integrated these devices and services into our home networks and the Internet without much thought or consideration for the device's and network's power, reliability, security and privacy. 
 
-The first problem this paper addresses is that many current approaches have integrated expensive wireless chipsets and/or heavyweight/inefficient protocols (IPv6/6Lowpan, TCP, MQTT\cite{MQTT}, \cite{xAP}) into Things, or simply manipulated Things to fit into the traditional RESTful client-server architecture\cite{IETF_COAP_HTTP}. However, given that many of these Things are expected to run unattended on battery power for as long as possible, these approaches are largely inappropriate. Therefore, it's necessary to engineer a new, lightweight, power-efficient protocol, specifically tailored for the typical iot model discussed later in section \ref{sec:design}, which also scales well as the number of devices inevitably increases. 
+The first problem this paper addresses is that many current approaches have integrated expensive wireless chipsets and/or heavyweight/inefficient protocols (IPv6/6Lowpan, TCP, MQTT\cite{MQTT}, \cite{xAP}) into Things, or simply manipulated Things to fit into the traditional RESTful client-server architecture\cite{IETF_COAP_HTTP}. However, given that many of these Things are expected to run unattended on battery-power for as long as possible, these approaches are largely inappropriate. Therefore, it's necessary to engineer a new, lightweight, power-efficient protocol, specifically tailored for the typical iot model discussed later in section \ref{sec:design}, which also scales well as the number of devices inevitably increases. 
 
 Our model and protocol targets a network of Things within the home, with devices communicating and forming the closed-loop of control locally, as opposed to in the Cloud; thus, in lieu of an Internet of Things (IoT), a more suitable name, an Intranet of Things (iot), will be used.
 
@@ -126,9 +128,9 @@ Our model and protocol targets a network of Things within the home, with devices
 \label{sub:motivation_security}
 In the context of an iot, security is of paramount importance due to the rich and sensitive nature of the data that sensors gather, as well as the level of control available from actuators. In a similar fashion to how Stuxnet was directly targeted at machine-to-machine (M2M) networks\cite{Stuxnet}, recently there have been several significant attacks targeted towards IoT devices\cite{IoTWorm,BelkinWemo}. For example, over half a million users' Belkin IoT devices and home networks were vulnerable to attackers being able to remote control and monitor these devices, as well as allowing attackers access to the home network\cite{BelkinWemo}. This resulted in risks ranging from electricity wastage, to presence monitoring and, in severe cases, possibilities of home fires being caused by the appliances attached to these devices.
 
-Thus, the second problem this paper attempts to solve is securing an iot to ensure the user's devices, network and data are protected against possible attacks and also allow new ``approved'' devices to join the network with minimal user effort and interaction. Due to the scale of an iot network, containing potentially tens if not hundreds of devices, this needs to be possible without the user being required to manually configure each device with a security key.
+Thus, the second problem this paper attempts to address is securing an iot to ensure the user's devices, network and data are protected against possible attacks and also allow new ``approved'' devices to join the network with minimal user effort and interaction. Due to the scale of an iot network, containing potentially tens if not hundreds of devices, this needs to be possible without the user being required to manually configure each device with a security key.
 
-Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in wireless sensor networks (WSN); thus, running expensive conventional cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are often extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment as well as (re)distribute keys for the network, enables the network to scale, replace failed nodes and protect against attackers with ease. Previous work has demonstrated various solutions to the first and second part of this problem\cite{TinySec,MiniSec,TinyECC}, but have largely ignored the third part, assuming that keys or shared secrets are distributed at install time.
+Deployable security in wireless sensor networks continues to be a significant problem for several reasons. Firstly, power is a major concern in wireless sensor networks (WSN); thus, running expensive conventional cryptography algorithms in order to keep transmitted data secret can be detrimental to the lifetime of a node. Secondly, WSN nodes are often extremely constrained in terms of memory (ROM/RAM), requiring cryptography algorithms to fit within extreme size constraints and is especially problematic when trying to reduce computational load by storing pre-computed tables. Lastly, being able to dynamically add new nodes to a network post-deployment, as well as (re)distribute keys for the network, enables the network to scale, replace failed nodes and protect against attackers. Previous work has demonstrated various solutions to the first and second part of this problem\cite{TinySec,MiniSec,TinyECC}, but have largely ignored the third part, assuming that keys or shared secrets are distributed at install time.
 
 The types of attack to which IoT networks are vulnerable are:
 \begin{itemize}
@@ -142,7 +144,7 @@ The types of attack to which IoT networks are vulnerable are:
 
 \subsection{Integration} % (fold)
 \label{sub:integration}
-Without integrating the iot into a more powerful and user-accessible platform, the iot risks becoming static and inflexible, incapable of meeting the needs of the constantly changing and evolving lives of the users. To tackle this problem, most existing activities have pursued Cloud integration\cite{SmartThings,Twine,Belkin}; as described section \ref{sec:introduction}, whilst this approach provides benefits such as scalable power/storage and anywhere-access, reliability and security become serious issues, especially in cases where Things become part of security systems or health-care devices.
+Without integrating the iot into a more powerful and user-accessible platform, the iot risks becoming static and inflexible, incapable of meeting the needs of the constantly changing and evolving lives of the users. To tackle this problem, most existing activities have pursued Cloud integration\cite{SmartThings,Twine,Belkin}; as described section \ref{sec:introduction}, whilst this approach provides benefits such as scalable compute power/storage and anywhere-access, reliability and security become serious issues, especially in cases where Things become part of security systems or health-care devices.
 
 Similarly, within the home networking domain, they are many issues regarding integration and usability of commodity home network routers, in which, despite their widespread adoption, the majority of routers are still not designed for the average user, making controlling and managing a home network a difficult and neglected task. In an attempt to solve this, the Homework project redesigned the home router from the ground up, re-engineering the protocols, models and architectures to truly suit the target users and the home environment\cite{HomeworkProject,Homework}. A key component of the platform is the Cache\cite{Cache}, a high-performance complex event processing engine, enabling the router to perform closed-loop control over the network and events which occur. On top of this, users can create customised rules to alert them of certain usage patterns occurring within the network.
 
@@ -153,16 +155,16 @@ Thus, the third and last problem this paper addresses is integrating the aforeme
 
 \section{Design} % (fold)
 \label{sec:design}
-The design of our secure iot protocol largely consists of two parts, the core iot protocol, which encapsulates the iot model, and the security protocol which ensures secure packet transport and entry into the network. This section will first describe our assumptions, followed by the design of the iot protocol and security scheme, respectively.
+The design of our secure iot protocol largely consists of three parts, the core iot protocol, which encapsulates the iot model, the security protocol, which ensures secure packet transport and entry into the network, and the Cache integration, enabling the closed-loop of control within the iot. This section will first describe our assumptions, followed by the design of the iot protocol, security scheme and Cache integration, respectively.
 
 \subsection{Assumptions} % (fold)
 \label{sub:assumptions}
 In designing the iot protocol, the following assumptions were made:
 \begin{itemize}
   \item The controller role is implemented on a PC and has sufficient resources available to process and store a large number of public keys for nodes within the network.
-  \item Typical raw sensor data is non-critical, ephemeral and frequent enough such that occasional packet loss is acceptable. Additionally, we expect the network to be sufficiently engineered, such that a sufficient percentage of packets are received to provide utility.
+  \item Typical raw sensor data is non-critical, ephemeral and frequent enough such that occasional packet loss is acceptable. Additionally, we expect the network to be sufficiently well engineered, such that a sufficient percentage of packets are received to provide utility.
   \item The controller has sufficient resources available to generate and store secure pair-wise session keys for each node in the network.
-  \item Things are typically retrofit into existing homes and structures, thus connecting these devices directly to power lines is impractical in most cases; instead Things must rely on battery power and are expected to run for as long as possible.  
+  \item Things are typically retrofit into existing homes and structures, thus connecting these devices directly to power lines is impractical in most cases; instead Things must rely on battery-power and are expected to run for as long as possible.  
   \item The network is deployed over a geographically small enough area, the home, such that it's unnecessary to perform packet gathering and compression between the source sensor and sink controller. Thus, intermediary nodes need not store keys for each of the surrounding nodes and can, if necessary, forward any encrypted packets received towards their destination.
   \item The majority of nodes deployed in an iot are situated within a secure property e.g., the home or office; due to the increased cost of tamper-proofing nodes, node capture is not deemed to be a significant issue and will not be mitigated against in this security protocol.
 \end{itemize}
@@ -170,12 +172,12 @@ In designing the iot protocol, the following assumptions were made:
 
 \subsection{Hardware and Software Platforms} % (fold)
 \label{sec:hardware_and_software_platforms}
-Whilst many newer and more powerful sensor platforms are available today, much of the existing work for WSNs and WSN security has been developed for the TelosB mote, a 8Mhz TI MSP430 microcontroller with 48KB ROM and 10KB RAM, due to its low-power operation and TinyOS support. TinyOS is a lightweight operating system designed for embedded devices in WSNs and has strong support in academia, with many libraries and tools available. 
+Whilst many newer and more powerful sensor platforms are available today, much of the existing work for WSNs and WSN security has been developed for the TelosB mote, a 8Mhz TI MSP430 microcontroller with 48KB ROM and 10KB RAM due to its low-power operation and TinyOS support. TinyOS\footnote{\url{http://www.tinyos.net/}} is a lightweight operating system designed for embedded devices in WSNs and has strong support in academia, with many libraries and tools available. 
 
 % The IoT protocol previously discussed was developed for the Contiki operating system running on TelosB motes due to Contiki's relative similarity with imperative style programming, as opposed to TinyOS's event style programming. However, due to the number of security implementations available for TinyOS, including MiniSec and TinyECC, the IoT protocol will need to be ported across to TinyOS. 
 \subsection{iot Protocol} % (fold)
 \label{sub:design_iot_protocol}
-In the design of an improved and fit-for-purpose iot protocol, we attempt to minimise radio usage in order to maximise the lifetime of a battery-powered Thing, sacrificing reliability where appropriate, whilst still ensuring robust and predictable operation. In this section, we first present the architectural model of a typical iot network, followed by the key design areas for achieving these goals within the protocol: reliability, integrity, liveness, minimising packet headers and ensuring correct operational semantics (at-most-once/at-least-once). 
+In the design of an improved and fit-for-purpose iot protocol, we attempt to minimise radio usage in order to maximise the lifetime of a battery-powered Thing, sacrificing reliability where appropriate, whilst still ensuring robust and predictable operation. In this section, we first present the architectural model of a typical iot network, followed by the key design areas for achieving these goals within the protocol: reliability, integrity, liveness, minimising packet headers and ensuring correct operational semantics (at-most-once). 
 
 \subsubsection*{iot Model} % (fold)
 \label{ssub:iot_model}
@@ -183,7 +185,7 @@ Within the Intranet of Things ecosystem, three distinct equivalence classes of d
 \begin{itemize}
   \item \textbf{Sensors}, devices which sense and receive input from the real world or another service, such as temperature sensors, presence sensors etc. Data from these devices is typically periodic, thus non-critical, only requiring integrity and not complete reliability.
   \item \textbf{Actuators}, devices which represent physical or digital outputs, such as displays, lights and functions on appliances, that present an RPC interface for a controller to call. Functions provided by these devices are expected to be carried out once and only once when requested, thus reliability and acknowledgements are needed to ensure reliable operation. 
-  \item \textbf{Controllers}, typically one device such as a PC or home router, which queries, connects and manages the network of sensors and actuators, orchestrating the closed-loop of interaction between sensor inputs and actuator outputs.
+  \item \textbf{Controllers}, typically one device such as a PC or home router, which queries, connects and manages the network of sensors and actuators, orchestrating the closed-loop of interaction between sensor inputs and actuator outputs based on user-specified actions or rules.
 \end{itemize}
 
 Figure \ref{fig:model} presents the iot model with a variety of typical Things connected to the controller, with matching colours representing the closed-loop of control between each of the Things in the network. As discussed below, reliability varies with respect to the typical operations a device performs, which is portrayed with the solid and dashed directed lines.
@@ -199,12 +201,12 @@ Figure \ref{fig:model} presents the iot model with a variety of typical Things c
 
 \subsubsection*{Reliability} % (fold)
 \label{ssub:reliability}
-Typical Things within the iot are low-power embedded devices, relying on wireless communication which is inherently unreliable. Thus it's necessary to implement reliability on top in order to ensure correct operation. However, whilst other approaches have simply chosen to run over TCP, which provides a fully reliable connection, our design opts for selective reliability on top of the unreliable packet stream. This enables the protocol to ensure critical packets are sent reliably, such as connection handshakes, as well as allow devices to save power and sleep after a transmission instead of waiting for an acknowledgement when the data isn't critical, such as ephemeral sensor readings. Similarly, this also ensures commands sent to actuators from the controller are carried out at-most-once.
+Typical Things within the iot are low-power embedded devices, relying on wireless communication which is inherently unreliable. Thus, it's necessary to implement reliability on top in order to ensure correct operation. However, whilst other approaches have simply chosen to run over TCP, which provides a fully reliable connection, our design opts for selective reliability on top of the unreliable packet stream. This enables the protocol to ensure critical packets are sent reliably, such as connection handshakes, as well as allow devices to save power and sleep after a transmission instead of waiting for an acknowledgement when the data isn't critical, such as ephemeral sensor readings. Similarly, this also ensures commands sent to actuators from the controller are carried out at-most-once.
 % subsubsection reliability (end)
 
 \subsubsection*{Liveness} % (fold)
 \label{ssub:liveness}
-Ensuring Things within the network are alive and accessible is another key issue, since wireless interference and depleted batteries are a real problem, causing the closed-loop of interaction to hang or fail and Things within the network to waste power sending packets to devices that are no longer ``out there''. To resolve this issue, checks must be performed, using piggybacked messages where possible, to ensure that no extra bandwidth is wasted, such as a sensor periodically requesting a response to a reading. Otherwise standard ping-ack messages are exchanged.
+Ensuring Things within the network are alive and accessible is another key issue, since wireless interference and depleted batteries are a real problem, causing the closed-loop interaction to hang or fail and Things within the network to waste power sending packets to devices that are no longer ``out there''. To resolve this issue, checks must be performed, using piggybacked messages where possible, to ensure that no extra bandwidth is wasted, such as a sensor periodically requesting a response to a reading. Otherwise standard ping-ack messages are exchanged.
 % subsubsection liveness (end) 
 
 \subsubsection*{Integrity} % (fold)
@@ -216,7 +218,12 @@ Whilst ensuring reliability of some data is not essential, it is however extreme
 \label{ssub:protocol_data_unit}
 One of the key aims of this protocol is to ensure low energy consumption, which on an embedded devices means transmitting as little as possible over the radio, as radio transmission is the most power-hungry operation for a node. Therefore it was imperative that our protocol adds very little overhead to the already small payload size.
 
-Figure \ref{fig:pdu} shows the secure protocol data unit layout for the iot protocol. Channels are synonymous to ports found in TCP/UDP and enable devices to hold state for more than one connection and potentially take on more than one role. Sequence numbers ensure packet ordering and at-most-one semantics. The command field designates the type of payload each packet holds e.g. sensor reading, handshake ack, actuator command etc. For ensuring reliability, the last bit of the command field, designated R, can be set.
+Figure \ref{fig:pdu} shows the secure protocol data unit layout for the iot protocol. Channels are synonymous to ports found in TCP/UDP and enable devices to hold state for more than one connection and potentially take on more than one role. Sequence numbers ensure packet ordering, at-most-one semantics and protect against possible replay attacks. The command field designates the type of payload each packet holds e.g. sensor reading, handshake ack, actuator command etc. The low order bit of the command field, designated R, is used to indicate that the packet requires an acknowledgement. Additionally, the shaded region shows the encrypted and authenticated bytes, ensuring the sensitive data is kept secret and secure. The MAC field, contains the message authentication code (MAC), used for authenticating the integrity of the encrypted fields.
+
+\newcommand{\colorbitbox}[4]{%
+\rlap{\bitbox[#1]{#3}{\color{#2}\rule{\width}{\height}}}%
+\bitbox[#1]{#3}{#4}}
+\definecolor{gray}{rgb}{0.75, 0.75, 0.75}
 
 \begin{figure}[h!]
 \begin{center}
@@ -230,13 +237,13 @@ Figure \ref{fig:pdu} shows the secure protocol data unit layout for the iot prot
   \begin{rightwordgroup}{\footnotesize Header}
     \begin{leftwordgroup}{\footnotesize Channel\\ \footnotesize IDs}
       \bitbox[r]{8}{} & \bitbox[tr]{8}{Source}\\
-      \bitbox[trl]{8}{Destination} & \bitbox[tr]{8}{Sequence number}
+      \bitbox[trl]{8}{Destination} & \colorbitbox{trl}{gray}{8}{Sequence number}
     \end{leftwordgroup}\\
-    \bitbox{7}{Command} & \bitbox{1}{R} & \bitbox{8}{Payload length}
+    \colorbitbox{tbrl}{gray}{7}{Command} & \colorbitbox{tbrl}{gray}{1}{R} & \colorbitbox{tbrl}{gray}{8}{Payload length}
   \end{rightwordgroup}\\
-  \bitbox[brl]{16}{Command payload...}
+  \colorbitbox{tbrl}{gray}{16}{Command payload...}
 \end{bytefield}
-\caption{iot Protocol data unit}
+\caption{iot Protocol data unit, shading indicates bytes are encrypted and authenticated using a pairwise symmetric key.}
 \label{fig:pdu}
 \end{center}
 \end{figure}
@@ -244,7 +251,7 @@ Figure \ref{fig:pdu} shows the secure protocol data unit layout for the iot prot
 % subsubsection protocol_data_unit (end)
 
 \subsection{Integration} % (fold)
-In this section we will present the architecture design for integrating the iot into the Homework Cache, as well as describe in more detail how the closed-loop of control will function using the Cache and its related concepts.
+In this section we present the architecture design for integrating the iot into the Homework Cache, as well as describe in more detail how the closed-loop of control functions using the Cache and its related concepts.
 
 As shown in figure \ref{fig:integration}, the integration architecture comprises of 3 main components, the iot network managed by the controller device, the iot proxy and the Homework Cache.
 \label{sub:integration}
@@ -257,12 +264,12 @@ As shown in figure \ref{fig:integration}, the integration architecture comprises
 \end{figure}
 \subsubsection*{Controller role} % (fold)
 \label{ssub:controller_role}
-In our previously described iot model, the controller role manages the network and orchestrates the closed-loop of control, receiving sensor messages and issuing actuator commands. The current implementation of the controller is implemented on TelosB mote for TinyOS. Thus in order for the controller to communicate with the Cache, the TelosB mote is connected to the host PC and provides a bridge into the iot network, allowing a PC-side application to issue commands for the controller to carry out and receive responses from the network e.g., sensor messages. 
+In the previously described iot model, the controller role manages the network and orchestrates the closed-loop of control, receiving sensor messages and issuing actuator commands. The current implementation of the controller is implemented on TelosB a mote for TinyOS. Thus, in order for the controller to communicate with the Cache, the TelosB mote is connected to the host PC and provides a bridge into the iot network, allowing a PC-side application to issue commands, via the serial link, for the controller to carry out, and receive responses from the network e.g., sensor messages. 
 % subsubsection controller_role (end)
 
 \subsubsection*{iot Proxy} % (fold)
 \label{ssub:iot_proxy}
-To allow the controller and Cache to communicate, a suitable designed proxy is necessary. TinyOS provides the necessary libraries to facilitate mote-to-PC communication for a variety of languages, including Java, Python and C. These libraries communicate over serial to the mote and translate the incoming packets to the correct format and endianness. For the proposed design the Java library is used, due to the abundance of documentation available for it.
+To allow the controller and Cache to communicate, a suitably designed proxy is necessary. TinyOS provides the necessary libraries to facilitate mote-to-PC communication for a variety of languages, including Java, Python and C. These libraries communicate over the serial link to the mote and translate the incoming packets to the correct format and endianness. Due to the abundance of documentation available, the proposed proxy design is implemented using the Java library. Similarly, the relevant libraries and support are also available for the Cache, which use RPC, in Java.
 
 Within the Java-based proxy, there are two threads:
 \begin{itemize}
@@ -274,9 +281,23 @@ Within the Java-based proxy, there are two threads:
 \subsubsection*{Homework Cache} % (fold)
 \label{ssub:homework_cache}
 The Cache combines both publish/subscribe and stream database concepts, to create a powerful and flexible complex event processing engine. Within the cache, automata, written in the Glasgow Automaton Programming Language (GAPL), are used to detect complex events patterns which occur over the cached streams and relations within the database. 
-As previously mentioned, the proxy will register automata against the cache, after which, the automata subscribe to the necessary topics within the Cache; each time a tuple is inserted into a relevant topic in the Cache by the receiver thread, automata subscribed to this topic will receive an event containing the tuple. The automata can then process the tuple, lookup/update/insert tuples into relation tables or streams within the database and then, if necessary, send a relevant event to the sender thread, to be forwarded to the iot network.
+As previously mentioned, the proxy registers automata against the cache, after which, the automata subscribe to the necessary topics within the Cache; each time a tuple is inserted into a relevant topic stream in the Cache by the receiver thread, automata subscribed to this topic receive an event containing the tuple. The automaton can then process the tuple, lookup/update/insert tuples into relational tables or streams within the database and then, if necessary, send a relevant event to the sender thread, to be forwarded to the iot network.
 
-This enables the iot closed-loop of control to not only obey simple rules, such as the temperature falling below limit, but also allows for complex patterns to be ascertained over longer periods of time, such as detecting when users are home most and adjusting the heating appropriately before they arrive home. Similarly, because of the dynamic nature of automata, which can be registered and removed freely during run-time, new rules can be added and old ones modified easily, evolving in-sync with the user and their lifestyle.
+This enables the iot closed-loop of control to not only obey simple rules, such as the temperature falling below a set limit, but also allows for complex patterns to be ascertained over longer periods of time, such as detecting when users are home most often and adjusting the heating appropriately before they arrive home. Similarly, because of the dynamic nature of automata, which can be registered and removed freely during run-time, new rules can be added and old ones modified easily, evolving in-sync with the user and their lifestyle.
+
+\subsubsection*{Automata} % (fold)
+\label{ssub:automata}
+Automata, programs written in the GAPL programming language, use memory and control structures exposed by the language, in a similar fashion to C, rather than more traditional declarative languages, such as SQL, which consist of predefined and nested queries. Additionally, automata are not only able to maintain local state, but are also able to interact with state in event streams and relational tables, both locally and remotely. These key concepts enable programmers to perform dynamic and complex pattern matching over high-speed data streams, whilst also maintaining persistent stores of selected data, in the form of relations. The rest of this section will describe a simple automaton designed for testing the iot integration architecture and describe some of GAPL's features in more detail.
+
+Figure \ref{fig:automaton} shows a basic automaton which reports back to the proxy when a Thing, which senses temperature, has sent a temperature that has exceeded its set limits, previously set by the user via the proxy. In this example, the automaton subscribes to the \textit{Temp} topic by binding it to a local variable t. This enables it to receive an event, containing a Thing ID and temperature reading, every time it is delivered to the \textit{Temp} topic e.g., Thing 2 senses 22C. Similarly, associations allow the automaton to access and modify persistent tables via lookup and insert calls, in this case the \textit{TempLimits} table, containing upper- and lower-bound limits for each temperature sensing Thing. The behavior clause allows the automaton to interact with the aforementioned subscriptions and associations each time a temperature event occurs; upon receiving an event, the automaton attempts to find upper- and lower-bound limits for the event's Thing ID; if found, it checks to see if the event's temperature reading has exceeded the limits and, if so, notifies the process which registered the automaton via a send call, passing with it the related data and a relevant message.
+
+To extend this, a further association could be made to an average temperature table, allowing the automaton to log a Thing's temperature over a period of time, potentially using this data to inform the registered process or manipulate other streams or tables.
+\begin{figure}[h!]
+\lstinputlisting[frame=tb,backgroundcolor=\color{white},basicstyle=\scriptsize,keywordstyle=\bfseries,morekeywords={subscribe, associate, to, with, identifier, sequence, behavior, Identifier, hasEntry, seqElement, lookup, Sequence, send}]{demoAutomaton.gapl}
+\caption{Temperature limit automaton}
+\label{fig:automaton}
+\end{figure}
+% subsubsection automata (end)
 % subsection homework_cache (end)
 \subsection{Security} % (fold)
 \label{sub:security}
@@ -285,9 +306,9 @@ As discussed later in section \ref{sec:related_work}, there are many existing se
 
 The key problem with previous approaches to WSN security is key distribution, in which approaches either assume that a network-specific shared secret, key or ID is pre-installed onto some or all of the nodes and thus distribution is not an issue, or the structure of the network is planned and predetermined, with designated high-power nodes to aid in distribution, see section \ref{sec:related_work}. However, this is impractical for networks containing many tens of nodes, entering in a piecemeal fashion and for administration by a novice user expecting device installation to be simple. Thus, a secure key distribution method must be devised to ensure new nodes can join the network without the need to be reprogrammed.
 
-To solve this problem we propose the security protocol design described below and in figure \ref{fig:sequence_diagram}. Our design attempts to alleviate complex physical interactions between devices performed by the user\cite{MessageBottle} and remove the need to design and configure the network, which for the average home user would be non-trivial. Later sections \ref{sec:asymmetric_security} and \ref{sec:symmetric_security} describe the choices made in designing this protocol.
+To solve this problem we propose the security protocol design described below and in figure \ref{fig:sequence_diagram}. Our design attempts to alleviate complex physical interactions between devices performed by the user\cite{MessageBottle} and remove the need to design and configure the network, which for the average home user would be non-trivial. Later sections, \ref{sec:asymmetric_security} and \ref{sec:symmetric_security}, describe the choices made in designing this protocol.
 
-Prior to deployment, nodes will need to be bootstrapped with unique public/private key pairs, public key certificate and the CA's public key. In a commercial scenario this would require cooperation with trusted manufacturers to create these keys and certificates. After this the protocol is as follows:
+Prior to deployment, nodes will need to be bootstrapped with unique public/private key pairs, a public key certificate and the CA's public key. In a commercial scenario this would require cooperation with trusted manufacturers to create these keys and certificates. After this the protocol is as follows:
 \begin{enumerate}
   \item Initiate discovery mode on the node; node now accepts and verifies incoming certificate requests.
   \item Initiate query on controller; controller sends a broadcast query with its public key certificate.
@@ -295,8 +316,8 @@ Prior to deployment, nodes will need to be bootstrapped with unique public/priva
   \item The controller receives the response with the sensor's certificate, verifies its authenticity using the CA public key and replies with an acknowledgement.
   \item The sensor receives the response ack, generates a random nonce value (to protect against replay attacks), then encrypts it with the controller's public key and signs it with its own private key before sending it to the controller.
   \item The controller receives the signed and encrypted nonce. It first verifies the signature; if invalid it can either request the nonce again or abort the key exchange and waste no further resources. Otherwise it then decrypts the nonce value. The controller then generates a new symmetric key, encrypts it and the nonce with the sensor's public key and signs with its own private key.
-  \item The sensor receives the signed and encrypted key and nonce. It first verifies the signature; if invalid it can either request the key response again or abort the key exchange. Otherwise it then decrypts the key and nonce value, verifying that the nonce is equal to the one it sent earlier, confirming the key response has not been replayed. Using the symmetric key, the sensor then initialises the symmetric encryption code and then sends a handover message to the controller to signal it has received the key and is ready to communicate using it.
-  \item The controller then receives the symmetric handover message and replies with an acknowledgement. The two devices can now communicate securely.
+  \item The sensor receives the signed and encrypted key and nonce. It first verifies the signature; if invalid it can either request the key response again or abort the key exchange. Otherwise it then decrypts the key and nonce value, verifying that the nonce is equal to the one it sent earlier, confirming the key response has not been replayed. Using the symmetric key, the sensor then initialises the symmetric encryption code and then sends a handover message, encrypted using the symmetric key, to the controller to signal it has received the key and is ready to communicate using it.
+  \item The controller then receives the symmetric handover message, decrypting it to confirm its authenticity, and replies with an acknowledgement, also encrypted using the symmetric key. The two devices can now communicate securely using the symmetric key.
 \end{enumerate} 
 
 \begin{figure}[h!]
@@ -335,7 +356,7 @@ To enable ECC to operate within reasonable time bounds on microcontroller platfo
 
 \subsection{Asymmetric costs} % (fold)
 \label{sub:asymmetric_payload_sizes}
-Whilst the overarching aim of our iot protocol is to minimise transmission and save as much power as possible, due to the use of asymmetric cryptography for public keys and certificates in which keys and certificates are 40bytes and 20bytes, respectively, large packet sizes are unavoidable. Similarly, whilst TinyECC makes public key computations feasible on embedded devices, combining them in our proposed protocol to provide both authentication and encryption over an insecure channel for the key exchange results in a one-time high cost, taking between 30 and 40 seconds to complete. However, because it's only performed once, the high initial cost is amortised over the lifetime of the node. 
+Whilst the overarching aim of our iot protocol is to minimise transmission and save as much power as possible, due to the use of asymmetric cryptography for public keys and certificates in which keys and certificates are 40bytes and 20bytes, respectively, large packet sizes are unavoidable. Similarly, whilst TinyECC makes public key computations feasible on embedded devices, combining them in our proposed protocol to provide both authentication and encryption over an insecure channel for the key exchange results in a one-time high cost, taking less than a minute to complete. However, because it's only performed once, the high initial cost is amortised over the lifetime of the node. 
 % subsection asymmetric_payload_sizes (end)
 
 \section{Symmetric Security} % (fold)
@@ -361,22 +382,25 @@ When MiniSec was developed, Skipjack was chosen as the underlying block-cipher d
 
 \section{Evaluation} % (fold)
 \label{sec:evaluation}
-To evaluate our proposed protocol we observed several key attributes related to our initial requirements of an efficient, lightweight protocol that attempts to minimise radio transmission. The rest of this section will discuss the iot implementation size for the various roles, followed by the packet overheads compared to other existing protocols, and lastly, the key exchange timings with the related optimisations to ECC.
+To evaluate our proposed protocol we observed several key attributes related to our initial requirements of an efficient, lightweight protocol that attempts to minimise radio transmission. The rest of this section will discuss the iot implementation size for the various roles, followed by the packet overheads compared to other existing protocols, the key exchange timings with the related optimisations to ECC and lastly, the overall end-to-end system performance.
 
-Things, specifically sensors and actuators, are expected to run on low-power constrained devices, thus it's paramount to ensure an iot protocol not only fits within the constraints of a typical Thing, but that it also leaves adequate space for applications to be built on top of it. Table \ref{tab:implementation} shows the implementation size, ROM and static RAM, across the three roles. In the current implementation the actuator demonstrates the lowest overhead with only the iot protocol and LED library linked into the TinyOS compile, leaving approximately 13KB ROM and 4KB RAM for applications. Given that actuators and sensors are only expected to compute very little, this should provide significant space for applications, except, perhaps, in the case when local filtering is necessary; this is demonstrated by the sensor role which shows a significant increase in the ROM size due to the inclusion of the temperature libraries for TinyOS; however, it is still well within the constraints of the environment. Lastly, the controller role demonstrates the largest size, due to the extra processing and state involved in managing the network. Unlike the sensor and actuator, the controller is not definitively bound by the same constraints, and is expected to run on a more powerful device. Whilst old, the TelosB mote still represents a middle ground for embedded devices in terms of ROM and RAM, compared to the popular Arduino platform sporting only 32KB ROM and 1-4KB RAM. However, recent MSP430 and ARM microprocessors have significantly increased amounts of storage available, up to 512KB ROM and 64KB RAM.\footnote{FreeScale ARM - \url{http://www.freescale.com/webapp/sps/site/taxonomy.jsp?code=KINETIS_L_SERIES}}
+Things, specifically sensors and actuators, are expected to run on low-power constrained devices, thus it's paramount to ensure an iot protocol not only fits within the constraints of a typical Thing, but that it also leaves adequate space for applications to be built on top of it. Table \ref{tab:implementation} shows the implementation size, ROM and static RAM, across the three roles. In the current implementation the actuator demonstrates the lowest overhead with only the iot protocol and LED library linked into the TinyOS compile, leaving approximately 13KB ROM and 4KB RAM for applications. Given that actuators and sensors are only expected to compute very little, this should provide significant space for applications, except, perhaps, in the case when local filtering is necessary; this is demonstrated by the sensor role which shows a significant increase in the ROM size due to the inclusion of the temperature libraries for TinyOS; however, it is still well within the constraints of the environment. Lastly, the controller role demonstrates the largest size, due to the extra processing and state involved in managing the network. Unlike the sensor and actuator, the controller is not definitively bound by the same constraints, and is expected to run on a more powerful device. Whilst old, the TelosB mote still represents a middle ground for embedded devices in terms of ROM and RAM, compared to the popular Arduino platform sporting only 32KB ROM and 1-4KB RAM\footnote{Arduino Uno - \url{http://arduino.cc/en/Main/ArduinoBoardUno}}. However, recent MSP430 and ARM microprocessors have significantly increased amounts of storage available, up to 512KB ROM and 64KB RAM.\footnote{FreeScale ARM - \url{http://www.freescale.com/webapp/sps/site/taxonomy.jsp?code=KINETIS_L_SERIES}}
 
-The most important requirement of our protocol is to minimise radio transmission; in order to ensure this we not only try to decrease the number of packets sent but also the size of the packets. In table \ref{fig:pdu} we compare our packet header overheads against the popular and one of the most significant IoT protocols, 6LowPan combined with the security extension, AES-CCM. For traditional 802.15.4 radio, the maximum advised packet size is 128-bytes. 6LowPan, a minified IPv6 protocol, compresses its normally 128-bit addresses to 64- or 16-bit addresses in order to reduce its overhead. Within a smaller number of bytes compared to an un-encrypted 6LowPan packet with 16-bit addresses, our proposed protocol is able to also ensure that a packet is both secure and authenticated, adding only 4 bytes of overhead to an un-encrypted packet for the MAC. In the current implementation there is still room for possible improvement, as demonstrated by MiniSec which discussed removing the group and crc fields from the TinyOS packet, reducing the overhead by a further 3 bytes.
+The most important requirement of our protocol is to minimise radio transmission; in order to ensure this, we not only try to decrease the number of packets sent, but also the size of the packets. In table \ref{fig:pdu} we compare our packet header overheads against the popular and one of the most significant IoT protocols, 6LowPan combined with the security extension, AES-CCM. For traditional 802.15.4 radio, the maximum advised packet size is 128-bytes. 6LowPan, a minified IPv6 protocol, compresses its normally 128-bit addresses to 64- or 16-bit addresses in order to reduce its overhead. Within a smaller number of bytes compared to an un-encrypted 6LowPan packet with 16-bit addresses, our proposed protocol is able to also ensure that a packet is both secure and authenticated, adding only 4 bytes of overhead to an un-encrypted packet for the MAC. In the current implementation there is still room for possible improvement, as demonstrated by MiniSec which discussed removing the group and crc fields from the TinyOS packet, reducing the overhead by a further 3 bytes.
 
 In order to create a user-friendly, dynamic and flexible key distribution scheme, we opted to use public-key cryptography with TinyECC. In section \ref{sec:asymmetric_security}, we argued that whilst TinyECC still exhibits a considerable cost in terms of storage, speed and overhead, the full key exchange only has to be performed once and is amortised over the lifetime of the node; subsequent key exchanges could use the existing symmetric-secured channel. Table \ref{tab:ECC_optimisations} shows the average time for switching between modes and the overall time for the entire key exchange outlined in section \ref{sec:asymmetric_security}. TinyECC uses precomputed tables and values based on the public-key to be used for an operation, thus when using different public-keys multiple times to perform a sequence of encrypted and authenticated actions, such as in the proposed iot protocol, these tables need to be recomputed each time in order for them to be effective; this adds a significant overhead of around 20 seconds between the communicating nodes. To reduce this, we added an optimisation to save previously initialised state, thus removing the need to recompute the state for a given public-key the next time it is used; this gives us a fully authenticated and secure key exchange taking just under a minute to complete, split between the two nodes. Because the ECC computations are split between the two nodes, porting the controller role to a more powerful platform would significantly reduce the exchange time, further minimising the time the sensor/actuator node needs to power and listen on the radio. 
 
-\begin{table*}[h] %makes a float (prevents splitting over pages)
+Lastly, table \ref{tab:performance} presents a break-down of the system performance, providing average timings and their standard deviations for each part of the system. Rows \textit{a} and \textit{b} show the average timings for encrypt and decrypt operations of 4 bytes, including header fields and a 1 byte payload (e.g., sensor reading); contrasting this to row \textit{c}, which presents the average time for an RPC call (consisting of two messages, each with 4 bytes encrypted), shows that the encryption/decryption operations only add around 8ms of overhead for each message, with the sending/receiving of a message averaging 26ms. Row \textit{d} shows the length of time taken for the proxy to publish a sensor reading to the cache, followed a subsequent send() call made by a subscribed automaton which issues a command back to the proxy, based on the received reading. Row \textit{e} includes \textit{c}, with the addition of the sensor reading now propagating from the controller through \textit{e} and back, via the serial link; similar to \textit{c}, the serial link adds a significant overhead, taking around 19ms for a message to pass from the controller to the proxy. Lastly, to capture the end-to-end time, from sensing to actuation, row \textit{f} combines rows \textit{c} and \textit{e}, in which the RPC is split across the sensor$\to$controller and controller$\to$actuator messages. Thus, the closed-loop of control takes 109ms from sensing to actuation\footnote{An additional ack is also sent by the actuator, but this does not have an effect on the response time of the actuation itself.}. Due to the non-time-critical nature of an iot, providing sub 100ms response-times isn't necessary, thus, the overall performance is sufficient to provide a suitably real-time iot.
+
+As described in section \ref{sub:design_iot_protocol}, ensuring reliability, for some messages, and liveness, for all connected Things, is important for the iot to operate correctly and responsively. In the case of sensors, readings are non-critical and expected to occur frequent enough such that the iot won't be affected by occasional packet loss; thus, in the case of packet loss the closed-loop of control is only potentially delayed, if the reading isn't redundant, by the sensing frequency. However, in the case of the actuator, commands issued by the controller are sent reliably. Thus, if a packet is dropped, retries occur after a set period, exponentially increasing until the command is either acknowledged, or the controller has deemed the actuator is completely unresponsive and has potentially died. In the current design, the sender waits for 40ms for a response before retrying, doubling this wait, either until the receiver replies or the number of attempts reaches 5. The initial wait of 40ms ensures the receiver has sufficient time to decrypt larger encrypted payloads. In the case of a single packet loss, the response time increases to around 253ms; in the worst case of 5 packets lost, the response time increases to 918ms, which still ensures a reasonably responsive performance with respect to the non-critical nature of an iot.
+\begin{table*}[h!] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|c|} 
   \hline
   \multicolumn{4}{|c|}{\textbf{Secure iot Protocol}}\\ \hline
                     & \textbf{Controller} & \textbf{Sensor} & \textbf{Actuator} \\ \hline
-  \textbf{ROM size} & 38,178B (80\%)      & 41,016B (85\%)  & 34,988B (73\%)    \\ \hline
-  \textbf{RAM size} & 7372B (74\%)        & 6,208B  (62\%)  & 6,142B  (61\%)    \\ \hline
+  \textit{ROM size} & 38,178B (80\%)      & 41,016B (85\%)  & 34,988B (73\%)    \\ \hline
+  \textit{RAM size} & 7372B (74\%)        & 6,208B  (62\%)  & 6,142B  (61\%)    \\ \hline
   \end{tabular}
   \caption[Table]{Secure iot protocol size for Controller, Sensor and Actuator roles on the TelosB (8Mhz, 48KB ROM, 10KB RAM)mote.}
   \label{tab:implementation}
@@ -384,30 +408,47 @@ In order to create a user-friendly, dynamic and flexible key distribution scheme
 \end{table*}
 
 
-\begin{table*}[h] %makes a float (prevents splitting over pages)
+\begin{table*}[h!] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
   \hline
                             & \textbf{TinyOS + Secure iot Protocol} & \textbf{6LowPan + AES-CCM} \\ \hline
-  \textbf{Cleartext header} & 14B + 6B                              & 25B                        \\ \hline
-  \textbf{Encrypted header} & 14B + 10B                             & 46B                        \\ \hline
+  \textit{Cleartext header} & 14B + 6B                              & 25B                        \\ \hline
+  \textit{Encrypted header} & 14B + 10B                             & 46B                        \\ \hline
   \end{tabular}
   \caption[Table]{Comparison of payload overhead for our Secure iot (Symmetric security payload) vs 6LowPan with 16-bit addresses + AES-CCM.}
   \label{tab:pdu_sizes}
   \end{center}
 \end{table*}
 
-\begin{table*}[h] %makes a float (prevents splitting over pages)
+\begin{table*}[h!] %makes a float (prevents splitting over pages)
   \begin{center} 
   \begin{tabular}{|c|c|c|} 
   \hline
                                         & \textbf{TinyECC} & \textbf{TinyECC + optimisations} \\ \hline
-  \textbf{Authentication to Encryption} & 1.4s             & 0s                      \\ \hline
-  \textbf{Encryption to Authentication} & 2.5s             & 0s                      \\ \hline
-  \textbf{Asymmetric key exchange}      & 80.4s            & 57.1s                     \\ \hline
+  \textit{Authentication to Encryption} & 1.4s             & 0s                      \\ \hline
+  \textit{Encryption to Authentication} & 2.5s             & 0s                      \\ \hline
+  \textit{Asymmetric key exchange}      & 80.4s            & 57.1s                     \\ \hline
   \end{tabular}
   \caption[Table]{Comparison of the module switch over and overall asymmetric key exchange durations with normal TinyECC and TinyECC with the save state optimisations implemented.}
   \label{tab:ECC_optimisations}
+  \end{center}
+\end{table*}
+
+\begin{table*}[h!] %makes a float (prevents splitting over pages)
+  \begin{center} 
+  \begin{tabular}{|c|c|c|} 
+  \hline
+    \textbf{Closed-loop flow}                               & \textbf{Mean time} & \textbf{$\sigma$} \\ \hline
+    \textit{a) Symmetric encrypt sensor message (4 bytes)} & 5ms                & 0ms                 \\ \hline
+    \textit{b) Symmetric decrypt sensor message (4 bytes)} & 2.9ms              & 0.3ms               \\ \hline
+    \textit{c) Thing $\to$ Thing RPC (symmetric encrypt/decrypt)} & 68.9ms          & 5.8ms               \\ \hline
+    \textit{d) Proxy $\to$ Cache/Automaton $\to$ Proxy}           & 1.1ms              & 0.9ms               \\ \hline
+    \textit{e) Controller $\to$ Proxy $\to$ Cache $\to$ Proxy $\to$ Controller}& 40.4ms      & 1.5ms               \\ \hline
+    \textit{f) Sense $\to$ Cache $\to$ Actuate}& 109.3ms                             & 6ms               \\ \hline
+  \end{tabular}
+  \caption[Table]{A break-down of the steps within the closed-loop flow of control from sensing through to actuating, showing the mean time and standard deviation ($\sigma$) for each step of 200 samples.}
+  \label{tab:performance}
   \end{center}
 \end{table*}
 
@@ -443,11 +484,13 @@ Other proposed key distribution schemes such as TinyPK aim to sacrifice immediat
 % section related_work (end)
 \section{Conclusion}
 \label{sec:conclusion}
-Our proposed model and protocol demonstrates a thoughtful approach to designing a secure and efficient Intranet of Things. Compared to other approaches which have used power-hungry WIFI or heavyweight protocols, our protocol attempts to minimise radio usage on 802.15.4 platforms, in an effort to prolong the lifetime of battery-powered Things. In light of existing and recent M2M/IoT attacks, our protocol has been secured against a variety of attacks, ensuring the user's data, privacy and, most importantly, home is safe from remote control, monitoring and other malicious activities. Lastly, our protocol also demonstrates a usable, secure and scalable method for enabling users to add new devices to the network, without the need for pre-shared secret keys or complex configuration, via the use of public key cryptography, provided by TinyECC. The implementation was developed for the TelosB mote running TinyOS, and the source code has been made available online\footnote{Source code available from Github: \url{https://github.com/fergul/Intranet_of_Things}}.
+Our proposed model and protocol demonstrates a thoughtful approach to designing a secure and efficient Intranet of Things. Compared to other approaches which have used power-hungry WIFI or heavyweight protocols, our protocol attempts to minimise radio usage on 802.15.4 platforms, in an effort to prolong the lifetime of battery-powered Things. In light of existing and recent M2M/IoT attacks, our protocol has been secured against a variety of attacks, ensuring the user's data, privacy and, most importantly, home is safe from remote control, monitoring and other malicious activities. The protocol also demonstrates a usable, secure and scalable method for enabling users to add new devices to the network, without the need for pre-shared secret keys or complex configuration, via the use of public key cryptography, provided by TinyECC. 
+
+Additionally, by integrating our iot protocol into the Homework Cache locally, the closed-loop of control can be fully realised, providing the possibility for dynamic and powerful interactions between the user and Things located around the home, with the privacy and reliability risks associated with the Internet and Cloud. The implementation was developed for the TelosB mote running TinyOS, and the source code has been made available online\footnote{Source code available from Github: \url{https://github.com/fergul/Intranet_of_Things}}.
 
 \section{Future Work} % (fold)
 \label{sec:future_work}
-Whilst we have presented a solid foundation for the iot, in the form of a secure and efficient protocol, there are many possible extensions/improvements. This includes porting the controller role to more powerful hardware, such as a PC or router, porting the sensor and actuator roles to other low-power platforms, and implementing ad-hoc routing. These extensions would enable the network to easily scale up to handle hundreds of devices over large and interference-prone areas. It would also allow for rich and configurable interactions between Things by connecting the controller to a suitable platform, such as the Homework Cache\cite{Cache}, a high-performance complex event processing engine designed for processing data events in a closed-loop of control. Lastly, the security against brute-force attacks needs to be improved by replacing the now out-dated Skipjack block cipher algorithm with the more secure AES algorithm\cite{NIST}.
+Whilst we have presented a solid foundation for the iot, in the form of a secure and efficient protocol integrated into the Homework platform, there are many possible extensions/improvements. This includes fully porting the controller role to more powerful hardware, such as a PC or router running Homework, porting the sensor and actuator roles to other low-power platforms, and implementing ad-hoc routing. These extensions would enable the network to easily scale up to handle hundreds of devices over large and interference-prone areas. Additionally, the current support for customising rules requires programming skill and knowledge about GAPL, thus it will be necessary to implement a user-friendly rule designer, similar to what Homework already uses\cite{HomeworkInterface}; or attempt to remove the interface almost entirely, using intelligent agents and machine learning to analyse and predict the user's needs within the home\cite{SmartHomeFusion,mavhome}, removing the need for users from having to perform the difficult task of trying to create the perfect rules or update existing rules as patterns change e.g., a change in weather or timetable. Lastly, the security against brute-force attacks needs to be improved by replacing the now out-dated Skipjack block cipher algorithm with the more secure AES algorithm\cite{NIST}. However, improving the security will inevitably affect the performance of the protocol due to the increased computational time for encryption and decryption, thus, the reliability measures will need to be adjusted to ensure retries don't occur when the receiver is encrypting/decrypting data.
 
 % section future_work (end)
 
